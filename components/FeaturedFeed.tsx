@@ -77,14 +77,14 @@ function TestimonyCard({ testimony }: { testimony: DbTestimony }) {
 
   function handleXShare() {
     const text = encodeURIComponent(
-      `Jesus saved me from ${testimony.word}. "${displayText.slice(0, 120)}" — testify.netlify.app`
+      `Jesus saved me from ${testimony.word}. "${displayText.slice(0, 120)}" — testifi.vercel.app`
     );
     window.open(`https://twitter.com/intent/tweet?text=${text}`, '_blank');
   }
 
   function handleWhatsAppShare() {
     const text = encodeURIComponent(
-      `Jesus saved me from ${testimony.word}.\n\n"${displayText.slice(0, 160)}"\n\ntestify.netlify.app`
+      `Jesus saved me from ${testimony.word}.\n\n"${displayText.slice(0, 160)}"\n\ntestifi.vercel.app`
     );
     window.open(`https://wa.me/?text=${text}`, '_blank');
   }

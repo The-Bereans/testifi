@@ -200,7 +200,7 @@ export default function TestimonySection() {
   }
 
   function handleTwitterShare() {
-    const text = `Jesus saved me from ${newWord}. He still saves. #Testify`;
+    const text = `Jesus saved me from ${newWord}. He still saves. #Testifi`;
     const url  = window.location.href;
     window.open(
       `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`,
@@ -224,7 +224,7 @@ export default function TestimonySection() {
 
   function handleWhatsAppShare() {
     const text = encodeURIComponent(
-      `Jesus saved me from ${newWord}. He still saves.\n\ntestify.netlify.app`
+      `Jesus saved me from ${newWord}. He still saves.\n\ntestifi.vercel.app`
     );
     window.open(`https://wa.me/?text=${text}`, '_blank');
   }

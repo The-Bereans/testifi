@@ -172,7 +172,7 @@ const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(
               textTransform: 'uppercase',
             }}
           >
-            Testify
+            Testifi
           </span>
         </div>
 
@@ -262,7 +262,7 @@ const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(
               margin: 0,
             }}
           >
-            testify.netlify.app
+            testifi.vercel.app
           </p>
         </div>
 

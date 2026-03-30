@@ -18,12 +18,12 @@ const jakarta = Plus_Jakarta_Sans({
 
 export const metadata: Metadata = {
   title: {
-    default: "Testify",
-    template: "%s · Testify",
+    default: "Testifi",
+    template: "%s · Testifi",
   },
   description: "Share what Jesus has saved you from — and inspire someone else to believe.",
   openGraph: {
-    title: "Testify",
+    title: "Testifi",
     description: "Share what Jesus has saved you from — and inspire someone else to believe.",
     type: "website",
   },

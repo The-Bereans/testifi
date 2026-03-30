@@ -77,7 +77,7 @@ const CommunityShareCard = forwardRef<HTMLDivElement, CommunityShareCardProps>(
                 textTransform: 'uppercase' as const,
               }}
             >
-              Testify
+              Testifi
             </span>
           </div>
           <span
@@ -182,7 +182,7 @@ const CommunityShareCard = forwardRef<HTMLDivElement, CommunityShareCardProps>(
               letterSpacing: '0.03em',
             }}
           >
-            testify.netlify.app
+            testifi.vercel.app
           </p>
         </div>
       </div>

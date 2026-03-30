@@ -273,11 +273,13 @@ export default function FeaturedFeed() {
   const sectionRef    = useRef<HTMLElement>(null);
   const intervalRef   = useRef<ReturnType<typeof setInterval> | null>(null);
   const pauseTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const fetchGenRef   = useRef(0);
   const isInView = useInView(sectionRef, { once: true, margin: '-80px 0px' });
 
   // ── Fetch pool ──────────────────────────────────────────────────────────────
 
   const fetchPool = useCallback(async (tab: FilterTab) => {
+    const gen = ++fetchGenRef.current;
     setLoading(true);
     setError(null);
     setCurrentIndex(0);
@@ -289,11 +291,13 @@ export default function FeaturedFeed() {
       const res = await fetch(`/api/testimonies?${params}`);
       if (!res.ok) throw new Error('Failed to load.');
       const json = await res.json();
+      if (gen !== fetchGenRef.current) return;
       setTestimonies(json.data ?? []);
     } catch {
+      if (gen !== fetchGenRef.current) return;
       setError('Could not load testimonies. Please try again.');
     } finally {
-      setLoading(false);
+      if (gen === fetchGenRef.current) setLoading(false);
     }
   }, []);
 
@@ -513,7 +517,7 @@ export default function FeaturedFeed() {
             paddingTop: '2rem',
           }}
         >
-          No testimonies in this category yet.
+          {activeTab === 'All' ? 'No testimonies yet.' : 'No testimonies in this category yet.'}
         </motion.p>
       )}
 

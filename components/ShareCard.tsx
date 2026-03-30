@@ -170,7 +170,7 @@ const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(
               fontSize: '26px',
               fontWeight: 600,
               lineHeight: 1,
-              textTransform: 'capitalize',
+              textTransform: 'uppercase',
               marginBottom: '8px',
             }}
           >
@@ -179,7 +179,7 @@ const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(
               <rect x="7.5" y="0"   width="3"  height="22" rx="1.5" fill="#B5673D" />
               <rect x="0"   y="6.5" width="18" height="3"  rx="1.5" fill="#B5673D" />
             </svg>
-            <span style={{ color: '#B5673D' }}>Testifi</span>
+            <span style={{ color: '#B5673D' }}>estifi</span>
             <span style={{ color: 'rgba(248,244,236,0.7)' }}>That Jesus Saved Me From</span>
           </div>
 

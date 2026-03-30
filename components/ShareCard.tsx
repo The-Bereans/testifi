@@ -50,14 +50,18 @@ function getClusterPosition(index: number, count: number, maxCount: number): Wor
   return { x, y, size, opacity };
 }
 
-// ─── Hero word font size (4 tiers) ──────────────────────────────────────────
+// ─── Hero word font size (responsive tiers) ──────────────────────────────────
 
 function heroFontSize(word: string): string {
   const len = word.length;
   if (len <= 6)  return '140px';
   if (len <= 10) return '120px';
   if (len <= 14) return '100px';
-  return '80px';
+  if (len <= 18) return '80px';
+  if (len <= 24) return '64px';
+  if (len <= 32) return '52px';
+  if (len <= 42) return '42px';
+  return '32px';
 }
 
 // ─── ShareCard ──────────────────────────────────────────────────────────────
@@ -147,35 +151,6 @@ const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(
 
         {/* ── Layer 4 · Foreground content ─────────────────────────────────── */}
 
-        {/* Top-left branding */}
-        <div
-          style={{
-            position: 'absolute',
-            top: 72,
-            left: 96,
-            display: 'flex',
-            alignItems: 'center',
-            gap: 10,
-          }}
-        >
-          <svg width="18" height="22" viewBox="0 0 18 22" fill="none">
-            <rect x="7.5" y="0"   width="3"  height="22" rx="1.5" fill="#B5673D" />
-            <rect x="0"   y="6.5" width="18" height="3"  rx="1.5" fill="#B5673D" />
-          </svg>
-          <span
-            style={{
-              color: '#B5673D',
-              fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
-              fontSize: '14px',
-              fontWeight: 600,
-              letterSpacing: '0.2em',
-              textTransform: 'uppercase',
-            }}
-          >
-            Testifi
-          </span>
-        </div>
-
         {/* Hero content block  starts at optical center (~38% from top = 342px) */}
         <div
           style={{
@@ -185,19 +160,27 @@ const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(
             right: 96,
           }}
         >
-          {/* "Jesus saved me from"  italic label */}
+          {/* "I, ✝ testifi that Jesus saved me from"  label */}
           <p
             style={{
               fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
               fontSize: '20px',
-              fontWeight: 400,
-              fontStyle: 'italic',
-              color: 'rgba(248,244,236,0.5)',
+              fontWeight: 600,
+              color: 'rgba(248,244,236,0.7)',
               marginBottom: '8px',
               lineHeight: 1,
+              textTransform: 'capitalize',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '7px',
             }}
           >
-            Jesus saved me from
+            I,
+            <svg width="13" height="16" viewBox="0 0 18 22" fill="none" style={{ display: 'inline', verticalAlign: 'middle', flexShrink: 0 }}>
+              <rect x="7.5" y="0"   width="3"  height="22" rx="1.5" fill="rgba(248,244,236,0.7)" />
+              <rect x="0"   y="6.5" width="18" height="3"  rx="1.5" fill="rgba(248,244,236,0.7)" />
+            </svg>
+            testifi that Jesus saved me from
           </p>
 
           {/* Hero word */}
@@ -212,19 +195,8 @@ const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(
               margin: 0,
             }}
           >
-            {word.toUpperCase()}
+            {word}
           </h2>
-
-          {/* Anchor rule */}
-          <div
-            style={{
-              width: '120px',
-              height: '2px',
-              background: '#B5673D',
-              marginTop: '20px',
-              opacity: 0.85,
-            }}
-          />
         </div>
 
         {/* Bottom bar  "He still saves." + URL */}
@@ -250,7 +222,7 @@ const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(
               lineHeight: 1,
             }}
           >
-            He still saves.
+            Jesus can save you too
           </p>
           <p
             style={{

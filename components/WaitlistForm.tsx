@@ -83,7 +83,7 @@ export default function WaitlistForm() {
             marginBottom: '0.75rem',
           }}
         >
-          The JESUS App.
+          The JESUS App
         </h2>
 
         <p
@@ -95,7 +95,7 @@ export default function WaitlistForm() {
             marginBottom: '2rem',
           }}
         >
-          Our assignment is to bring kingdom online. The JESUS App is step one. Be the first to jump on.
+          The assignment is to bring Kingdom online, and The JESUS App is step one.
         </p>
 
         {/* Form / success swap */}
@@ -250,7 +250,7 @@ export default function WaitlistForm() {
                   letterSpacing: '0.02em',
                 }}
               >
-                No spam. Just updates.
+                Be the first to jump on.
               </p>
             </motion.form>
           )}

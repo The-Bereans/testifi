@@ -1,39 +1,60 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence, useInView } from 'framer-motion';
-import { testimonies, type Category } from '@/lib/mock/testimonies';
+import { CATEGORIES, type Category } from '@/lib/sanitize';
 import CommunityShareCard from '@/components/CommunityShareCard';
 import { relativeTime } from '@/lib/relativeTime';
 
-const ALL_CATEGORIES = [
-  'All',
-  'Addiction',
-  'Mental Health',
-  'Relationships',
-  'Identity',
-  'Spiritual',
-] as const;
+interface DbTestimony {
+  id: string;
+  word: string;
+  body: string;
+  category: string | null;
+  excerpt: string | null;
+  created_at: string;
+}
 
-type FilterTab = (typeof ALL_CATEGORIES)[number];
-
-const CATEGORY_COLORS: Record<Category, { bg: string; text: string; border: string }> = {
-  Addiction:       { bg: 'rgba(139,74,42,0.12)',  text: '#8B4A2A', border: 'rgba(139,74,42,0.3)' },
-  'Mental Health': { bg: 'rgba(181,103,61,0.12)', text: '#B5673D', border: 'rgba(181,103,61,0.35)' },
-  Relationships:   { bg: 'rgba(74,61,48,0.10)',   text: '#4A3D30', border: 'rgba(74,61,48,0.25)' },
-  Identity:        { bg: 'rgba(181,103,61,0.12)', text: '#B5673D', border: 'rgba(181,103,61,0.3)' },
-  Spiritual:       { bg: 'rgba(181,103,61,0.12)', text: '#B5673D', border: 'rgba(181,103,61,0.3)' },
+const CATEGORY_LABEL: Record<Category, string> = {
+  addiction:       'Addiction',
+  anxiety:         'Anxiety',
+  depression:      'Depression',
+  anger:           'Anger',
+  shame:           'Shame',
+  identity:        'Identity',
+  relationships:   'Relationships',
+  'sexual sin':    'Sexual Sin',
+  'mental health': 'Mental Health',
+  other:           'Other',
 };
 
-const INITIAL_COUNT = 3;
+type FilterTab = 'All' | Category;
 
+const ALL_CATEGORIES: FilterTab[] = ['All', ...CATEGORIES];
 
-function TestimonyCard({ testimony }: { testimony: (typeof testimonies)[number] }) {
+const CATEGORY_COLORS: Record<string, { bg: string; text: string; border: string }> = {
+  addiction:       { bg: 'rgba(139,74,42,0.12)',  text: '#8B4A2A', border: 'rgba(139,74,42,0.3)' },
+  anxiety:         { bg: 'rgba(181,103,61,0.12)', text: '#B5673D', border: 'rgba(181,103,61,0.35)' },
+  depression:      { bg: 'rgba(74,61,48,0.10)',   text: '#4A3D30', border: 'rgba(74,61,48,0.25)' },
+  anger:           { bg: 'rgba(139,74,42,0.12)',  text: '#8B4A2A', border: 'rgba(139,74,42,0.3)' },
+  shame:           { bg: 'rgba(181,103,61,0.12)', text: '#B5673D', border: 'rgba(181,103,61,0.3)' },
+  identity:        { bg: 'rgba(181,103,61,0.12)', text: '#B5673D', border: 'rgba(181,103,61,0.3)' },
+  relationships:   { bg: 'rgba(74,61,48,0.10)',   text: '#4A3D30', border: 'rgba(74,61,48,0.25)' },
+  'sexual sin':    { bg: 'rgba(139,74,42,0.12)',  text: '#8B4A2A', border: 'rgba(139,74,42,0.3)' },
+  'mental health': { bg: 'rgba(181,103,61,0.12)', text: '#B5673D', border: 'rgba(181,103,61,0.35)' },
+  other:           { bg: 'rgba(74,61,48,0.10)',   text: '#4A3D30', border: 'rgba(74,61,48,0.25)' },
+};
+
+const DEFAULT_COLORS = { bg: 'rgba(74,61,48,0.10)', text: '#4A3D30', border: 'rgba(74,61,48,0.25)' };
+
+const PAGE_SIZE = 9;
+
+function TestimonyCard({ testimony }: { testimony: DbTestimony }) {
   const [isCapturing, setIsCapturing] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
-  const colors = CATEGORY_COLORS[testimony.category];
+  const colors = CATEGORY_COLORS[testimony.category ?? ''] ?? DEFAULT_COLORS;
+  const displayText = testimony.excerpt ?? testimony.body;
 
-  // B1-B2 — share handlers
   async function handleDownloadPNG() {
     if (!cardRef.current || isCapturing) return;
     setIsCapturing(true);
@@ -56,14 +77,14 @@ function TestimonyCard({ testimony }: { testimony: (typeof testimonies)[number] 
 
   function handleXShare() {
     const text = encodeURIComponent(
-      `Jesus saved me from ${testimony.word}. "${testimony.excerpt.slice(0, 120)}" — testify.netlify.app`
+      `Jesus saved me from ${testimony.word}. "${displayText.slice(0, 120)}" — testify.netlify.app`
     );
     window.open(`https://twitter.com/intent/tweet?text=${text}`, '_blank');
   }
 
   function handleWhatsAppShare() {
     const text = encodeURIComponent(
-      `Jesus saved me from ${testimony.word}.\n\n"${testimony.excerpt.slice(0, 160)}"\n\ntestify.netlify.app`
+      `Jesus saved me from ${testimony.word}.\n\n"${displayText.slice(0, 160)}"\n\ntestify.netlify.app`
     );
     window.open(`https://wa.me/?text=${text}`, '_blank');
   }
@@ -107,7 +128,6 @@ function TestimonyCard({ testimony }: { testimony: (typeof testimonies)[number] 
           gap: '0.75rem',
         }}
       >
-        {/* Testimony text */}
         <p
           style={{
             fontFamily: 'var(--font-body)',
@@ -118,10 +138,9 @@ function TestimonyCard({ testimony }: { testimony: (typeof testimonies)[number] 
             margin: 0,
           }}
         >
-          {testimony.excerpt}
+          {displayText}
         </p>
 
-        {/* Footer: date */}
         <div
           style={{
             paddingTop: '0.25rem',
@@ -136,13 +155,11 @@ function TestimonyCard({ testimony }: { testimony: (typeof testimonies)[number] 
               letterSpacing: '0.03em',
             }}
           >
-            Anonymous · {relativeTime(testimony.date)}
+            Anonymous · {relativeTime(testimony.created_at)}
           </span>
         </div>
 
-        {/* B4 — icon-only horizontal share buttons */}
         <div style={{ display: 'flex', justifyContent: 'center', gap: '0.75rem' }}>
-          {/* Download */}
           <button
             className="share-btn"
             onClick={handleDownloadPNG}
@@ -155,21 +172,18 @@ function TestimonyCard({ testimony }: { testimony: (typeof testimonies)[number] 
             </svg>
           </button>
 
-          {/* X / Twitter */}
           <button className="share-btn" onClick={handleXShare} title="Share on X" style={circleBtn}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
               <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L2.1 2.25h6.3l4.255 5.643L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z" />
             </svg>
           </button>
 
-          {/* WhatsApp */}
           <button className="share-btn" onClick={handleWhatsAppShare} title="Share on WhatsApp" style={circleBtn}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
               <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
             </svg>
           </button>
 
-          {/* Instagram */}
           <button
             className="share-btn"
             onClick={handleInstagramShare}
@@ -181,7 +195,6 @@ function TestimonyCard({ testimony }: { testimony: (typeof testimonies)[number] 
           </button>
         </div>
 
-        {/* Tag — word chip + category, below the testimony */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
           <span
             style={{
@@ -199,31 +212,32 @@ function TestimonyCard({ testimony }: { testimony: (typeof testimonies)[number] 
           >
             {testimony.word}
           </span>
-          <span
-            style={{
-              color: 'var(--brand-near-black-muted)',
-              fontSize: '0.7rem',
-              letterSpacing: '0.06em',
-              textTransform: 'uppercase',
-              fontFamily: 'var(--font-body)',
-            }}
-          >
-            {testimony.category}
-          </span>
+          {testimony.category && (
+            <span
+              style={{
+                color: 'var(--brand-near-black-muted)',
+                fontSize: '0.7rem',
+                letterSpacing: '0.06em',
+                textTransform: 'uppercase',
+                fontFamily: 'var(--font-body)',
+              }}
+            >
+              {CATEGORY_LABEL[testimony.category as Category] ?? testimony.category}
+            </span>
+          )}
         </div>
       </motion.article>
 
       <CommunityShareCard
         ref={cardRef}
         word={testimony.word}
-        excerpt={testimony.excerpt}
-        category={testimony.category}
+        excerpt={displayText}
+        category={(CATEGORY_LABEL[testimony.category as Category] ?? testimony.category ?? '') as never}
       />
     </>
   );
 }
 
-// B3 — Instagram icon
 function InstagramIcon({ size = 18 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -233,31 +247,52 @@ function InstagramIcon({ size = 18 }: { size?: number }) {
 }
 
 export default function FeaturedFeed() {
-  const [activeTab, setActiveTab] = useState<FilterTab>('All');
-  const [showFilters, setShowFilters] = useState(false);
-  const [visibleCount, setVisibleCount] = useState(INITIAL_COUNT);
-  const [nextBatch, setNextBatch] = useState(5);
+  const [activeTab, setActiveTab]         = useState<FilterTab>('All');
+  const [showFilters, setShowFilters]     = useState(false);
+  const [testimonies, setTestimonies]     = useState<DbTestimony[]>([]);
+  const [loading, setLoading]             = useState(true);
+  const [loadingMore, setLoadingMore]     = useState(false);
+  const [error, setError]                 = useState<string | null>(null);
+  const [page, setPage]                   = useState(1);
+  const [hasMore, setHasMore]             = useState(false);
 
   const sectionRef = useRef<HTMLElement>(null);
   const isInView = useInView(sectionRef, { once: true, margin: '-80px 0px' });
 
-  const filtered =
-    activeTab === 'All'
-      ? testimonies
-      : testimonies.filter((t) => t.category === activeTab);
+  const fetchTestimonies = useCallback(async (tab: FilterTab, pageNum: number, append: boolean) => {
+    append ? setLoadingMore(true) : setLoading(true);
+    setError(null);
+    try {
+      const params = new URLSearchParams({ page: String(pageNum), limit: String(PAGE_SIZE) });
+      if (tab !== 'All') params.set('category', tab);
+      const res = await fetch(`/api/testimonies?${params}`);
+      if (!res.ok) throw new Error('Failed to load.');
+      const json = await res.json();
+      const incoming: DbTestimony[] = json.data ?? [];
+      setTestimonies(prev => append ? [...prev, ...incoming] : incoming);
+      setHasMore((pageNum * PAGE_SIZE) < (json.total ?? 0));
+    } catch {
+      setError('Could not load testimonies. Please try again.');
+    } finally {
+      setLoading(false);
+      setLoadingMore(false);
+    }
+  }, []);
 
-  const visible = filtered.slice(0, visibleCount);
-  const hasMore = visibleCount < filtered.length;
+  // Initial load + tab change
+  useEffect(() => {
+    setPage(1);
+    fetchTestimonies(activeTab, 1, false);
+  }, [activeTab, fetchTestimonies]);
 
   function handleTabChange(tab: FilterTab) {
     setActiveTab(tab);
-    setVisibleCount(INITIAL_COUNT);
-    setNextBatch(5);
   }
 
   function handleLoadMore() {
-    setVisibleCount((c) => c + nextBatch);
-    setNextBatch((b) => b + 2);
+    const next = page + 1;
+    setPage(next);
+    fetchTestimonies(activeTab, next, true);
   }
 
   return (
@@ -299,7 +334,6 @@ export default function FeaturedFeed() {
         >
           Others who were set free.
         </h2>
-        {/* Subtitle + filter button on the same row */}
         <div
           style={{
             display: 'flex',
@@ -354,7 +388,7 @@ export default function FeaturedFeed() {
         </div>
       </div>
 
-      {/* Category filter tabs — hidden by default */}
+      {/* Category filter tabs */}
       <AnimatePresence>
         {showFilters && (
           <motion.div
@@ -377,6 +411,7 @@ export default function FeaturedFeed() {
             >
               {ALL_CATEGORIES.map((tab) => {
                 const isActive = activeTab === tab;
+                const label = tab === 'All' ? 'All' : (CATEGORY_LABEL[tab as Category] ?? tab);
                 return (
                   <button
                     key={tab}
@@ -405,7 +440,7 @@ export default function FeaturedFeed() {
                       if (!isActive) e.currentTarget.style.borderColor = 'var(--brand-ivory-deeper)';
                     }}
                   >
-                    {tab}
+                    {label}
                   </button>
                 );
               })}
@@ -414,27 +449,34 @@ export default function FeaturedFeed() {
         )}
       </AnimatePresence>
 
-      {/* Feed */}
-      <motion.div
-        layout
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 340px), 1fr))',
-          gap: 'clamp(0.875rem, 2vw, 1.25rem)',
-        }}
-      >
-        <AnimatePresence mode="popLayout">
-          {visible.map((testimony) => (
-            <TestimonyCard key={testimony.id} testimony={testimony} />
+      {/* Loading skeleton */}
+      {loading && (
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 340px), 1fr))',
+            gap: 'clamp(0.875rem, 2vw, 1.25rem)',
+          }}
+        >
+          {Array.from({ length: 3 }).map((_, i) => (
+            <div
+              key={i}
+              style={{
+                height: '200px',
+                borderRadius: 'var(--radius-lg)',
+                background: 'var(--brand-ivory-dark)',
+                border: '1px solid var(--brand-ivory-deeper)',
+                opacity: 0.5,
+                animation: 'pulse 1.5s ease-in-out infinite',
+              }}
+            />
           ))}
-        </AnimatePresence>
-      </motion.div>
+        </div>
+      )}
 
-      {/* Empty state */}
-      {filtered.length === 0 && (
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
+      {/* Error state */}
+      {error && !loading && (
+        <p
           style={{
             textAlign: 'center',
             fontFamily: 'var(--font-body)',
@@ -443,44 +485,85 @@ export default function FeaturedFeed() {
             paddingTop: '2rem',
           }}
         >
-          No testimonies in this category yet.
-        </motion.p>
+          {error}
+        </p>
       )}
 
-      {/* Load more */}
-      {hasMore && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          style={{ textAlign: 'center', marginTop: 'clamp(1.5rem, 4vw, 2.5rem)' }}
-        >
-          <button
-            onClick={handleLoadMore}
+      {/* Feed */}
+      {!loading && !error && (
+        <>
+          <motion.div
+            layout
             style={{
-              background: 'none',
-              border: '1px solid var(--brand-ivory-deeper)',
-              borderRadius: 'var(--radius-full)',
-              padding: '0.55rem 1.5rem',
-              cursor: 'pointer',
-              fontFamily: 'var(--font-body)',
-              fontSize: '0.85rem',
-              fontWeight: 600,
-              letterSpacing: '0.03em',
-              color: 'var(--brand-near-black-soft)',
-              transition: 'border-color 0.15s, color 0.15s',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = 'var(--brand-sienna-pale)';
-              e.currentTarget.style.color = 'var(--brand-near-black)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.borderColor = 'var(--brand-ivory-deeper)';
-              e.currentTarget.style.color = 'var(--brand-near-black-soft)';
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 340px), 1fr))',
+              gap: 'clamp(0.875rem, 2vw, 1.25rem)',
             }}
           >
-            Read more testimonies
-          </button>
-        </motion.div>
+            <AnimatePresence mode="popLayout">
+              {testimonies.map((testimony) => (
+                <TestimonyCard key={testimony.id} testimony={testimony} />
+              ))}
+            </AnimatePresence>
+          </motion.div>
+
+          {/* Empty state */}
+          {testimonies.length === 0 && (
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              style={{
+                textAlign: 'center',
+                fontFamily: 'var(--font-body)',
+                color: 'var(--brand-near-black-muted)',
+                fontSize: '0.9rem',
+                paddingTop: '2rem',
+              }}
+            >
+              No testimonies in this category yet.
+            </motion.p>
+          )}
+
+          {/* Load more */}
+          {hasMore && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              style={{ textAlign: 'center', marginTop: 'clamp(1.5rem, 4vw, 2.5rem)' }}
+            >
+              <button
+                onClick={handleLoadMore}
+                disabled={loadingMore}
+                style={{
+                  background: 'none',
+                  border: '1px solid var(--brand-ivory-deeper)',
+                  borderRadius: 'var(--radius-full)',
+                  padding: '0.55rem 1.5rem',
+                  cursor: loadingMore ? 'default' : 'pointer',
+                  fontFamily: 'var(--font-body)',
+                  fontSize: '0.85rem',
+                  fontWeight: 600,
+                  letterSpacing: '0.03em',
+                  color: 'var(--brand-near-black-soft)',
+                  opacity: loadingMore ? 0.5 : 1,
+                  transition: 'border-color 0.15s, color 0.15s',
+                }}
+                onMouseEnter={(e) => {
+                  if (!loadingMore) {
+                    e.currentTarget.style.borderColor = 'var(--brand-sienna-pale)';
+                    e.currentTarget.style.color = 'var(--brand-near-black)';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--brand-ivory-deeper)';
+                  e.currentTarget.style.color = 'var(--brand-near-black-soft)';
+                }}
+              >
+                {loadingMore ? 'Loading…' : 'Read more testimonies'}
+              </button>
+            </motion.div>
+          )}
+        </>
       )}
     </motion.section>
   );

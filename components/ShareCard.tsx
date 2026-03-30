@@ -137,19 +137,44 @@ const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(
         <div
           style={{
             position: 'absolute',
-            right: 60,
+            right: 40,
             top: '50%',
             transform: 'translateY(-50%)',
-            opacity: 0.05,
+            opacity: 0.07,
           }}
         >
-          <svg width="480" height="600" viewBox="0 0 480 600" fill="none">
+          <svg width="620" height="780" viewBox="0 0 480 600" fill="none">
             <rect x="196" y="0"   width="88"  height="600" rx="12" fill="#F8F4EC" />
             <rect x="0"   y="176" width="480" height="88"  rx="12" fill="#F8F4EC" />
           </svg>
         </div>
 
         {/* ── Layer 4 · Foreground content ─────────────────────────────────── */}
+
+        {/* Top label: "I, ✝ testifi that Jesus saved me from" */}
+        <div
+          style={{
+            position: 'absolute',
+            top: 72,
+            left: 96,
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
+            fontSize: '26px',
+            fontWeight: 600,
+            lineHeight: 1,
+            textTransform: 'capitalize',
+          }}
+        >
+          <span style={{ color: 'rgba(248,244,236,0.7)' }}>I,</span>
+          <svg width="16" height="20" viewBox="0 0 18 22" fill="none" style={{ flexShrink: 0 }}>
+            <rect x="7.5" y="0"   width="3"  height="22" rx="1.5" fill="#B5673D" />
+            <rect x="0"   y="6.5" width="18" height="3"  rx="1.5" fill="#B5673D" />
+          </svg>
+          <span style={{ color: '#B5673D' }}>Testifi</span>
+          <span style={{ color: 'rgba(248,244,236,0.7)' }}>That Jesus Saved Me From</span>
+        </div>
 
         {/* Hero content block  starts at optical center (~38% from top = 342px) */}
         <div
@@ -160,29 +185,6 @@ const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(
             right: 96,
           }}
         >
-          {/* "I, ✝ testifi that Jesus saved me from"  label */}
-          <p
-            style={{
-              fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
-              fontSize: '20px',
-              fontWeight: 600,
-              color: 'rgba(248,244,236,0.7)',
-              marginBottom: '8px',
-              lineHeight: 1,
-              textTransform: 'capitalize',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '7px',
-            }}
-          >
-            I,
-            <svg width="13" height="16" viewBox="0 0 18 22" fill="none" style={{ display: 'inline', verticalAlign: 'middle', flexShrink: 0 }}>
-              <rect x="7.5" y="0"   width="3"  height="22" rx="1.5" fill="rgba(248,244,236,0.7)" />
-              <rect x="0"   y="6.5" width="18" height="3"  rx="1.5" fill="rgba(248,244,236,0.7)" />
-            </svg>
-            testifi that Jesus saved me from
-          </p>
-
           {/* Hero word */}
           <h2
             style={{
@@ -227,7 +229,7 @@ const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(
           <p
             style={{
               fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
-              fontSize: '15px',
+              fontSize: '20px',
               fontWeight: 500,
               letterSpacing: '0.03em',
               color: 'rgba(181,103,61,0.5)',

@@ -162,6 +162,7 @@ export default function TestimonySection() {
     setDepthSubmitted(true);
     setShowThankYou(true);
     setTimeout(() => setShowThankYou(false), 1500);
+    setTestimonyText('');
 
     // Persist testimony with optional category (fire-and-forget)
     try {
@@ -738,7 +739,7 @@ export default function TestimonySection() {
                     marginBottom: '1.25rem',
                   }}
                 >
-                  Want to share what happened?
+                  Your testimony in details would shift someone's life
                 </p>
 
                 <textarea
@@ -777,51 +778,6 @@ export default function TestimonySection() {
                 >
                   {testimonyText.length}/1000
                 </p>
-
-                {/* Consent: progressive disclosure, only shown once typing starts */}
-                <AnimatePresence>
-                  {testimonyText.length > 0 && (
-                    <motion.label
-                      key="consent"
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: 'auto' }}
-                      exit={{ opacity: 0, height: 0 }}
-                      transition={{ duration: 0.25 }}
-                      style={{
-                        display: 'flex',
-                        gap: '0.625rem',
-                        alignItems: 'flex-start',
-                        cursor: 'pointer',
-                        marginBottom: '1.25rem',
-                        overflow: 'hidden',
-                      }}
-                    >
-                      <input
-                        type="checkbox"
-                        checked={consentChecked}
-                        onChange={(e) => setConsentChecked(e.target.checked)}
-                        style={{
-                          width: '1rem',
-                          height: '1rem',
-                          marginTop: '0.1rem',
-                          accentColor: 'var(--brand-sienna-light)',
-                          flexShrink: 0,
-                          cursor: 'pointer',
-                        }}
-                      />
-                      <span
-                        style={{
-                          fontFamily: 'var(--font-body)',
-                          fontSize: '0.85rem',
-                          color: 'var(--brand-near-black)',
-                          lineHeight: 1.5,
-                        }}
-                      >
-                        Share this anonymously to encourage others
-                      </span>
-                    </motion.label>
-                  )}
-                </AnimatePresence>
 
                 {/* Category picker — optional, shown once typing starts */}
                 <AnimatePresence>

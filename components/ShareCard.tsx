@@ -175,11 +175,11 @@ const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(
             }}
           >
             <span style={{ color: 'rgba(248,244,236,0.7)' }}>I,</span>
-            <svg width="16" height="20" viewBox="0 0 18 22" fill="none" style={{ flexShrink: 0 }}>
+            {/* <svg width="16" height="20" viewBox="0 0 18 22" fill="none" style={{ flexShrink: 0 }}>
               <rect x="7.5" y="0"   width="3"  height="22" rx="1.5" fill="#B5673D" />
               <rect x="0"   y="6.5" width="18" height="3"  rx="1.5" fill="#B5673D" />
-            </svg>
-            <span style={{ color: '#B5673D' }}>estifi</span>
+            </svg> */}
+            <span style={{ color: '#B5673D' }}>Testifi</span>
             <span style={{ color: 'rgba(248,244,236,0.7)' }}>That Jesus Saved Me From</span>
           </div>
 

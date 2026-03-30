@@ -77,7 +77,7 @@ function TestimonyCard({ testimony }: { testimony: DbTestimony }) {
 
   function handleXShare() {
     const text = encodeURIComponent(
-      `Jesus saved me from ${testimony.word}. "${displayText.slice(0, 120)}" — testifi.vercel.app`
+      `Jesus saved me from ${testimony.word}. "${displayText.slice(0, 120)}"  testifi.vercel.app`
     );
     window.open(`https://twitter.com/intent/tweet?text=${text}`, '_blank');
   }

@@ -29,7 +29,7 @@ export default function CommunityReveal() {
 
   return (
     <>
-      {/* Sentinel — sits between TestimonySection and FeaturedFeed */}
+      {/* Sentinel  sits between TestimonySection and FeaturedFeed */}
       <div ref={sentinelRef} aria-hidden="true" />
 
       {/* Sticky reveal button */}
@@ -78,7 +78,7 @@ export default function CommunityReveal() {
         )}
       </AnimatePresence>
 
-      {/* FeaturedFeed — hidden until revealed */}
+      {/* FeaturedFeed  hidden until revealed */}
       <AnimatePresence>
         {feedVisible && (
           <motion.div

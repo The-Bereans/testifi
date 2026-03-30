@@ -27,8 +27,8 @@ export interface RateLimitResult {
 /**
  * Check (and increment) the rate-limit counter for a given key.
  *
- * @param key      — typically the hashed IP address
- * @param options  — { limit, windowMs }
+ * @param key       typically the hashed IP address
+ * @param options   { limit, windowMs }
  */
 export function checkRateLimit(key: string, options: RateLimitOptions): RateLimitResult {
   const now = Date.now();

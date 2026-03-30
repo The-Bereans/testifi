@@ -41,7 +41,7 @@ export async function GET() {
     });
   } catch (err) {
     console.error('[/api/words]', err);
-    // Graceful degradation — return mock data so the UI never breaks
+    // Graceful degradation  return mock data so the UI never breaks
     return NextResponse.json(WORD_COUNTS, {
       headers: { 'Cache-Control': 'no-store' },
     });

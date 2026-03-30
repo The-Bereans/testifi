@@ -60,7 +60,7 @@ const CommunityShareCard = forwardRef<HTMLDivElement, CommunityShareCardProps>(
           </svg>
         </div>
 
-        {/* Top bar — cross + wordmark + category */}
+        {/* Top bar  cross + wordmark + category */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <svg width="18" height="22" viewBox="0 0 18 22" fill="none">

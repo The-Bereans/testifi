@@ -1,5 +1,5 @@
 /**
- * Google Sheets waitlist provider — drop-in alternative to Supabase.
+ * Google Sheets waitlist provider  drop-in alternative to Supabase.
  *
  * SETUP
  * ─────
@@ -12,7 +12,7 @@
  *      GOOGLE_SERVICE_ACCOUNT_EMAIL=<your-service-account@project.iam.gserviceaccount.com>
  *      GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n"
  *
- *    Tip: the private key from the JSON file needs its literal \n kept — paste it
+ *    Tip: the private key from the JSON file needs its literal \n kept  paste it
  *    in quotes and it works in both .env files and Vercel/Netlify env vars.
  *
  * 5. Set up your sheet:
@@ -109,7 +109,7 @@ async function getAccessToken(): Promise<string> {
 
 /**
  * Appends a waitlist row to the Google Sheet.
- * Throws on failure — let the caller handle the HTTP response.
+ * Throws on failure  let the caller handle the HTTP response.
  */
 export async function appendToWaitlist(email: string, ipHash: string): Promise<void> {
   const spreadsheetId = process.env.GOOGLE_SHEETS_SPREADSHEET_ID;

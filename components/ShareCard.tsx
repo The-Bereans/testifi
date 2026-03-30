@@ -19,15 +19,15 @@ const CROSS = {
 } as const;
 // Derived card-pixel coords
 const CROSS_ANCHOR_X = 1200 - CROSS.RIGHT_OFFSET - CROSS.SVG_W + CROSS.BEAM_X + CROSS.BEAM_W / 2; // 900
-const CROSS_ANCHOR_Y = 450 - CROSS.SVG_H / 2 + CROSS.SVG_H;  // 750 — base of vertical beam
+const CROSS_ANCHOR_Y = 450 - CROSS.SVG_H / 2 + CROSS.SVG_H;  // 750  base of vertical beam
 
 // ─── Deterministic golden-angle spiral positions ────────────────────────────
-// No Math.random, no Date, no state — same output every render (html2canvas-safe).
+// No Math.random, no Date, no state  same output every render (html2canvas-safe).
 // Caller must pass cloudWords sorted descending by count so index 0 (innermost
-// spiral position) is the highest-frequency word — closest to the cross anchor.
+// spiral position) is the highest-frequency word  closest to the cross anchor.
 
 const GOLDEN_ANGLE = 2.39996322972865332; // radians
-const MAX_R = 220; // px — caps outer spiral ring so words past index ~15 don't drift
+const MAX_R = 220; // px  caps outer spiral ring so words past index ~15 don't drift
 
 interface WordPosition {
   x: number;
@@ -38,7 +38,7 @@ interface WordPosition {
 
 function getClusterPosition(index: number, count: number, maxCount: number): WordPosition {
   const angle = index * GOLDEN_ANGLE;
-  const r = Math.min(55 * Math.sqrt(index + 0.5), MAX_R); // capped — D.2
+  const r = Math.min(55 * Math.sqrt(index + 0.5), MAX_R); // capped  D.2
 
   const x = Math.min(900 + r * Math.cos(angle), 1150);
   const y = Math.min(750 + r * Math.sin(angle), 870);
@@ -62,13 +62,13 @@ function heroFontSize(word: string): string {
 
 // ─── ShareCard ──────────────────────────────────────────────────────────────
 /**
- * Full-bleed layered poster share card — 1200×900 px.
+ * Full-bleed layered poster share card  1200×900 px.
  * Layer 1: background word-cloud scatter (golden-angle spiral, deterministic)
  * Layer 2: radial vignette (spotlight on content area)
  * Layer 3: watermark cross (centered-right, opacity 0.05)
  * Layer 4: foreground content (left-aligned, optically centered)
  *
- * Uses only inline styles / system fonts — no CSS vars — html2canvas-safe.
+ * Uses only inline styles / system fonts  no CSS vars  html2canvas-safe.
  */
 const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(
   ({ word, cloudWords = [], preview = false }, ref) => {
@@ -176,7 +176,7 @@ const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(
           </span>
         </div>
 
-        {/* Hero content block — starts at optical center (~38% from top = 342px) */}
+        {/* Hero content block  starts at optical center (~38% from top = 342px) */}
         <div
           style={{
             position: 'absolute',
@@ -185,7 +185,7 @@ const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(
             right: 96,
           }}
         >
-          {/* "Jesus saved me from" — italic label */}
+          {/* "Jesus saved me from"  italic label */}
           <p
             style={{
               fontFamily: 'Georgia, "Times New Roman", serif',
@@ -227,7 +227,7 @@ const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(
           />
         </div>
 
-        {/* Bottom bar — "He still saves." + URL */}
+        {/* Bottom bar  "He still saves." + URL */}
         <div
           style={{
             position: 'absolute',

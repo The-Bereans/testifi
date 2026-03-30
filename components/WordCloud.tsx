@@ -60,11 +60,11 @@ function WordChip({
         background: 'transparent',
         border: 'none',
         outline: 'none',
-        // Horizontal only — no transform rotations
+        // Horizontal only  no transform rotations
         writingMode: 'horizontal-tb',
         textOrientation: 'mixed',
       }}
-      aria-label={`${word} — ${count} people`}
+      aria-label={`${word}  ${count} people`}
     >
       {word}
     </motion.button>

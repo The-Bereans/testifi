@@ -28,7 +28,7 @@ export function useWordCloud(): WordCloudData {
     const updated = { ...current, [word]: (current[word] ?? 0) + 1 };
     await mutate(updated, { revalidate: false });
 
-    // Fire-and-forget persistence — revalidate after so counts stay accurate
+    // Fire-and-forget persistence  revalidate after so counts stay accurate
     try {
       await fetch('/api/submit', {
         method: 'POST',
@@ -36,7 +36,7 @@ export function useWordCloud(): WordCloudData {
         body: JSON.stringify({ word }),
       });
     } catch {
-      // Network error — optimistic update still visible; no UX disruption
+      // Network error  optimistic update still visible; no UX disruption
     } finally {
       // Refresh word counts from DB after a short delay
       setTimeout(() => mutate(), 2000);

@@ -46,7 +46,7 @@ export async function POST(req: NextRequest) {
 
     const { error } = await db.from('waitlist').insert({ email, ip_hash: ipHash });
 
-    // Unique constraint violation — silently succeed (don't reveal existing emails)
+    // Unique constraint violation  silently succeed (don't reveal existing emails)
     if (error && error.code !== '23505') throw error;
 
     return NextResponse.json({ ok: true }, { status: 201 });

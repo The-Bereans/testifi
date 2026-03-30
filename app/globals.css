@@ -2,7 +2,7 @@
 @import "../styles/tokens.css";
 
 /* ============================================================
-   Tailwind v4 Theme — wire brand tokens into utility classes
+   Tailwind v4 Theme  wire brand tokens into utility classes
    ============================================================ */
 @theme {
   /* Colors */
@@ -149,7 +149,7 @@ a:hover {
   padding-inline: var(--section-padding-x);
 }
 
-/* Share buttons — circular icon buttons */
+/* Share buttons  circular icon buttons */
 .share-btn:hover:not(:disabled) {
   background: rgba(107, 53, 32, 0.08);
   border-color: #8B4A2A !important;

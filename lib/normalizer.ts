@@ -1,4 +1,4 @@
-// Normalization map — ~100 entries.
+// Normalization map  ~100 entries.
 // Rule: only collapse truly identical meanings; preserve specific struggles; no abstraction.
 
 const normalizationMap: Record<string, string> = {
@@ -206,7 +206,7 @@ export function normalize(raw: string): NormalizeResult {
 
 /**
  * Returns the canonical form only when it differs from what the user typed.
- * Used for real-time preview — undefined means no preview needed.
+ * Used for real-time preview  undefined means no preview needed.
  */
 export function getCanonicalPreview(raw: string): string | undefined {
   const trimmed = raw.trim();

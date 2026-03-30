@@ -1,5 +1,5 @@
 -- ============================================================
--- Testify — Phase 2 Schema Migration
+-- Testify  Phase 2 Schema Migration
 -- Run once in Supabase SQL Editor (safe to re-run; guarded with IF NOT EXISTS / ON CONFLICT DO NOTHING)
 --
 -- Stage 2.1  Add category + excerpt columns to testimonies
@@ -15,8 +15,8 @@ ALTER TABLE public.testimonies
   ADD COLUMN IF NOT EXISTS category text,
   ADD COLUMN IF NOT EXISTS excerpt  text GENERATED ALWAYS AS (left(body, 160)) STORED;
 
--- category  — user-selected at submission time (Addiction | Mental Health | Relationships | Identity | Spiritual)
--- excerpt   — auto-derived from first 160 chars of body; never written by app logic
+-- category   user-selected at submission time (Addiction | Mental Health | Relationships | Identity | Spiritual)
+-- excerpt    auto-derived from first 160 chars of body; never written by app logic
 
 
 -- ─── 2.2  Partial indexes for feed queries ───────────────────────────────────
@@ -45,7 +45,7 @@ GRANT SELECT (id, word, body, consented, created_at, category, excerpt)
 
 -- ─── 2.4  Seed mock testimonies ──────────────────────────────────────────────
 -- Uses deterministic UUIDs so re-running is idempotent (ON CONFLICT DO NOTHING).
--- ip_hash is intentionally omitted — seed rows have no origin to hash.
+-- ip_hash is intentionally omitted  seed rows have no origin to hash.
 
 INSERT INTO public.testimonies (id, word, category, body, consented, created_at)
 VALUES
@@ -60,7 +60,7 @@ VALUES
   (
     '00000000-0000-0000-0000-000000000002',
     'pornography', 'Addiction',
-    'Ten years. I didn''t think I''d ever get out. I was ashamed to even say the word out loud in church — like just naming it would make me less. But the shame was keeping me in. I finally told one person. That was the beginning. Not the end — the beginning. There''s still work to do, but I''m not alone in it anymore.',
+    'Ten years. I didn''t think I''d ever get out. I was ashamed to even say the word out loud in church  like just naming it would make me less. But the shame was keeping me in. I finally told one person. That was the beginning. Not the end  the beginning. There''s still work to do, but I''m not alone in it anymore.',
     true, '2026-03-24T21:47:00Z'
   ),
   (
@@ -74,19 +74,19 @@ VALUES
   (
     '00000000-0000-0000-0000-000000000004',
     'anxiety', 'Mental Health',
-    'I used to plan my own funeral in my head — not because I wanted to die, just to feel in control of something. Anxiety had taken everything else. I couldn''t make a single decision without spiraling. Therapy helped. Medication helped. But honestly, the moment someone said "me too" without flinching — that helped more than anything. I''m not fixed. I''m functional. That''s enough for today.',
+    'I used to plan my own funeral in my head  not because I wanted to die, just to feel in control of something. Anxiety had taken everything else. I couldn''t make a single decision without spiraling. Therapy helped. Medication helped. But honestly, the moment someone said "me too" without flinching  that helped more than anything. I''m not fixed. I''m functional. That''s enough for today.',
     true, '2026-03-20T07:55:00Z'
   ),
   (
     '00000000-0000-0000-0000-000000000005',
     'depression', 'Mental Health',
-    'I stayed in bed for 11 days. My mom called every morning. I didn''t pick up once. On day 12 I picked up, and she just said "I''m still here." That''s it. No lecture. No fix. She was just still there. I cried for a long time after that. I think that''s what grace sounds like sometimes — just someone being still there.',
+    'I stayed in bed for 11 days. My mom called every morning. I didn''t pick up once. On day 12 I picked up, and she just said "I''m still here." That''s it. No lecture. No fix. She was just still there. I cried for a long time after that. I think that''s what grace sounds like sometimes  just someone being still there.',
     true, '2026-03-15T18:22:00Z'
   ),
   (
     '00000000-0000-0000-0000-000000000006',
     'suicide', 'Mental Health',
-    'I was on the edge of a bridge. I''m not entirely sure why I got off. I don''t have a clean story about a voice or a vision. I just got off. I went home. I called a number I''d been avoiding. That was three years ago. I still have bad days — genuinely bad ones. But I''m here to have them, and that matters more than I used to think it did.',
+    'I was on the edge of a bridge. I''m not entirely sure why I got off. I don''t have a clean story about a voice or a vision. I just got off. I went home. I called a number I''d been avoiding. That was three years ago. I still have bad days  genuinely bad ones. But I''m here to have them, and that matters more than I used to think it did.',
     true, '2026-01-05T11:08:00Z'
   ),
 
@@ -94,13 +94,13 @@ VALUES
   (
     '00000000-0000-0000-0000-000000000007',
     'loneliness', 'Relationships',
-    'I was surrounded by people every weekend and still the loneliest I''d ever been in my life. I was performing closeness. Laughing at the right moments. Nobody knew what was actually going on. I think I was afraid that if they did, they''d leave. When I finally let one person in — actually in — they didn''t leave. I hadn''t expected that.',
+    'I was surrounded by people every weekend and still the loneliest I''d ever been in my life. I was performing closeness. Laughing at the right moments. Nobody knew what was actually going on. I think I was afraid that if they did, they''d leave. When I finally let one person in  actually in  they didn''t leave. I hadn''t expected that.',
     true, '2026-03-10T16:40:00Z'
   ),
   (
     '00000000-0000-0000-0000-000000000008',
     'betrayal', 'Relationships',
-    'My closest friend told everyone my secret. I still don''t fully trust anyone — I''m working on it. I used to think I was just broken for not being able to move on. But a counselor helped me understand that what happened was real and it made sense that it changed me. I''m learning to trust again slowly. Not naively. Just slowly.',
+    'My closest friend told everyone my secret. I still don''t fully trust anyone  I''m working on it. I used to think I was just broken for not being able to move on. But a counselor helped me understand that what happened was real and it made sense that it changed me. I''m learning to trust again slowly. Not naively. Just slowly.',
     true, '2026-02-28T20:03:00Z'
   ),
   (
@@ -120,13 +120,13 @@ VALUES
   (
     '00000000-0000-0000-0000-000000000011',
     'invisible', 'Identity',
-    'I used to wonder if anyone would actually notice if I just disappeared one day. Not in a dark way — just in a quiet, hollow way. Like I was taking up space without mattering. I started showing up to a small group even though I hated small groups. Someone remembered my name week two. It sounds small. It wasn''t.',
+    'I used to wonder if anyone would actually notice if I just disappeared one day. Not in a dark way  just in a quiet, hollow way. Like I was taking up space without mattering. I started showing up to a small group even though I hated small groups. Someone remembered my name week two. It sounds small. It wasn''t.',
     true, '2026-02-12T22:51:00Z'
   ),
   (
     '00000000-0000-0000-0000-000000000012',
     'broken', 'Identity',
-    'I kept waiting to feel fixed. I eventually stopped waiting and started living with the cracks. There''s a Japanese art form — kintsugi — where they repair broken pottery with gold. I saw a picture of it once and had to sit down. I''m not a metaphor person. But that one got me. Maybe broken and beautiful aren''t opposites.',
+    'I kept waiting to feel fixed. I eventually stopped waiting and started living with the cracks. There''s a Japanese art form  kintsugi  where they repair broken pottery with gold. I saw a picture of it once and had to sit down. I''m not a metaphor person. But that one got me. Maybe broken and beautiful aren''t opposites.',
     true, '2026-03-01T10:44:00Z'
   ),
 
@@ -134,13 +134,13 @@ VALUES
   (
     '00000000-0000-0000-0000-000000000013',
     'doubt', 'Spiritual',
-    'I spent three years furious at God. I think He was okay with that. I kept waiting to lose faith entirely but I couldn''t — even my anger was directed at Someone. When I came back it wasn''t because I had answers. It was because the doubt itself had somehow kept me tethered. I''m still not sure about a lot of things. But I''m here.',
+    'I spent three years furious at God. I think He was okay with that. I kept waiting to lose faith entirely but I couldn''t  even my anger was directed at Someone. When I came back it wasn''t because I had answers. It was because the doubt itself had somehow kept me tethered. I''m still not sure about a lot of things. But I''m here.',
     true, '2026-03-18T06:38:00Z'
   ),
   (
     '00000000-0000-0000-0000-000000000014',
     'anger', 'Spiritual',
-    'I screamed at God in my car once. Just screamed. Nothing dramatic happened — no thunder, no peace descending. But something shifted. Like I''d finally stopped performing for someone who already knew. I think He''d been waiting for me to drop it. The pretending that I was fine. The polished prayers. He wanted the real version. That was terrifying. Also kind of a relief.',
+    'I screamed at God in my car once. Just screamed. Nothing dramatic happened  no thunder, no peace descending. But something shifted. Like I''d finally stopped performing for someone who already knew. I think He''d been waiting for me to drop it. The pretending that I was fine. The polished prayers. He wanted the real version. That was terrifying. Also kind of a relief.',
     true, '2026-03-12T19:05:00Z'
   ),
   (

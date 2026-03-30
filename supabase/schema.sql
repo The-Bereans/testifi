@@ -1,5 +1,5 @@
 -- ============================================================
--- Testify — Database Schema
+-- Testify  Database Schema
 -- Run in Supabase SQL Editor or via `supabase db push`
 -- ============================================================
 
@@ -40,7 +40,7 @@ create table if not exists public.testimonies (
 );
 
 -- category: user-selected at submission time (Addiction | Mental Health | Relationships | Identity | Spiritual)
--- excerpt:  auto-derived from first 160 chars of body — never written by app logic
+-- excerpt:  auto-derived from first 160 chars of body  never written by app logic
 
 -- Index for feed queries filtered by word
 create index if not exists testimonies_word_idx     on public.testimonies (word);
@@ -77,7 +77,7 @@ create table if not exists public.waitlist (
 );
 
 alter table public.waitlist enable row level security;
--- No public read policy — only accessible via service role
+-- No public read policy  only accessible via service role
 
 -- ─── Helpers ─────────────────────────────────────────────────────────────────
 -- Atomic upsert used by the submission API to avoid race conditions.

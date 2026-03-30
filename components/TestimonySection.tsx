@@ -88,7 +88,7 @@ export default function TestimonySection() {
 
   const { words, addWord } = useWordCloud();
 
-  // Sorted descending by count — ShareCard relies on index 0 being the
+  // Sorted descending by count  ShareCard relies on index 0 being the
   // highest-frequency word so it lands innermost on the spiral (D.1).
   const cloudWords = Object.entries(words)
     .sort(([, a], [, b]) => b - a)
@@ -175,7 +175,7 @@ export default function TestimonySection() {
         }),
       });
     } catch {
-      // Network error — thank-you already shown; no UX disruption
+      // Network error  thank-you already shown; no UX disruption
     }
   }
 
@@ -299,7 +299,7 @@ export default function TestimonySection() {
                 overflow: 'hidden',
               }}
             >
-              {/* Conic gradient sunburst — very subtle, emanates from top-center */}
+              {/* Conic gradient sunburst  very subtle, emanates from top-center */}
               <div style={{
                 position: 'absolute',
                 top: '-30%',
@@ -449,7 +449,7 @@ export default function TestimonySection() {
                     />
                   </AnimatePresence>
 
-                  {/* Arrow send button — bottom-right corner */}
+                  {/* Arrow send button  bottom-right corner */}
                   <button
                     onClick={handleSubmit}
                     aria-label="Share testimony"
@@ -602,7 +602,7 @@ export default function TestimonySection() {
               </motion.div>
             )}
 
-            {/* Share buttons — 4 circular icons under the card */}
+            {/* Share buttons  4 circular icons under the card */}
             {newWord && (
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
@@ -711,7 +711,7 @@ export default function TestimonySection() {
                 letterSpacing: '0.01em',
               }}
             >
-              Thousands set free — tap any word to explore
+              Thousands set free  tap any word to explore
             </motion.p>
 
             {/* Compact interactive cloud in a modal-launching row */}
@@ -769,7 +769,7 @@ export default function TestimonySection() {
                   {testimonyText.length}/1000
                 </p>
 
-                {/* Category picker — optional, shown once typing starts */}
+                {/* Category picker  optional, shown once typing starts */}
                 <AnimatePresence>
                   {testimonyText.length > 0 && (
                     <motion.div

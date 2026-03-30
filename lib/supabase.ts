@@ -14,10 +14,10 @@ function getSupabaseClient() {
   return createClient<Database>(url, key);
 }
 
-/** Browser/edge-safe client — uses anon key, subject to RLS */
+/** Browser/edge-safe client  uses anon key, subject to RLS */
 export const supabase = getSupabaseClient();
 
-/** Server-only admin client — bypasses RLS. Only import from route handlers. */
+/** Server-only admin client  bypasses RLS. Only import from route handlers. */
 export function createServiceClient() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;

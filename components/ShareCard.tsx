@@ -151,31 +151,6 @@ const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(
 
         {/* ── Layer 4 · Foreground content ─────────────────────────────────── */}
 
-        {/* Top label: "I, ✝ testifi that Jesus saved me from" */}
-        <div
-          style={{
-            position: 'absolute',
-            top: 72,
-            left: 96,
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
-            fontSize: '26px',
-            fontWeight: 600,
-            lineHeight: 1,
-            textTransform: 'capitalize',
-          }}
-        >
-          <span style={{ color: 'rgba(248,244,236,0.7)' }}>I,</span>
-          <svg width="16" height="20" viewBox="0 0 18 22" fill="none" style={{ flexShrink: 0 }}>
-            <rect x="7.5" y="0"   width="3"  height="22" rx="1.5" fill="#B5673D" />
-            <rect x="0"   y="6.5" width="18" height="3"  rx="1.5" fill="#B5673D" />
-          </svg>
-          <span style={{ color: '#B5673D' }}>Testifi</span>
-          <span style={{ color: 'rgba(248,244,236,0.7)' }}>That Jesus Saved Me From</span>
-        </div>
-
         {/* Hero content block  starts at optical center (~38% from top = 342px) */}
         <div
           style={{
@@ -185,6 +160,29 @@ const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(
             right: 96,
           }}
         >
+          {/* "I, ✝ testifi that Jesus saved me from"  label */}
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
+              fontSize: '26px',
+              fontWeight: 600,
+              lineHeight: 1,
+              textTransform: 'capitalize',
+              marginBottom: '8px',
+            }}
+          >
+            <span style={{ color: 'rgba(248,244,236,0.7)' }}>I,</span>
+            <svg width="16" height="20" viewBox="0 0 18 22" fill="none" style={{ flexShrink: 0 }}>
+              <rect x="7.5" y="0"   width="3"  height="22" rx="1.5" fill="#B5673D" />
+              <rect x="0"   y="6.5" width="18" height="3"  rx="1.5" fill="#B5673D" />
+            </svg>
+            <span style={{ color: '#B5673D' }}>Testifi</span>
+            <span style={{ color: 'rgba(248,244,236,0.7)' }}>That Jesus Saved Me From</span>
+          </div>
+
           {/* Hero word */}
           <h2
             style={{

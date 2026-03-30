@@ -95,7 +95,7 @@ export default function WaitlistForm() {
             marginBottom: '2rem',
           }}
         >
-          The assignment is to bring Kingdom online, and The JESUS App is step one.
+          We are bringing 'Kingdom' online, and The JESUS App is step one.
         </p>
 
         {/* Form / success swap */}

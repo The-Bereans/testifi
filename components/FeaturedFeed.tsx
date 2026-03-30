@@ -523,75 +523,72 @@ export default function FeaturedFeed() {
 
       {/* ── Slideshow ── */}
       {!loading && !error && total > 0 && (
-        <div>
-          {/* Card viewport */}
-          <div style={{ overflow: 'hidden', position: 'relative', minHeight: 'clamp(240px, 35vh, 380px)' }}>
-            <AnimatePresence initial={false} custom={direction} mode="wait">
-              <motion.div
-                key={currentIndex}
-                custom={direction}
-                variants={slideVariants}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-              >
-                <TestimonyCard testimony={testimonies[currentIndex]} />
-              </motion.div>
-            </AnimatePresence>
-          </div>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1.25rem' }}>
 
-          {/* Progress bar */}
-          <div style={{
-            height: '2px',
-            background: 'var(--brand-ivory-deeper)',
-            borderRadius: '999px',
-            marginTop: '1.25rem',
-            overflow: 'hidden',
-          }}>
-            {!isPaused && total > 1 && (
-              <div
-                key={currentIndex}
-                style={{
-                  height: '100%',
-                  background: 'var(--brand-sienna-light)',
-                  borderRadius: '999px',
-                  animation: `slideshow-progress ${SLIDE_DURATION_MS}ms linear forwards`,
-                }}
-              />
-            )}
-          </div>
-
-          {/* Navigation row */}
+          {/* Prev */}
           {total > 1 && (
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              marginTop: '1rem',
-              gap: '0.75rem',
-            }}>
-              {/* Prev */}
-              <button
-                onClick={() => handleNav(-1)}
-                aria-label="Previous testimony"
-                style={arrowBtnStyle}
-                onMouseEnter={e => {
-                  e.currentTarget.style.borderColor = 'var(--brand-sienna-pale)';
-                  e.currentTarget.style.color = 'var(--brand-near-black-soft)';
-                }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.borderColor = 'var(--brand-ivory-deeper)';
-                  e.currentTarget.style.color = 'var(--brand-near-black-muted)';
-                }}
-              >
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                  <path d="M10 3L5 8L10 13" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </button>
+            <button
+              onClick={() => handleNav(-1)}
+              aria-label="Previous testimony"
+              style={{ ...arrowBtnStyle, flexShrink: 0 }}
+              onMouseEnter={e => {
+                e.currentTarget.style.borderColor = 'var(--brand-sienna-pale)';
+                e.currentTarget.style.color = 'var(--brand-near-black-soft)';
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.borderColor = 'var(--brand-ivory-deeper)';
+                e.currentTarget.style.color = 'var(--brand-near-black-muted)';
+              }}
+            >
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M10 3L5 8L10 13" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+          )}
 
-              {/* Dots + counter */}
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', flex: 1 }}>
+          {/* Center: card + progress bar + dots */}
+          <div style={{ flex: '0 1 640px', minWidth: 0 }}>
+            {/* Card viewport */}
+            <div style={{ overflow: 'hidden', position: 'relative', minHeight: 'clamp(240px, 35vh, 380px)' }}>
+              <AnimatePresence initial={false} custom={direction} mode="wait">
+                <motion.div
+                  key={currentIndex}
+                  custom={direction}
+                  variants={slideVariants}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                >
+                  <TestimonyCard testimony={testimonies[currentIndex]} />
+                </motion.div>
+              </AnimatePresence>
+            </div>
+
+            {/* Progress bar */}
+            <div style={{
+              height: '2px',
+              background: 'var(--brand-ivory-deeper)',
+              borderRadius: '999px',
+              marginTop: '1.25rem',
+              overflow: 'hidden',
+            }}>
+              {!isPaused && total > 1 && (
+                <div
+                  key={currentIndex}
+                  style={{
+                    height: '100%',
+                    background: 'var(--brand-sienna-light)',
+                    borderRadius: '999px',
+                    animation: `slideshow-progress ${SLIDE_DURATION_MS}ms linear forwards`,
+                  }}
+                />
+              )}
+            </div>
+
+            {/* Dots + counter */}
+            {total > 1 && (
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', marginTop: '1rem' }}>
                 <div style={{ display: 'flex', gap: '0.375rem', alignItems: 'center' }}>
                   {Array.from({ length: dotCount }, (_, i) => {
                     const isActive = i === activeDot;
@@ -619,27 +616,30 @@ export default function FeaturedFeed() {
                   {currentIndex + 1} / {total}
                 </span>
               </div>
+            )}
+          </div>
 
-              {/* Next */}
-              <button
-                onClick={() => handleNav(1)}
-                aria-label="Next testimony"
-                style={arrowBtnStyle}
-                onMouseEnter={e => {
-                  e.currentTarget.style.borderColor = 'var(--brand-sienna-pale)';
-                  e.currentTarget.style.color = 'var(--brand-near-black-soft)';
-                }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.borderColor = 'var(--brand-ivory-deeper)';
-                  e.currentTarget.style.color = 'var(--brand-near-black-muted)';
-                }}
-              >
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                  <path d="M6 3L11 8L6 13" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </button>
-            </div>
+          {/* Next */}
+          {total > 1 && (
+            <button
+              onClick={() => handleNav(1)}
+              aria-label="Next testimony"
+              style={{ ...arrowBtnStyle, flexShrink: 0 }}
+              onMouseEnter={e => {
+                e.currentTarget.style.borderColor = 'var(--brand-sienna-pale)';
+                e.currentTarget.style.color = 'var(--brand-near-black-soft)';
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.borderColor = 'var(--brand-ivory-deeper)';
+                e.currentTarget.style.color = 'var(--brand-near-black-muted)';
+              }}
+            >
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M6 3L11 8L6 13" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
           )}
+
         </div>
       )}
     </motion.section>

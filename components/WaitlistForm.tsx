@@ -69,7 +69,7 @@ export default function WaitlistForm() {
             marginBottom: '0.75rem',
           }}
         >
-          Coming soon
+          There's more
         </p>
 
         {/* Heading */}
@@ -83,7 +83,7 @@ export default function WaitlistForm() {
             marginBottom: '0.75rem',
           }}
         >
-          Stay in the loop.
+          The JESUS App.
         </h2>
 
         <p
@@ -95,7 +95,7 @@ export default function WaitlistForm() {
             marginBottom: '2rem',
           }}
         >
-          We&rsquo;re building more. Be the first to know when it&rsquo;s ready.
+          Our assignment is to bring kingdom online. The JESUS App is step one. Be the first to jump on.
         </p>
 
         {/* Form / success swap */}

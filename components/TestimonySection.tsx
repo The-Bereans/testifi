@@ -19,11 +19,16 @@ const sectionVariants = {
 };
 
 const PLACEHOLDERS = [
-  'I used to drink, a lot, like a lot...',
-  'I was addicted to porn for over 15 years, and God saved me.',
-  'Anxiety had me paralyzed. Jesus set me free.',
-  'I was lost in depression for years. He found me.',
-  'Anger was destroying my family. Grace changed everything.',
+  'pornography',
+  'betting. I once bet my school fees',
+  'a chronic football addiction',
+  'homosexuality',
+  'alcohol',
+  'anger. I almost destroyed my marriage',
+  'drugs',
+  'shame',
+  'loneliness',
+  'suicidal thoughts',
 ];
 
 // Best-effort mapping from canonical word → category

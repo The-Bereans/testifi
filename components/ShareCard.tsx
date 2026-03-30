@@ -104,7 +104,7 @@ const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(
                 position: 'absolute',
                 left: x,
                 top: y,
-                fontFamily: 'Georgia, "Times New Roman", serif',
+                fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
                 fontSize: `${size}px`,
                 color: '#F8F4EC',
                 opacity,
@@ -165,7 +165,7 @@ const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(
           <span
             style={{
               color: '#B5673D',
-              fontFamily: 'Georgia, "Times New Roman", serif',
+              fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
               fontSize: '14px',
               fontWeight: 600,
               letterSpacing: '0.2em',
@@ -254,7 +254,7 @@ const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(
           </p>
           <p
             style={{
-              fontFamily: 'Georgia, "Times New Roman", serif',
+              fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
               fontSize: '15px',
               fontWeight: 500,
               letterSpacing: '0.03em',

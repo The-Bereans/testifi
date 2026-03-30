@@ -13,21 +13,27 @@ export async function GET() {
   try {
     const db = createServiceClient();
 
-    const [{ data: wordCountRows, error: wcError }, { data: testimonyRows, error: tError }] =
-      await Promise.all([
-        db.from('word_counts').select('word, count').order('count', { ascending: false }).limit(2000),
-        db.from('testimonies').select('body').limit(2000),
-      ]);
+    // Single query: word for explicit counts, body for NLP extraction.
+    const { data: rows, error } = await db
+      .from('testimonies')
+      .select('word, body')
+      .limit(5000);
 
-    if (wcError) throw wcError;
-    if (tError) throw tError;
+    if (error) throw error;
 
-    const bodies = (testimonyRows ?? []).map((r) => r.body ?? '');
+    // Count explicit submissions per word (replaces word_counts).
+    const wordCountMap: Record<string, number> = {};
+    const bodies: string[] = [];
+    for (const row of rows ?? []) {
+      wordCountMap[row.word] = (wordCountMap[row.word] ?? 0) + 1;
+      if (row.body) bodies.push(row.body);
+    }
+
     const nlpFreq = extractWordFrequencies(bodies);
 
     const merged: Record<string, number> = { ...nlpFreq };
-    for (const row of wordCountRows ?? []) {
-      merged[row.word] = (merged[row.word] ?? 0) + row.count * EXPLICIT_WEIGHT;
+    for (const [word, count] of Object.entries(wordCountMap)) {
+      merged[word] = (merged[word] ?? 0) + count * EXPLICIT_WEIGHT;
     }
 
     const result = Object.fromEntries(

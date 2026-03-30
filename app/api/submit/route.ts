@@ -47,21 +47,15 @@ export async function POST(req: NextRequest) {
   try {
     const db = createServiceClient();
 
-    // Atomic word count increment via DB function
-    const { error: countErr } = await db.rpc('increment_word_count', { p_word: word });
-    if (countErr) throw countErr;
-
-    // Store full testimony only if provided
-    if (testimonyBody) {
-      const { error: testimonyErr } = await db.from('testimonies').insert({
-        word,
-        body: testimonyBody,
-        consented: consented ?? false,
-        ip_hash: ipHash,
-        ...(category ? { category } : {}),
-      });
-      if (testimonyErr) throw testimonyErr;
-    }
+    // All submissions land in testimonies; body is NULL for word-only rows.
+    const { error: testimonyErr } = await db.from('testimonies').insert({
+      word,
+      body: testimonyBody ?? null,
+      consented: consented ?? false,
+      ip_hash: ipHash,
+      ...(category ? { category } : {}),
+    });
+    if (testimonyErr) throw testimonyErr;
 
     return NextResponse.json({ ok: true }, { status: 201 });
   } catch (err) {

@@ -29,30 +29,55 @@ const CATEGORY_LABEL: Record<Category, string> = {
 };
 
 type FilterTab = 'All' | Category;
-
 const ALL_CATEGORIES: FilterTab[] = ['All', ...CATEGORIES];
 
 const CATEGORY_COLORS: Record<string, { bg: string; text: string; border: string }> = {
-  addiction:       { bg: 'rgba(139,74,42,0.12)',  text: '#8B4A2A', border: 'rgba(139,74,42,0.3)' },
+  addiction:       { bg: 'rgba(139,74,42,0.12)',  text: '#8B4A2A', border: 'rgba(139,74,42,0.3)'  },
   anxiety:         { bg: 'rgba(181,103,61,0.12)', text: '#B5673D', border: 'rgba(181,103,61,0.35)' },
-  depression:      { bg: 'rgba(74,61,48,0.10)',   text: '#4A3D30', border: 'rgba(74,61,48,0.25)' },
-  anger:           { bg: 'rgba(139,74,42,0.12)',  text: '#8B4A2A', border: 'rgba(139,74,42,0.3)' },
+  depression:      { bg: 'rgba(74,61,48,0.10)',   text: '#4A3D30', border: 'rgba(74,61,48,0.25)'  },
+  anger:           { bg: 'rgba(139,74,42,0.12)',  text: '#8B4A2A', border: 'rgba(139,74,42,0.3)'  },
   shame:           { bg: 'rgba(181,103,61,0.12)', text: '#B5673D', border: 'rgba(181,103,61,0.3)' },
   identity:        { bg: 'rgba(181,103,61,0.12)', text: '#B5673D', border: 'rgba(181,103,61,0.3)' },
-  relationships:   { bg: 'rgba(74,61,48,0.10)',   text: '#4A3D30', border: 'rgba(74,61,48,0.25)' },
-  'sexual sin':    { bg: 'rgba(139,74,42,0.12)',  text: '#8B4A2A', border: 'rgba(139,74,42,0.3)' },
+  relationships:   { bg: 'rgba(74,61,48,0.10)',   text: '#4A3D30', border: 'rgba(74,61,48,0.25)'  },
+  'sexual sin':    { bg: 'rgba(139,74,42,0.12)',  text: '#8B4A2A', border: 'rgba(139,74,42,0.3)'  },
   'mental health': { bg: 'rgba(181,103,61,0.12)', text: '#B5673D', border: 'rgba(181,103,61,0.35)' },
-  other:           { bg: 'rgba(74,61,48,0.10)',   text: '#4A3D30', border: 'rgba(74,61,48,0.25)' },
+  other:           { bg: 'rgba(74,61,48,0.10)',   text: '#4A3D30', border: 'rgba(74,61,48,0.25)'  },
 };
 
 const DEFAULT_COLORS = { bg: 'rgba(74,61,48,0.10)', text: '#4A3D30', border: 'rgba(74,61,48,0.25)' };
 
-const PAGE_SIZE = 9;
+const POOL_SIZE            = 50;
+const SLIDE_DURATION_MS    = 5000;
+const PAUSE_AFTER_NAV_MS   = 10000;
+const MAX_DOTS             = 10;
+
+const slideVariants = {
+  enter:  (dir: number) => ({ x: dir > 0 ? '100%' : '-100%', opacity: 0 }),
+  center: { x: 0, opacity: 1 },
+  exit:   (dir: number) => ({ x: dir > 0 ? '-100%' : '100%', opacity: 0 }),
+};
+
+const arrowBtnStyle: React.CSSProperties = {
+  width: '2.5rem',
+  height: '2.5rem',
+  border: '1px solid var(--brand-ivory-deeper)',
+  borderRadius: '50%',
+  background: 'none',
+  cursor: 'pointer',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  color: 'var(--brand-near-black-muted)',
+  flexShrink: 0,
+  transition: 'border-color 0.15s, color 0.15s',
+};
+
+// ─── TestimonyCard ────────────────────────────────────────────────────────────
 
 function TestimonyCard({ testimony }: { testimony: DbTestimony }) {
   const [isCapturing, setIsCapturing] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
-  const colors = CATEGORY_COLORS[testimony.category ?? ''] ?? DEFAULT_COLORS;
+  const colors  = CATEGORY_COLORS[testimony.category ?? ''] ?? DEFAULT_COLORS;
   const displayText = testimony.excerpt ?? testimony.body;
 
   async function handleDownloadPNG() {
@@ -61,10 +86,7 @@ function TestimonyCard({ testimony }: { testimony: DbTestimony }) {
     try {
       const { default: html2canvas } = await import('html2canvas');
       const canvas = await html2canvas(cardRef.current, {
-        scale: 1,
-        useCORS: true,
-        logging: false,
-        backgroundColor: '#1C1611',
+        scale: 1, useCORS: true, logging: false, backgroundColor: '#1C1611',
       });
       const link = document.createElement('a');
       link.download = `testimony-${testimony.word}.png`;
@@ -112,12 +134,7 @@ function TestimonyCard({ testimony }: { testimony: DbTestimony }) {
 
   return (
     <>
-      <motion.article
-        layout
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -8 }}
-        transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+      <article
         style={{
           background: 'var(--brand-ivory-dark)',
           border: '1px solid var(--brand-ivory-deeper)',
@@ -141,12 +158,7 @@ function TestimonyCard({ testimony }: { testimony: DbTestimony }) {
           {displayText}
         </p>
 
-        <div
-          style={{
-            paddingTop: '0.25rem',
-            borderTop: '1px solid var(--brand-ivory-deeper)',
-          }}
-        >
+        <div style={{ paddingTop: '0.25rem', borderTop: '1px solid var(--brand-ivory-deeper)' }}>
           <span
             style={{
               fontFamily: 'var(--font-body)',
@@ -226,7 +238,7 @@ function TestimonyCard({ testimony }: { testimony: DbTestimony }) {
             </span>
           )}
         </div>
-      </motion.article>
+      </article>
 
       <CommunityShareCard
         ref={cardRef}
@@ -246,54 +258,92 @@ function InstagramIcon({ size = 18 }: { size?: number }) {
   );
 }
 
-export default function FeaturedFeed() {
-  const [activeTab, setActiveTab]         = useState<FilterTab>('All');
-  const [showFilters, setShowFilters]     = useState(false);
-  const [testimonies, setTestimonies]     = useState<DbTestimony[]>([]);
-  const [loading, setLoading]             = useState(true);
-  const [loadingMore, setLoadingMore]     = useState(false);
-  const [error, setError]                 = useState<string | null>(null);
-  const [page, setPage]                   = useState(1);
-  const [hasMore, setHasMore]             = useState(false);
+// ─── FeaturedFeed ─────────────────────────────────────────────────────────────
 
-  const sectionRef = useRef<HTMLElement>(null);
+export default function FeaturedFeed() {
+  const [activeTab,     setActiveTab]     = useState<FilterTab>('All');
+  const [showFilters,   setShowFilters]   = useState(false);
+  const [testimonies,   setTestimonies]   = useState<DbTestimony[]>([]);
+  const [loading,       setLoading]       = useState(true);
+  const [error,         setError]         = useState<string | null>(null);
+  const [currentIndex,  setCurrentIndex]  = useState(0);
+  const [direction,     setDirection]     = useState<1 | -1>(1);
+  const [isPaused,      setIsPaused]      = useState(false);
+
+  const sectionRef    = useRef<HTMLElement>(null);
+  const intervalRef   = useRef<ReturnType<typeof setInterval> | null>(null);
+  const pauseTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isInView = useInView(sectionRef, { once: true, margin: '-80px 0px' });
 
-  const fetchTestimonies = useCallback(async (tab: FilterTab, pageNum: number, append: boolean) => {
-    append ? setLoadingMore(true) : setLoading(true);
+  // ── Fetch pool ──────────────────────────────────────────────────────────────
+
+  const fetchPool = useCallback(async (tab: FilterTab) => {
+    setLoading(true);
     setError(null);
+    setCurrentIndex(0);
+    setDirection(1);
+    setIsPaused(false);
     try {
-      const params = new URLSearchParams({ page: String(pageNum), limit: String(PAGE_SIZE) });
+      const params = new URLSearchParams({ page: '1', limit: String(POOL_SIZE) });
       if (tab !== 'All') params.set('category', tab);
       const res = await fetch(`/api/testimonies?${params}`);
       if (!res.ok) throw new Error('Failed to load.');
       const json = await res.json();
-      const incoming: DbTestimony[] = json.data ?? [];
-      setTestimonies(prev => append ? [...prev, ...incoming] : incoming);
-      setHasMore((pageNum * PAGE_SIZE) < (json.total ?? 0));
+      setTestimonies(json.data ?? []);
     } catch {
       setError('Could not load testimonies. Please try again.');
     } finally {
       setLoading(false);
-      setLoadingMore(false);
     }
   }, []);
 
-  // Initial load + tab change
+  useEffect(() => { fetchPool(activeTab); }, [activeTab, fetchPool]);
+
+  // ── Auto-advance interval ───────────────────────────────────────────────────
+
   useEffect(() => {
-    setPage(1);
-    fetchTestimonies(activeTab, 1, false);
-  }, [activeTab, fetchTestimonies]);
+    if (isPaused || loading || testimonies.length <= 1) {
+      if (intervalRef.current) { clearInterval(intervalRef.current); intervalRef.current = null; }
+      return;
+    }
+    intervalRef.current = setInterval(() => {
+      setDirection(1);
+      setCurrentIndex(prev => (prev + 1) % testimonies.length);
+    }, SLIDE_DURATION_MS);
+    return () => { if (intervalRef.current) clearInterval(intervalRef.current); };
+  }, [isPaused, loading, testimonies.length]);
+
+  // Cleanup on unmount
+  useEffect(() => () => {
+    if (intervalRef.current)  clearInterval(intervalRef.current);
+    if (pauseTimerRef.current) clearTimeout(pauseTimerRef.current);
+  }, []);
+
+  // ── Handlers ────────────────────────────────────────────────────────────────
+
+  function handleNav(dir: 1 | -1) {
+    if (testimonies.length <= 1) return;
+    setDirection(dir);
+    setCurrentIndex(prev => (prev + dir + testimonies.length) % testimonies.length);
+    setIsPaused(true);
+    if (pauseTimerRef.current) clearTimeout(pauseTimerRef.current);
+    pauseTimerRef.current = setTimeout(() => setIsPaused(false), PAUSE_AFTER_NAV_MS);
+  }
 
   function handleTabChange(tab: FilterTab) {
+    if (pauseTimerRef.current) clearTimeout(pauseTimerRef.current);
     setActiveTab(tab);
   }
 
-  function handleLoadMore() {
-    const next = page + 1;
-    setPage(next);
-    fetchTestimonies(activeTab, next, true);
-  }
+  // ── Derived ─────────────────────────────────────────────────────────────────
+
+  const total    = testimonies.length;
+  const dotCount = Math.min(total, MAX_DOTS);
+  const activeDot = total <= MAX_DOTS
+    ? currentIndex
+    : Math.min(Math.round((currentIndex / total) * MAX_DOTS), MAX_DOTS - 1);
+
+  // ── Render ──────────────────────────────────────────────────────────────────
 
   return (
     <motion.section
@@ -307,55 +357,42 @@ export default function FeaturedFeed() {
         margin: '0 auto',
       }}
     >
-      {/* Section heading */}
+      {/* ── Section heading ── */}
       <div style={{ marginBottom: showFilters ? '0.75rem' : 'clamp(1.25rem, 3vw, 2rem)' }}>
-        <p
-          style={{
-            fontFamily: 'var(--font-body)',
-            color: 'var(--brand-sienna-light)',
-            fontSize: '0.72rem',
-            letterSpacing: '0.18em',
-            textTransform: 'uppercase',
-            fontWeight: 600,
-            marginBottom: '0.5rem',
-          }}
-        >
+        <p style={{
+          fontFamily: 'var(--font-body)',
+          color: 'var(--brand-sienna-light)',
+          fontSize: '0.72rem',
+          letterSpacing: '0.18em',
+          textTransform: 'uppercase',
+          fontWeight: 600,
+          marginBottom: '0.5rem',
+        }}>
           Community
         </p>
-        <h2
-          style={{
-            fontFamily: 'var(--font-body)',
-            color: 'var(--brand-near-black)',
-            fontSize: 'clamp(1.5rem, 4vw, 2.25rem)',
-            fontWeight: 700,
-            lineHeight: 1.2,
-            marginBottom: '0.6rem',
-          }}
-        >
+        <h2 style={{
+          fontFamily: 'var(--font-body)',
+          color: 'var(--brand-near-black)',
+          fontSize: 'clamp(1.5rem, 4vw, 2.25rem)',
+          fontWeight: 700,
+          lineHeight: 1.2,
+          marginBottom: '0.6rem',
+        }}>
           Others who were set free.
         </h2>
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            gap: '1rem',
-          }}
-        >
-          <p
-            style={{
-              fontFamily: 'var(--font-body)',
-              color: 'var(--brand-near-black-muted)',
-              fontSize: 'clamp(0.875rem, 2vw, 1rem)',
-              lineHeight: 1.65,
-              maxWidth: '38ch',
-              margin: 0,
-            }}
-          >
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem' }}>
+          <p style={{
+            fontFamily: 'var(--font-body)',
+            color: 'var(--brand-near-black-muted)',
+            fontSize: 'clamp(0.875rem, 2vw, 1rem)',
+            lineHeight: 1.65,
+            maxWidth: '38ch',
+            margin: 0,
+          }}>
             Real people. Real struggles. Shared with consent, anonymously.
           </p>
           <button
-            onClick={() => setShowFilters((v) => !v)}
+            onClick={() => setShowFilters(v => !v)}
             style={{
               flexShrink: 0,
               background: 'none',
@@ -373,11 +410,11 @@ export default function FeaturedFeed() {
               gap: '0.35rem',
               transition: 'border-color 0.15s, color 0.15s',
             }}
-            onMouseEnter={(e) => {
+            onMouseEnter={e => {
               e.currentTarget.style.borderColor = 'var(--brand-sienna-pale)';
               e.currentTarget.style.color = 'var(--brand-near-black-soft)';
             }}
-            onMouseLeave={(e) => {
+            onMouseLeave={e => {
               e.currentTarget.style.borderColor = 'var(--brand-ivory-deeper)';
               e.currentTarget.style.color = 'var(--brand-near-black-muted)';
             }}
@@ -388,7 +425,7 @@ export default function FeaturedFeed() {
         </div>
       </div>
 
-      {/* Category filter tabs */}
+      {/* ── Category filter tabs ── */}
       <AnimatePresence>
         {showFilters && (
           <motion.div
@@ -402,14 +439,9 @@ export default function FeaturedFeed() {
             <div
               role="tablist"
               aria-label="Filter testimonies by category"
-              style={{
-                display: 'flex',
-                flexWrap: 'wrap',
-                gap: '0.5rem',
-                paddingBottom: 'clamp(1.25rem, 3vw, 2rem)',
-              }}
+              style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', paddingBottom: 'clamp(1.25rem, 3vw, 2rem)' }}
             >
-              {ALL_CATEGORIES.map((tab) => {
+              {ALL_CATEGORIES.map(tab => {
                 const isActive = activeTab === tab;
                 const label = tab === 'All' ? 'All' : (CATEGORY_LABEL[tab as Category] ?? tab);
                 return (
@@ -425,20 +457,14 @@ export default function FeaturedFeed() {
                       letterSpacing: '0.03em',
                       padding: '0.4rem 0.9rem',
                       borderRadius: 'var(--radius-full)',
-                      border: isActive
-                        ? '1px solid var(--brand-sienna-light)'
-                        : '1px solid var(--brand-ivory-deeper)',
+                      border: isActive ? '1px solid var(--brand-sienna-light)' : '1px solid var(--brand-ivory-deeper)',
                       background: isActive ? 'var(--brand-sienna-light)' : 'var(--brand-ivory-dark)',
                       color: isActive ? 'var(--brand-near-black)' : 'var(--brand-near-black-muted)',
                       cursor: 'pointer',
                       transition: 'all 0.18s ease',
                     }}
-                    onMouseEnter={(e) => {
-                      if (!isActive) e.currentTarget.style.borderColor = 'var(--brand-sienna-pale)';
-                    }}
-                    onMouseLeave={(e) => {
-                      if (!isActive) e.currentTarget.style.borderColor = 'var(--brand-ivory-deeper)';
-                    }}
+                    onMouseEnter={e => { if (!isActive) e.currentTarget.style.borderColor = 'var(--brand-sienna-pale)'; }}
+                    onMouseLeave={e => { if (!isActive) e.currentTarget.style.borderColor = 'var(--brand-ivory-deeper)'; }}
                   >
                     {label}
                   </button>
@@ -449,34 +475,36 @@ export default function FeaturedFeed() {
         )}
       </AnimatePresence>
 
-      {/* Loading skeleton */}
+      {/* ── Loading skeleton ── */}
       {loading && (
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 340px), 1fr))',
-            gap: 'clamp(0.875rem, 2vw, 1.25rem)',
-          }}
-        >
-          {Array.from({ length: 3 }).map((_, i) => (
-            <div
-              key={i}
-              style={{
-                height: '200px',
-                borderRadius: 'var(--radius-lg)',
-                background: 'var(--brand-ivory-dark)',
-                border: '1px solid var(--brand-ivory-deeper)',
-                opacity: 0.5,
-                animation: 'pulse 1.5s ease-in-out infinite',
-              }}
-            />
-          ))}
-        </div>
+        <div style={{
+          minHeight: 'clamp(240px, 35vh, 380px)',
+          borderRadius: 'var(--radius-lg)',
+          background: 'var(--brand-ivory-dark)',
+          border: '1px solid var(--brand-ivory-deeper)',
+          animation: 'pulse 1.5s ease-in-out infinite',
+          opacity: 0.55,
+        }} />
       )}
 
-      {/* Error state */}
+      {/* ── Error state ── */}
       {error && !loading && (
-        <p
+        <p style={{
+          textAlign: 'center',
+          fontFamily: 'var(--font-body)',
+          color: 'var(--brand-near-black-muted)',
+          fontSize: '0.9rem',
+          paddingTop: '2rem',
+        }}>
+          {error}
+        </p>
+      )}
+
+      {/* ── Empty state ── */}
+      {!loading && !error && total === 0 && (
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
           style={{
             textAlign: 'center',
             fontFamily: 'var(--font-body)',
@@ -485,85 +513,130 @@ export default function FeaturedFeed() {
             paddingTop: '2rem',
           }}
         >
-          {error}
-        </p>
+          No testimonies in this category yet.
+        </motion.p>
       )}
 
-      {/* Feed */}
-      {!loading && !error && (
-        <>
-          <motion.div
-            layout
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 340px), 1fr))',
-              gap: 'clamp(0.875rem, 2vw, 1.25rem)',
-            }}
-          >
-            <AnimatePresence mode="popLayout">
-              {testimonies.map((testimony) => (
-                <TestimonyCard key={testimony.id} testimony={testimony} />
-              ))}
+      {/* ── Slideshow ── */}
+      {!loading && !error && total > 0 && (
+        <div>
+          {/* Card viewport */}
+          <div style={{ overflow: 'hidden', position: 'relative', minHeight: 'clamp(240px, 35vh, 380px)' }}>
+            <AnimatePresence initial={false} custom={direction} mode="wait">
+              <motion.div
+                key={currentIndex}
+                custom={direction}
+                variants={slideVariants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+              >
+                <TestimonyCard testimony={testimonies[currentIndex]} />
+              </motion.div>
             </AnimatePresence>
-          </motion.div>
+          </div>
 
-          {/* Empty state */}
-          {testimonies.length === 0 && (
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              style={{
-                textAlign: 'center',
-                fontFamily: 'var(--font-body)',
-                color: 'var(--brand-near-black-muted)',
-                fontSize: '0.9rem',
-                paddingTop: '2rem',
-              }}
-            >
-              No testimonies in this category yet.
-            </motion.p>
-          )}
-
-          {/* Load more */}
-          {hasMore && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              style={{ textAlign: 'center', marginTop: 'clamp(1.5rem, 4vw, 2.5rem)' }}
-            >
-              <button
-                onClick={handleLoadMore}
-                disabled={loadingMore}
+          {/* Progress bar */}
+          <div style={{
+            height: '2px',
+            background: 'var(--brand-ivory-deeper)',
+            borderRadius: '999px',
+            marginTop: '1.25rem',
+            overflow: 'hidden',
+          }}>
+            {!isPaused && total > 1 && (
+              <div
+                key={currentIndex}
                 style={{
-                  background: 'none',
-                  border: '1px solid var(--brand-ivory-deeper)',
-                  borderRadius: 'var(--radius-full)',
-                  padding: '0.55rem 1.5rem',
-                  cursor: loadingMore ? 'default' : 'pointer',
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '0.85rem',
-                  fontWeight: 600,
-                  letterSpacing: '0.03em',
-                  color: 'var(--brand-near-black-soft)',
-                  opacity: loadingMore ? 0.5 : 1,
-                  transition: 'border-color 0.15s, color 0.15s',
+                  height: '100%',
+                  background: 'var(--brand-sienna-light)',
+                  borderRadius: '999px',
+                  animation: `slideshow-progress ${SLIDE_DURATION_MS}ms linear forwards`,
                 }}
-                onMouseEnter={(e) => {
-                  if (!loadingMore) {
-                    e.currentTarget.style.borderColor = 'var(--brand-sienna-pale)';
-                    e.currentTarget.style.color = 'var(--brand-near-black)';
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = 'var(--brand-ivory-deeper)';
+              />
+            )}
+          </div>
+
+          {/* Navigation row */}
+          {total > 1 && (
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              marginTop: '1rem',
+              gap: '0.75rem',
+            }}>
+              {/* Prev */}
+              <button
+                onClick={() => handleNav(-1)}
+                aria-label="Previous testimony"
+                style={arrowBtnStyle}
+                onMouseEnter={e => {
+                  e.currentTarget.style.borderColor = 'var(--brand-sienna-pale)';
                   e.currentTarget.style.color = 'var(--brand-near-black-soft)';
                 }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.borderColor = 'var(--brand-ivory-deeper)';
+                  e.currentTarget.style.color = 'var(--brand-near-black-muted)';
+                }}
               >
-                {loadingMore ? 'Loading…' : 'Read more testimonies'}
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <path d="M10 3L5 8L10 13" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
               </button>
-            </motion.div>
+
+              {/* Dots + counter */}
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', flex: 1 }}>
+                <div style={{ display: 'flex', gap: '0.375rem', alignItems: 'center' }}>
+                  {Array.from({ length: dotCount }, (_, i) => {
+                    const isActive = i === activeDot;
+                    return (
+                      <div
+                        key={i}
+                        style={{
+                          width: isActive ? '1.25rem' : '0.4rem',
+                          height: '0.4rem',
+                          borderRadius: '999px',
+                          background: isActive ? 'var(--brand-sienna-light)' : 'var(--brand-ivory-deeper)',
+                          transition: 'width 0.25s ease, background 0.25s ease',
+                          flexShrink: 0,
+                        }}
+                      />
+                    );
+                  })}
+                </div>
+                <span style={{
+                  fontFamily: 'var(--font-body)',
+                  fontSize: '0.7rem',
+                  color: 'var(--brand-near-black-muted)',
+                  letterSpacing: '0.04em',
+                }}>
+                  {currentIndex + 1} / {total}
+                </span>
+              </div>
+
+              {/* Next */}
+              <button
+                onClick={() => handleNav(1)}
+                aria-label="Next testimony"
+                style={arrowBtnStyle}
+                onMouseEnter={e => {
+                  e.currentTarget.style.borderColor = 'var(--brand-sienna-pale)';
+                  e.currentTarget.style.color = 'var(--brand-near-black-soft)';
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.borderColor = 'var(--brand-ivory-deeper)';
+                  e.currentTarget.style.color = 'var(--brand-near-black-muted)';
+                }}
+              >
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <path d="M6 3L11 8L6 13" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </button>
+            </div>
           )}
-        </>
+        </div>
       )}
     </motion.section>
   );

@@ -1,26 +1,157 @@
 @import "tailwindcss";
+@import "../styles/tokens.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ============================================================
+   Tailwind v4 Theme — wire brand tokens into utility classes
+   ============================================================ */
+@theme {
+  /* Colors */
+  --color-ivory:            #F8F4EC;
+  --color-ivory-dark:       #EDE6D6;
+  --color-ivory-deeper:     #DDD3BC;
+
+  --color-sienna-pale:      #D4A882;
+  --color-sienna-warm:      #C07B4E;
+  --color-sienna:           #8B4A2A;
+  --color-sienna-light:     #B5673D;
+  --color-sienna-dark:      #6B3520;
+
+  --color-near-black:       #1C1611;
+  --color-near-black-soft:  #2E2418;
+  --color-near-black-muted: #4A3D30;
+
+  /* Fonts */
+  --font-heading: var(--font-playfair), Georgia, "Times New Roman", serif;
+  --font-body:    var(--font-jakarta), system-ui, -apple-system, sans-serif;
+
+  /* Custom animations */
+  --animate-fade-in:    fade-in 0.5s ease forwards;
+  --animate-slide-up:   slide-up 0.55s ease forwards;
+  --animate-slide-down: slide-down 0.4s ease forwards;
+  --animate-scale-in:   scale-in 0.35s ease forwards;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* ============================================================
+   Keyframes
+   ============================================================ */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(1.5rem); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slide-down {
+  from { opacity: 0; transform: translateY(-1rem); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.96); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* ============================================================
+   Base resets
+   ============================================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--brand-ivory);
+  color: var(--brand-near-black);
+  font-family: var(--font-body);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+img, video, svg {
+  max-width: 100%;
+  display: block;
+}
+
+button, input, textarea, select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+/* ============================================================
+   Typography scale
+   ============================================================ */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  line-height: 1.2;
+  font-weight: 700;
+  color: var(--brand-near-black);
+}
+
+h1 { font-size: clamp(2.25rem, 5vw, 4rem); }
+h2 { font-size: clamp(1.75rem, 3.5vw, 3rem); }
+h3 { font-size: clamp(1.375rem, 2.5vw, 2rem); }
+h4 { font-size: clamp(1.125rem, 2vw, 1.5rem); }
+h5 { font-size: 1.125rem; }
+h6 { font-size: 1rem; }
+
+p {
+  max-width: 70ch;
+}
+
+a {
+  color: var(--brand-sienna);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color var(--transition-base);
+}
+
+a:hover {
+  color: var(--brand-sienna-dark);
+}
+
+/* ============================================================
+   Animation utilities
+   ============================================================ */
+.animate-fade-in    { animation: var(--animate-fade-in); }
+.animate-slide-up   { animation: var(--animate-slide-up); }
+.animate-slide-down { animation: var(--animate-slide-down); }
+.animate-scale-in   { animation: var(--animate-scale-in); }
+
+.delay-100 { animation-delay: 100ms; }
+.delay-200 { animation-delay: 200ms; }
+.delay-300 { animation-delay: 300ms; }
+.delay-400 { animation-delay: 400ms; }
+.delay-500 { animation-delay: 500ms; }
+
+.page-enter { animation: var(--animate-slide-up); }
+
+/* ============================================================
+   Layout helpers
+   ============================================================ */
+.container-site {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--section-padding-x);
+}
+
+/* Share buttons — circular icon buttons */
+.share-btn:hover:not(:disabled) {
+  background: rgba(107, 53, 32, 0.08);
+  border-color: #8B4A2A !important;
+  color: var(--brand-sienna-light) !important;
 }

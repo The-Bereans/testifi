@@ -1,0 +1,58 @@
+/* ============================================================
+   Testify Design Tokens
+   Brand: ivory · sienna · near-black
+   ============================================================ */
+
+:root {
+  /* ------ Brand Colors ------ */
+  --brand-ivory:        #F8F4EC;
+  --brand-ivory-dark:   #EDE6D6;
+  --brand-ivory-deeper: #DDD3BC;
+
+  --brand-sienna-pale:  #D4A882;
+  --brand-sienna-warm:  #C07B4E;
+  --brand-sienna-light: #B5673D;
+  --brand-sienna:       #8B4A2A;
+  --brand-sienna-dark:  #6B3520;
+
+  --brand-near-black:   #1C1611;
+  --brand-near-black-soft: #2E2418;
+  --brand-near-black-muted: #4A3D30;
+
+  /* ------ Semantic Aliases ------ */
+  --color-bg:           var(--brand-ivory);
+  --color-surface:      var(--brand-ivory-dark);
+  --color-text:         var(--brand-near-black);
+  --color-text-muted:   var(--brand-near-black-muted);
+  --color-accent:       var(--brand-sienna-light);
+  --color-accent-hover: var(--brand-sienna-dark);
+  --color-link:         var(--brand-sienna);
+  --color-link-hover:   var(--brand-sienna-dark);
+  --color-border:       var(--brand-ivory-deeper);
+
+  /* ------ Typography ------ */
+  --font-heading:       var(--font-playfair), Georgia, "Times New Roman", serif;
+  --font-body:          var(--font-jakarta), system-ui, -apple-system, sans-serif;
+
+  /* ------ Spacing ------ */
+  --section-padding-y:  clamp(3rem, 8vw, 6rem);
+  --section-padding-x:  clamp(1rem, 5vw, 3rem);
+  --container-max:      72rem;
+
+  /* ------ Border Radius ------ */
+  --radius-sm:          0.25rem;
+  --radius-md:          0.5rem;
+  --radius-lg:          0.75rem;
+  --radius-xl:          1.25rem;
+  --radius-full:        9999px;
+
+  /* ------ Shadows ------ */
+  --shadow-sm:          0 1px 3px 0 rgb(28 22 17 / 0.08);
+  --shadow-md:          0 4px 12px 0 rgb(28 22 17 / 0.10);
+  --shadow-lg:          0 12px 32px 0 rgb(28 22 17 / 0.14);
+
+  /* ------ Transitions ------ */
+  --transition-fast:    150ms ease;
+  --transition-base:    200ms ease;
+  --transition-smooth:  400ms cubic-bezier(0.4, 0, 0.2, 1);
+}

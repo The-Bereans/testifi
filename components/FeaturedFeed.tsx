@@ -1,0 +1,487 @@
+'use client';
+
+import React, { useState, useRef } from 'react';
+import { motion, AnimatePresence, useInView } from 'framer-motion';
+import { testimonies, type Category } from '@/lib/mock/testimonies';
+import CommunityShareCard from '@/components/CommunityShareCard';
+import { relativeTime } from '@/lib/relativeTime';
+
+const ALL_CATEGORIES = [
+  'All',
+  'Addiction',
+  'Mental Health',
+  'Relationships',
+  'Identity',
+  'Spiritual',
+] as const;
+
+type FilterTab = (typeof ALL_CATEGORIES)[number];
+
+const CATEGORY_COLORS: Record<Category, { bg: string; text: string; border: string }> = {
+  Addiction:       { bg: 'rgba(139,74,42,0.12)',  text: '#8B4A2A', border: 'rgba(139,74,42,0.3)' },
+  'Mental Health': { bg: 'rgba(181,103,61,0.12)', text: '#B5673D', border: 'rgba(181,103,61,0.35)' },
+  Relationships:   { bg: 'rgba(74,61,48,0.10)',   text: '#4A3D30', border: 'rgba(74,61,48,0.25)' },
+  Identity:        { bg: 'rgba(181,103,61,0.12)', text: '#B5673D', border: 'rgba(181,103,61,0.3)' },
+  Spiritual:       { bg: 'rgba(181,103,61,0.12)', text: '#B5673D', border: 'rgba(181,103,61,0.3)' },
+};
+
+const INITIAL_COUNT = 3;
+
+
+function TestimonyCard({ testimony }: { testimony: (typeof testimonies)[number] }) {
+  const [isCapturing, setIsCapturing] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const colors = CATEGORY_COLORS[testimony.category];
+
+  // B1-B2 — share handlers
+  async function handleDownloadPNG() {
+    if (!cardRef.current || isCapturing) return;
+    setIsCapturing(true);
+    try {
+      const { default: html2canvas } = await import('html2canvas');
+      const canvas = await html2canvas(cardRef.current, {
+        scale: 1,
+        useCORS: true,
+        logging: false,
+        backgroundColor: '#1C1611',
+      });
+      const link = document.createElement('a');
+      link.download = `testimony-${testimony.word}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    } finally {
+      setIsCapturing(false);
+    }
+  }
+
+  function handleXShare() {
+    const text = encodeURIComponent(
+      `Jesus saved me from ${testimony.word}. "${testimony.excerpt.slice(0, 120)}" — testify.netlify.app`
+    );
+    window.open(`https://twitter.com/intent/tweet?text=${text}`, '_blank');
+  }
+
+  function handleWhatsAppShare() {
+    const text = encodeURIComponent(
+      `Jesus saved me from ${testimony.word}.\n\n"${testimony.excerpt.slice(0, 160)}"\n\ntestify.netlify.app`
+    );
+    window.open(`https://wa.me/?text=${text}`, '_blank');
+  }
+
+  async function handleInstagramShare() {
+    await handleDownloadPNG();
+    window.open('https://www.instagram.com', '_blank');
+  }
+
+  const circleBtn: React.CSSProperties = {
+    width: '3rem',
+    height: '3rem',
+    border: '1.5px solid #6B3520',
+    borderRadius: '50%',
+    background: 'none',
+    cursor: 'pointer',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    color: 'var(--color-accent)',
+    padding: 0,
+    lineHeight: 0,
+    transition: 'background 0.15s, border-color 0.15s, color 0.15s',
+  };
+
+  return (
+    <>
+      <motion.article
+        layout
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -8 }}
+        transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+        style={{
+          background: 'var(--brand-ivory-dark)',
+          border: '1px solid var(--brand-ivory-deeper)',
+          borderRadius: 'var(--radius-lg)',
+          padding: 'clamp(1.1rem, 3vw, 1.5rem)',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '0.75rem',
+        }}
+      >
+        {/* Testimony text */}
+        <p
+          style={{
+            fontFamily: 'var(--font-body)',
+            color: 'var(--brand-near-black-soft)',
+            fontSize: 'clamp(0.875rem, 2vw, 0.975rem)',
+            lineHeight: 1.72,
+            letterSpacing: '0.01em',
+            margin: 0,
+          }}
+        >
+          {testimony.excerpt}
+        </p>
+
+        {/* Footer: date */}
+        <div
+          style={{
+            paddingTop: '0.25rem',
+            borderTop: '1px solid var(--brand-ivory-deeper)',
+          }}
+        >
+          <span
+            style={{
+              fontFamily: 'var(--font-body)',
+              color: 'var(--brand-near-black-muted)',
+              fontSize: '0.75rem',
+              letterSpacing: '0.03em',
+            }}
+          >
+            Anonymous · {relativeTime(testimony.date)}
+          </span>
+        </div>
+
+        {/* B4 — icon-only horizontal share buttons */}
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '0.75rem' }}>
+          {/* Download */}
+          <button
+            className="share-btn"
+            onClick={handleDownloadPNG}
+            disabled={isCapturing}
+            title={isCapturing ? 'Saving…' : 'Save image'}
+            style={{ ...circleBtn, opacity: isCapturing ? 0.4 : 1, cursor: isCapturing ? 'default' : 'pointer' }}
+          >
+            <svg width="18" height="18" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+              <path d="M7 1v8M4 6l3 3 3-3M2 11h10" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
+
+          {/* X / Twitter */}
+          <button className="share-btn" onClick={handleXShare} title="Share on X" style={circleBtn}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L2.1 2.25h6.3l4.255 5.643L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z" />
+            </svg>
+          </button>
+
+          {/* WhatsApp */}
+          <button className="share-btn" onClick={handleWhatsAppShare} title="Share on WhatsApp" style={circleBtn}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+            </svg>
+          </button>
+
+          {/* Instagram */}
+          <button
+            className="share-btn"
+            onClick={handleInstagramShare}
+            disabled={isCapturing}
+            title="Share on Instagram"
+            style={{ ...circleBtn, opacity: isCapturing ? 0.4 : 1, cursor: isCapturing ? 'default' : 'pointer' }}
+          >
+            <InstagramIcon size={18} />
+          </button>
+        </div>
+
+        {/* Tag — word chip + category, below the testimony */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+          <span
+            style={{
+              background: colors.bg,
+              color: colors.text,
+              border: `1px solid ${colors.border}`,
+              borderRadius: 'var(--radius-full)',
+              padding: '0.2rem 0.75rem',
+              fontSize: '0.75rem',
+              fontWeight: 700,
+              letterSpacing: '0.04em',
+              textTransform: 'uppercase',
+              fontFamily: 'var(--font-body)',
+            }}
+          >
+            {testimony.word}
+          </span>
+          <span
+            style={{
+              color: 'var(--brand-near-black-muted)',
+              fontSize: '0.7rem',
+              letterSpacing: '0.06em',
+              textTransform: 'uppercase',
+              fontFamily: 'var(--font-body)',
+            }}
+          >
+            {testimony.category}
+          </span>
+        </div>
+      </motion.article>
+
+      <CommunityShareCard
+        ref={cardRef}
+        word={testimony.word}
+        excerpt={testimony.excerpt}
+        category={testimony.category}
+      />
+    </>
+  );
+}
+
+// B3 — Instagram icon
+function InstagramIcon({ size = 18 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
+    </svg>
+  );
+}
+
+export default function FeaturedFeed() {
+  const [activeTab, setActiveTab] = useState<FilterTab>('All');
+  const [showFilters, setShowFilters] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(INITIAL_COUNT);
+  const [nextBatch, setNextBatch] = useState(5);
+
+  const sectionRef = useRef<HTMLElement>(null);
+  const isInView = useInView(sectionRef, { once: true, margin: '-80px 0px' });
+
+  const filtered =
+    activeTab === 'All'
+      ? testimonies
+      : testimonies.filter((t) => t.category === activeTab);
+
+  const visible = filtered.slice(0, visibleCount);
+  const hasMore = visibleCount < filtered.length;
+
+  function handleTabChange(tab: FilterTab) {
+    setActiveTab(tab);
+    setVisibleCount(INITIAL_COUNT);
+    setNextBatch(5);
+  }
+
+  function handleLoadMore() {
+    setVisibleCount((c) => c + nextBatch);
+    setNextBatch((b) => b + 2);
+  }
+
+  return (
+    <motion.section
+      ref={sectionRef}
+      initial={{ opacity: 0, y: 48 }}
+      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 48 }}
+      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+      style={{
+        padding: 'var(--section-padding-y) var(--section-padding-x)',
+        maxWidth: 'var(--container-max)',
+        margin: '0 auto',
+      }}
+    >
+      {/* Section heading */}
+      <div style={{ marginBottom: showFilters ? '0.75rem' : 'clamp(1.25rem, 3vw, 2rem)' }}>
+        <p
+          style={{
+            fontFamily: 'var(--font-body)',
+            color: 'var(--brand-sienna-light)',
+            fontSize: '0.72rem',
+            letterSpacing: '0.18em',
+            textTransform: 'uppercase',
+            fontWeight: 600,
+            marginBottom: '0.5rem',
+          }}
+        >
+          Community
+        </p>
+        <h2
+          style={{
+            fontFamily: 'var(--font-heading)',
+            color: 'var(--brand-near-black)',
+            fontSize: 'clamp(1.5rem, 4vw, 2.25rem)',
+            fontWeight: 700,
+            lineHeight: 1.2,
+            marginBottom: '0.6rem',
+          }}
+        >
+          Others who were set free.
+        </h2>
+        {/* Subtitle + filter button on the same row */}
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: '1rem',
+          }}
+        >
+          <p
+            style={{
+              fontFamily: 'var(--font-body)',
+              color: 'var(--brand-near-black-muted)',
+              fontSize: 'clamp(0.875rem, 2vw, 1rem)',
+              lineHeight: 1.65,
+              maxWidth: '38ch',
+              margin: 0,
+            }}
+          >
+            Real people. Real struggles. Shared with consent, anonymously.
+          </p>
+          <button
+            onClick={() => setShowFilters((v) => !v)}
+            style={{
+              flexShrink: 0,
+              background: 'none',
+              border: '1px solid var(--brand-ivory-deeper)',
+              borderRadius: 'var(--radius-full)',
+              padding: '0.35rem 0.85rem',
+              cursor: 'pointer',
+              fontFamily: 'var(--font-body)',
+              fontSize: '0.75rem',
+              fontWeight: 600,
+              letterSpacing: '0.04em',
+              color: 'var(--brand-near-black-muted)',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.35rem',
+              transition: 'border-color 0.15s, color 0.15s',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.borderColor = 'var(--brand-sienna-pale)';
+              e.currentTarget.style.color = 'var(--brand-near-black-soft)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.borderColor = 'var(--brand-ivory-deeper)';
+              e.currentTarget.style.color = 'var(--brand-near-black-muted)';
+            }}
+          >
+            <span style={{ fontSize: '0.65rem' }}>{showFilters ? '▲' : '▼'}</span>
+            Filter by topic
+          </button>
+        </div>
+      </div>
+
+      {/* Category filter tabs — hidden by default */}
+      <AnimatePresence>
+        {showFilters && (
+          <motion.div
+            key="filter-tabs"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+            style={{ overflow: 'hidden' }}
+          >
+            <div
+              role="tablist"
+              aria-label="Filter testimonies by category"
+              style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                gap: '0.5rem',
+                paddingBottom: 'clamp(1.25rem, 3vw, 2rem)',
+              }}
+            >
+              {ALL_CATEGORIES.map((tab) => {
+                const isActive = activeTab === tab;
+                return (
+                  <button
+                    key={tab}
+                    role="tab"
+                    aria-selected={isActive}
+                    onClick={() => handleTabChange(tab)}
+                    style={{
+                      fontFamily: 'var(--font-body)',
+                      fontSize: '0.8rem',
+                      fontWeight: isActive ? 700 : 500,
+                      letterSpacing: '0.03em',
+                      padding: '0.4rem 0.9rem',
+                      borderRadius: 'var(--radius-full)',
+                      border: isActive
+                        ? '1px solid var(--brand-sienna-light)'
+                        : '1px solid var(--brand-ivory-deeper)',
+                      background: isActive ? 'var(--brand-sienna-light)' : 'var(--brand-ivory-dark)',
+                      color: isActive ? 'var(--brand-near-black)' : 'var(--brand-near-black-muted)',
+                      cursor: 'pointer',
+                      transition: 'all 0.18s ease',
+                    }}
+                    onMouseEnter={(e) => {
+                      if (!isActive) e.currentTarget.style.borderColor = 'var(--brand-sienna-pale)';
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!isActive) e.currentTarget.style.borderColor = 'var(--brand-ivory-deeper)';
+                    }}
+                  >
+                    {tab}
+                  </button>
+                );
+              })}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Feed */}
+      <motion.div
+        layout
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 340px), 1fr))',
+          gap: 'clamp(0.875rem, 2vw, 1.25rem)',
+        }}
+      >
+        <AnimatePresence mode="popLayout">
+          {visible.map((testimony) => (
+            <TestimonyCard key={testimony.id} testimony={testimony} />
+          ))}
+        </AnimatePresence>
+      </motion.div>
+
+      {/* Empty state */}
+      {filtered.length === 0 && (
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          style={{
+            textAlign: 'center',
+            fontFamily: 'var(--font-body)',
+            color: 'var(--brand-near-black-muted)',
+            fontSize: '0.9rem',
+            paddingTop: '2rem',
+          }}
+        >
+          No testimonies in this category yet.
+        </motion.p>
+      )}
+
+      {/* Load more */}
+      {hasMore && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          style={{ textAlign: 'center', marginTop: 'clamp(1.5rem, 4vw, 2.5rem)' }}
+        >
+          <button
+            onClick={handleLoadMore}
+            style={{
+              background: 'none',
+              border: '1px solid var(--brand-ivory-deeper)',
+              borderRadius: 'var(--radius-full)',
+              padding: '0.55rem 1.5rem',
+              cursor: 'pointer',
+              fontFamily: 'var(--font-body)',
+              fontSize: '0.85rem',
+              fontWeight: 600,
+              letterSpacing: '0.03em',
+              color: 'var(--brand-near-black-soft)',
+              transition: 'border-color 0.15s, color 0.15s',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.borderColor = 'var(--brand-sienna-pale)';
+              e.currentTarget.style.color = 'var(--brand-near-black)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.borderColor = 'var(--brand-ivory-deeper)';
+              e.currentTarget.style.color = 'var(--brand-near-black-soft)';
+            }}
+          >
+            Read more testimonies
+          </button>
+        </motion.div>
+      )}
+    </motion.section>
+  );
+}

@@ -9,7 +9,7 @@ import { relativeTime } from '@/lib/relativeTime';
 interface DbTestimony {
   id: string;
   word: string;
-  body: string;
+  body: string | null;
   category: string | null;
   excerpt: string | null;
   created_at: string;
@@ -78,7 +78,7 @@ function TestimonyCard({ testimony }: { testimony: DbTestimony }) {
   const [isCapturing, setIsCapturing] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
   const colors  = CATEGORY_COLORS[testimony.category ?? ''] ?? DEFAULT_COLORS;
-  const displayText = testimony.excerpt ?? testimony.body;
+  const displayText = testimony.excerpt ?? testimony.body ?? `Jesus saved me from ${testimony.word}`;
 
   async function handleDownloadPNG() {
     if (!cardRef.current || isCapturing) return;

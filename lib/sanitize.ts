@@ -76,7 +76,7 @@ export type WaitlistInput = z.infer<typeof waitlistSchema>;
 export const TestimonySchema = z.object({
   id: z.string().uuid(),
   word: z.string(),
-  body: z.string(),
+  body: z.string().nullable(),
   category: z.string().nullable(),
   excerpt: z.string().nullable(),
   created_at: z.string(),

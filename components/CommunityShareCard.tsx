@@ -4,7 +4,7 @@ import { forwardRef } from 'react';
 
 interface CommunityShareCardProps {
   word: string;
-  excerpt: string;
+  excerpt: string | null;
   category: string;
 }
 
@@ -18,8 +18,8 @@ const CommunityShareCard = forwardRef<HTMLDivElement, CommunityShareCardProps>(
     const wordFontSize =
       word.length > 18 ? '58px' : word.length > 12 ? '76px' : '96px';
 
-    const truncated =
-      excerpt.length > 200 ? excerpt.slice(0, 197) + '…' : excerpt;
+    const text = excerpt ?? `Jesus saved me from ${word}`;
+    const truncated = text.length > 200 ? text.slice(0, 197) + '…' : text;
 
     return (
       <div

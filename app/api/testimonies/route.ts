@@ -23,7 +23,7 @@ export async function GET(req: NextRequest) {
     let query = db
       .from('testimonies')
       .select('id, word, body, category, excerpt, created_at', { count: 'exact' })
-      .eq('consented', true)
+      .not('body', 'is', null)
       .order('created_at', { ascending: false })
       .range(from, to);
 

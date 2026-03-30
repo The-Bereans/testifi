@@ -38,8 +38,6 @@ export default function TestimonyTicker({ testimonies }: Props) {
         marginInline: 'auto',
         marginTop: '2rem',
         minHeight: '4.5rem',
-        borderLeft: '2.5px solid rgba(139,74,42,0.45)',
-        paddingLeft: '1rem',
         textAlign: 'left',
         opacity: visible ? 1 : 0,
         transition: 'opacity 400ms ease',
@@ -62,7 +60,7 @@ export default function TestimonyTicker({ testimonies }: Props) {
         style={{
           fontFamily: 'var(--font-body)',
           fontSize: '0.75rem',
-          color: 'var(--brand-near-black-muted)',
+          color: 'rgba(248,244,236,0.55)',
           letterSpacing: '0.03em',
           margin: 0,
         }}

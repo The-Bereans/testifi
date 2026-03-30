@@ -7,13 +7,6 @@ import { CATEGORIES, CATEGORY_LABELS, type Category } from '@/lib/sanitize';
 import { useWordCloud } from '@/lib/hooks/useWordCloud';
 import WordCloud from '@/components/WordCloud';
 import ShareCard from '@/components/ShareCard';
-import TestimonyTicker from '@/components/TestimonyTicker';
-import { testimonies as mockTestimonies } from '@/lib/mock/testimonies';
-
-const TICKER_DATA = mockTestimonies.map((t) => ({
-  excerpt: t.excerpt.length > 120 ? t.excerpt.slice(0, 117) + '…' : t.excerpt,
-  label: `Anonymous · ${t.word}`,
-}));
 
 type CubicBezier = [number, number, number, number];
 const EASE_OUT: CubicBezier = [0.22, 1, 0.36, 1];
@@ -526,14 +519,6 @@ export default function TestimonySection() {
                 </p>
               </motion.div>
 
-              {/* Living testimony ticker */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.6, duration: 0.5 }}
-              >
-                <TestimonyTicker testimonies={TICKER_DATA} />
-              </motion.div>
             </div>
           </motion.section>
         )}

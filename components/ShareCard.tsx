@@ -188,7 +188,7 @@ const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(
           {/* "Jesus saved me from"  italic label */}
           <p
             style={{
-              fontFamily: 'Georgia, "Times New Roman", serif',
+              fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
               fontSize: '20px',
               fontWeight: 400,
               fontStyle: 'italic',
@@ -203,7 +203,7 @@ const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(
           {/* Hero word */}
           <h2
             style={{
-              fontFamily: 'Georgia, "Times New Roman", serif',
+              fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
               fontSize: fontSize,
               fontWeight: 700,
               lineHeight: 1.0,
@@ -241,7 +241,7 @@ const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(
         >
           <p
             style={{
-              fontFamily: 'Georgia, "Times New Roman", serif',
+              fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
               fontSize: '26px',
               fontWeight: 400,
               fontStyle: 'italic',

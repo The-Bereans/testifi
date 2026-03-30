@@ -46,7 +46,7 @@ export default function TestimonyTicker({ testimonies }: Props) {
     >
       <p
         style={{
-          fontFamily: 'Georgia, "Times New Roman", serif',
+          fontFamily: 'var(--font-body)',
           fontStyle: 'italic',
           fontSize: 'clamp(1.0625rem, 2.5vw, 1.1875rem)',
           color: 'var(--brand-near-black)',

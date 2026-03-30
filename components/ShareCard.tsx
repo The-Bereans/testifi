@@ -108,7 +108,7 @@ const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(
                 fontSize: `${size}px`,
                 color: '#F8F4EC',
                 opacity,
-                fontWeight: count === maxCount ? 600 : 400,
+                fontWeight: count === maxCount ? 700 : 400,
                 letterSpacing: '0.01em',
                 whiteSpace: 'nowrap',
                 lineHeight: 1,
@@ -188,7 +188,7 @@ const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(
           {/* "Jesus saved me from" — italic label */}
           <p
             style={{
-              fontFamily: '"Helvetica Neue", Arial, sans-serif',
+              fontFamily: 'Georgia, "Times New Roman", serif',
               fontSize: '20px',
               fontWeight: 400,
               fontStyle: 'italic',
@@ -254,7 +254,7 @@ const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(
           </p>
           <p
             style={{
-              fontFamily: '"Helvetica Neue", Arial, sans-serif',
+              fontFamily: 'Georgia, "Times New Roman", serif',
               fontSize: '15px',
               fontWeight: 500,
               letterSpacing: '0.03em',

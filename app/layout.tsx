@@ -1,13 +1,6 @@
 import type { Metadata } from "next";
-import { Playfair_Display, Plus_Jakarta_Sans } from "next/font/google";
+import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
-
-const playfair = Playfair_Display({
-  variable: "--font-playfair",
-  subsets: ["latin"],
-  display: "swap",
-  weight: ["400", "500", "600", "700", "800", "900"],
-});
 
 const jakarta = Plus_Jakarta_Sans({
   variable: "--font-jakarta",
@@ -37,7 +30,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${playfair.variable} ${jakarta.variable} h-full`}
+      className={`${jakarta.variable} h-full`}
     >
       <body className="min-h-full flex flex-col antialiased">{children}</body>
     </html>

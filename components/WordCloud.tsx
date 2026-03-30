@@ -51,7 +51,7 @@ function WordChip({
       style={{
         fontSize: wordFontSize(count),
         color: wordColor(count, isNew),
-        fontFamily: 'var(--font-heading)',
+        fontFamily: 'var(--font-body)',
         fontWeight: isNew ? 700 : 500,
         lineHeight: 1.15,
         cursor: 'pointer',
@@ -122,7 +122,7 @@ function WordModal({
         {/* Word */}
         <p
           style={{
-            fontFamily: 'var(--font-heading)',
+            fontFamily: 'var(--font-body)',
             fontSize: 'clamp(2rem, 10vw, 3rem)',
             color: 'var(--brand-sienna-light)',
             fontWeight: 700,
@@ -144,7 +144,7 @@ function WordModal({
         >
           <span
             style={{
-              fontFamily: 'var(--font-heading)',
+              fontFamily: 'var(--font-body)',
               fontSize: '2rem',
               fontWeight: 700,
               color: 'var(--brand-sienna)',

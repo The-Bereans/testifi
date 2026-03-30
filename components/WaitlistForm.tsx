@@ -75,7 +75,7 @@ export default function WaitlistForm() {
         {/* Heading */}
         <h2
           style={{
-            fontFamily: 'var(--font-heading)',
+            fontFamily: 'var(--font-body)',
             fontSize: 'clamp(1.5rem, 4vw, 2.25rem)',
             fontWeight: 700,
             color: 'var(--brand-near-black)',
@@ -116,7 +116,7 @@ export default function WaitlistForm() {
             >
               <p
                 style={{
-                  fontFamily: 'var(--font-heading)',
+                  fontFamily: 'var(--font-body)',
                   fontSize: '1.15rem',
                   fontWeight: 600,
                   color: 'var(--brand-near-black)',

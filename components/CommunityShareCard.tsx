@@ -83,7 +83,7 @@ const CommunityShareCard = forwardRef<HTMLDivElement, CommunityShareCardProps>(
           <span
             style={{
               color: 'rgba(181,103,61,0.6)',
-              fontFamily: '"Helvetica Neue", Arial, sans-serif',
+              fontFamily: 'Georgia, "Times New Roman", serif',
               fontSize: '13px',
               fontWeight: 600,
               letterSpacing: '0.1em',
@@ -107,7 +107,7 @@ const CommunityShareCard = forwardRef<HTMLDivElement, CommunityShareCardProps>(
           <p
             style={{
               color: 'rgba(248,244,236,0.5)',
-              fontFamily: '"Helvetica Neue", Arial, sans-serif',
+              fontFamily: 'Georgia, "Times New Roman", serif',
               fontSize: '22px',
               fontWeight: 400,
               marginBottom: '10px',
@@ -141,7 +141,7 @@ const CommunityShareCard = forwardRef<HTMLDivElement, CommunityShareCardProps>(
             <p
               style={{
                 color: 'rgba(248,244,236,0.82)',
-                fontFamily: '"Helvetica Neue", Arial, sans-serif',
+                fontFamily: 'Georgia, "Times New Roman", serif',
                 fontSize: '20px',
                 fontWeight: 400,
                 lineHeight: 1.65,
@@ -176,7 +176,7 @@ const CommunityShareCard = forwardRef<HTMLDivElement, CommunityShareCardProps>(
           <p
             style={{
               color: 'rgba(181,103,61,0.5)',
-              fontFamily: '"Helvetica Neue", Arial, sans-serif',
+              fontFamily: 'Georgia, "Times New Roman", serif',
               fontSize: '15px',
               fontWeight: 500,
               letterSpacing: '0.03em',

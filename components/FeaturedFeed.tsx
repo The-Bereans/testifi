@@ -324,7 +324,7 @@ export default function FeaturedFeed() {
         </p>
         <h2
           style={{
-            fontFamily: 'var(--font-heading)',
+            fontFamily: 'var(--font-body)',
             color: 'var(--brand-near-black)',
             fontSize: 'clamp(1.5rem, 4vw, 2.25rem)',
             fontWeight: 700,

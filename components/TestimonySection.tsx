@@ -263,7 +263,7 @@ export default function TestimonySection() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1, duration: 0.4, ease: EASE_OUT }}
               style={{
-                fontFamily: 'var(--font-heading)',
+                fontFamily: 'var(--font-body)',
                 fontSize: 'clamp(1.8rem, 5vw, 2.8rem)',
                 fontWeight: 700,
                 color: 'var(--brand-near-black)',

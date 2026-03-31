@@ -122,44 +122,6 @@ export default function CommunityReveal() {
         )}
       </AnimatePresence>
 
-      {/* Stage 3 — Persistent in-page marker after reveal */}
-      <AnimatePresence>
-        {feedVisible && (
-          <motion.div
-            key="feed-marker"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, ease: EASE_OUT }}
-            style={{
-              width:          '100%',
-              padding:        '2rem 1.5rem 0.75rem',
-              display:        'flex',
-              flexDirection:  'column',
-              alignItems:     'center',
-              gap:            '0.75rem',
-            }}
-          >
-            <div style={{
-              width:      '100%',
-              maxWidth:   '480px',
-              height:     '1px',
-              background: 'linear-gradient(to right, transparent, rgba(181,103,61,0.3), transparent)',
-            }} />
-            <p style={{
-              color:          '#C9A87C',
-              fontSize:       '0.75rem',
-              letterSpacing:  '0.12em',
-              textTransform:  'uppercase',
-              fontWeight:     500,
-              opacity:        0.5,
-              margin:         0,
-            }}>
-              Community feed
-            </p>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
       {/* FeaturedFeed hidden until revealed */}
       <AnimatePresence>
         {feedVisible && (

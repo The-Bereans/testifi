@@ -169,42 +169,6 @@ function TestimonyCard({ testimony }: { testimony: DbTestimony }) {
             gap: '0.75rem',
           }}
         >
-          {/* Stage 1: Word + category header */}
-          <div>
-            <span
-              style={{
-                fontFamily: 'var(--font-body)',
-                background: colors.bg,
-                color: colors.text,
-                border: `1px solid ${colors.border}`,
-                borderRadius: 'var(--radius-full)',
-                padding: '0.25rem 0.9rem',
-                fontSize: '1rem',
-                fontWeight: 700,
-                letterSpacing: '0.04em',
-                textTransform: 'uppercase',
-                display: 'inline-block',
-                marginBottom: '0.3rem',
-              }}
-            >
-              {testimony.word}
-            </span>
-            {testimony.category && (
-              <p
-                style={{
-                  margin: 0,
-                  fontFamily: 'var(--font-body)',
-                  color: 'var(--brand-near-black-muted)',
-                  fontSize: '0.7rem',
-                  letterSpacing: '0.06em',
-                  textTransform: 'uppercase',
-                }}
-              >
-                {CATEGORY_LABEL[testimony.category as Category] ?? testimony.category}
-              </p>
-            )}
-          </div>
-
           {/* Body */}
           <p
             style={{

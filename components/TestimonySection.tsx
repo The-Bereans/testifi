@@ -222,11 +222,31 @@ export default function TestimonySection() {
     }
   }
 
-  function handleWhatsAppShare() {
-    const text = encodeURIComponent(
-      `Jesus saved me from ${newWord}. He still saves.\n\ntestifi.vercel.app`
-    );
-    window.open(`https://wa.me/?text=${text}`, '_blank');
+  async function handleWhatsAppShare() {
+    const shareText = `Jesus saved me from ${newWord}. He still saves.\n\ntestifi.vercel.app`;
+
+    // Try native share with image (works on mobile)
+    if (navigator.canShare && shareCardRef.current) {
+      try {
+        const { default: html2canvas } = await import('html2canvas');
+        const canvas = await html2canvas(shareCardRef.current, {
+          scale: 1, useCORS: true, logging: false, backgroundColor: '#1C1611',
+        });
+        const blob = await new Promise<Blob | null>(resolve => canvas.toBlob(resolve, 'image/png'));
+        if (blob) {
+          const file = new File([blob], `testimony-${newWord}.png`, { type: 'image/png' });
+          if (navigator.canShare({ files: [file] })) {
+            await navigator.share({ files: [file], text: shareText });
+            return;
+          }
+        }
+      } catch {
+        // Fall through to text-only fallback
+      }
+    }
+
+    // Fallback: text-only wa.me link (desktop / unsupported browsers)
+    window.open(`https://wa.me/?text=${encodeURIComponent(shareText)}`, '_blank');
   }
 
   async function handleInstagramShare() {

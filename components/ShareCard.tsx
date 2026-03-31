@@ -274,7 +274,7 @@ const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(
               margin: 0,
             }}
           >
-            testifi.vercel.app
+            https://testifi.vercel.app
           </p>
         </div>
 

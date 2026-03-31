@@ -182,7 +182,7 @@ const CommunityShareCard = forwardRef<HTMLDivElement, CommunityShareCardProps>(
               letterSpacing: '0.03em',
             }}
           >
-            testifi.vercel.app
+            https://testifi.vercel.app
           </p>
         </div>
       </div>

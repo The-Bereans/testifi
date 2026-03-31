@@ -99,13 +99,13 @@ function TestimonyCard({ testimony }: { testimony: DbTestimony }) {
 
   function handleXShare() {
     const text = encodeURIComponent(
-      `Jesus saved me from ${testimony.word}. "${displayText.slice(0, 120)}"  testifi.vercel.app`
+      `Jesus saved me from ${testimony.word}. "${displayText.slice(0, 120)}"  https://testifi.vercel.app`
     );
     window.open(`https://twitter.com/intent/tweet?text=${text}`, '_blank');
   }
 
   async function handleWhatsAppShare() {
-    const shareText = `Jesus saved me from ${testimony.word}.\n\n"${displayText.slice(0, 160)}"\n\ntestifi.vercel.app`;
+    const shareText = `Jesus saved me from ${testimony.word}.\n\n"${displayText.slice(0, 160)}"\n\nhttps://testifi.vercel.app`;
 
     // Try native share with image (works on mobile)
     if (navigator.canShare && cardRef.current) {

@@ -64,6 +64,14 @@ function heroFontSize(word: string): string {
   return '32px';
 }
 
+function sentenceFontSize(word: string): string {
+  const len = word.length;
+  if (len <= 60)  return '52px';
+  if (len <= 100) return '42px';
+  if (len <= 150) return '34px';
+  return '28px';
+}
+
 // ─── ShareCard ──────────────────────────────────────────────────────────────
 /**
  * Full-bleed layered poster share card  1200×900 px.
@@ -77,7 +85,8 @@ function heroFontSize(word: string): string {
 const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(
   ({ word, cloudWords = [], preview = false }, ref) => {
     const maxCount = cloudWords.reduce((m, w) => Math.max(m, w.count), 0);
-    const fontSize = heroFontSize(word);
+    const isSentence = word.trim().split(/\s+/).length > 4;
+    const fontSize = isSentence ? sentenceFontSize(word) : heroFontSize(word);
 
     return (
       <div
@@ -160,43 +169,74 @@ const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(
             right: 96,
           }}
         >
-          {/* "I, ✝ testifi that Jesus saved me from"  label */}
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-              fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
-              fontSize: '26px',
-              fontWeight: 600,
-              lineHeight: 1,
-              textTransform: 'uppercase',
-              marginBottom: '8px',
-            }}
-          >
-            <span style={{ color: 'rgba(248,244,236,0.7)' }}>I,</span>
-            {/* <svg width="16" height="20" viewBox="0 0 18 22" fill="none" style={{ flexShrink: 0 }}>
-              <rect x="7.5" y="0"   width="3"  height="22" rx="1.5" fill="#B5673D" />
-              <rect x="0"   y="6.5" width="18" height="3"  rx="1.5" fill="#B5673D" />
-            </svg> */}
-            <span style={{ color: '#B5673D' }}>Testifi</span>
-            <span style={{ color: 'rgba(248,244,236,0.7)' }}>That Jesus Saved Me From</span>
-          </div>
+          {isSentence ? (
+            /* Sentence layout: skip redundant prefix, show as testimony quote */
+            <>
+              <div
+                style={{
+                  fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
+                  fontSize: '72px',
+                  fontWeight: 700,
+                  lineHeight: 0.9,
+                  color: '#B5673D',
+                  marginBottom: '16px',
+                  opacity: 0.6,
+                }}
+              >
+                &ldquo;
+              </div>
+              <h2
+                style={{
+                  fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
+                  fontSize: fontSize,
+                  fontWeight: 600,
+                  lineHeight: 1.3,
+                  letterSpacing: '-0.01em',
+                  color: '#F8F4EC',
+                  margin: 0,
+                }}
+              >
+                {word}
+              </h2>
+            </>
+          ) : (
+            /* Short concept layout: "I, Testifi That Jesus Saved Me From [word]" */
+            <>
+              {/* "I, ✝ testifi that Jesus saved me from"  label */}
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
+                  fontSize: '26px',
+                  fontWeight: 600,
+                  lineHeight: 1,
+                  textTransform: 'uppercase',
+                  marginBottom: '8px',
+                }}
+              >
+                <span style={{ color: 'rgba(248,244,236,0.7)' }}>I,</span>
+                <span style={{ color: '#B5673D' }}>Testifi</span>
+                <span style={{ color: 'rgba(248,244,236,0.7)' }}>That Jesus Saved Me From</span>
+              </div>
 
-          {/* Hero word */}
-          <h2
-            style={{
-              fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
-              fontSize: fontSize,
-              fontWeight: 700,
-              lineHeight: 1.0,
-              letterSpacing: '-0.025em',
-              color: '#B5673D',
-              margin: 0,
-            }}
-          >
-            {word}
-          </h2>
+              {/* Hero word */}
+              <h2
+                style={{
+                  fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
+                  fontSize: fontSize,
+                  fontWeight: 700,
+                  lineHeight: 1.0,
+                  letterSpacing: '-0.025em',
+                  color: '#B5673D',
+                  margin: 0,
+                }}
+              >
+                {word}
+              </h2>
+            </>
+          )}
         </div>
 
         {/* Bottom bar  "He still saves." + URL */}

@@ -52,19 +52,27 @@ function getClusterPosition(index: number, count: number, maxCount: number): Wor
 
 // ─── Hero word font size (responsive tiers) ──────────────────────────────────
 
-function cardFontSize(word: string): string {
+// For short concepts (single word / short phrase)
+function heroFontSize(word: string): string {
   const len = word.length;
-  if (len <= 6)   return '140px';
-  if (len <= 10)  return '120px';
-  if (len <= 14)  return '100px';
-  if (len <= 18)  return '80px';
-  if (len <= 24)  return '64px';
-  if (len <= 32)  return '52px';
-  if (len <= 42)  return '42px';
-  if (len <= 60)  return '34px';
-  if (len <= 90)  return '26px';
-  if (len <= 130) return '22px';
-  return '18px';
+  if (len <= 6)  return '140px';
+  if (len <= 10) return '120px';
+  if (len <= 14) return '100px';
+  if (len <= 18) return '80px';
+  if (len <= 24) return '64px';
+  if (len <= 32) return '52px';
+  if (len <= 42) return '42px';
+  return '32px';
+}
+
+// For full sentences — scales down so it always fits in the card
+function sentenceFontSize(word: string): string {
+  const len = word.length;
+  if (len <= 60)  return '48px';
+  if (len <= 100) return '38px';
+  if (len <= 150) return '30px';
+  if (len <= 200) return '26px';
+  return '22px';
 }
 
 // ─── ShareCard ──────────────────────────────────────────────────────────────
@@ -80,7 +88,8 @@ function cardFontSize(word: string): string {
 const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(
   ({ word, cloudWords = [], preview = false }, ref) => {
     const maxCount = cloudWords.reduce((m, w) => Math.max(m, w.count), 0);
-    const fontSize = cardFontSize(word);
+    const isSentence = word.trim().split(/\s+/).length > 4;
+    const fontSize = isSentence ? sentenceFontSize(word) : heroFontSize(word);
 
     return (
       <div
@@ -163,40 +172,82 @@ const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(
             right: 96,
           }}
         >
-          {/* "I, ✝ testifi that Jesus saved me from"  label */}
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-              fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
-              fontSize: '26px',
-              fontWeight: 600,
-              lineHeight: 1,
-              textTransform: 'uppercase',
-              marginBottom: '8px',
-            }}
-          >
-            <span style={{ color: 'rgba(248,244,236,0.7)' }}>I,</span>
-            <span style={{ color: '#B5673D' }}>Testifi</span>
-            <span style={{ color: 'rgba(248,244,236,0.7)' }}>That Jesus Saved Me From</span>
-          </div>
+          {isSentence ? (
+            /* ── Sentence layout: quoted testimony ─────────────────────────── */
+            <>
+              {/* Opening quote */}
+              <div style={{
+                fontFamily: 'Georgia, serif',
+                fontSize: '96px',
+                lineHeight: 0.8,
+                color: '#B5673D',
+                opacity: 0.7,
+                marginBottom: '12px',
+              }}>
+                &ldquo;
+              </div>
 
-          {/* Hero word — font scales by char length so long sentences always fit */}
-          <h2
-            style={{
-              fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
-              fontSize: fontSize,
-              fontWeight: 700,
-              lineHeight: 1.2,
-              letterSpacing: '-0.02em',
-              color: '#B5673D',
-              margin: 0,
-              overflowWrap: 'break-word',
-            }}
-          >
-            {word}
-          </h2>
+              {/* The testimony sentence */}
+              <h2 style={{
+                fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
+                fontSize: fontSize,
+                fontWeight: 600,
+                lineHeight: 1.35,
+                letterSpacing: '-0.01em',
+                color: '#F8F4EC',
+                margin: '0 0 20px 0',
+                overflowWrap: 'break-word',
+              }}>
+                {word}
+              </h2>
+
+              {/* Closing attribution */}
+              <p style={{
+                fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
+                fontSize: '28px',
+                fontWeight: 500,
+                fontStyle: 'italic',
+                color: '#B5673D',
+                margin: 0,
+                opacity: 0.9,
+              }}>
+                Jesus saved me, and He can save you too.
+              </p>
+            </>
+          ) : (
+            /* ── Short concept layout ──────────────────────────────────────── */
+            <>
+              {/* "I, Testifi That Jesus Saved Me From"  label */}
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
+                fontSize: '26px',
+                fontWeight: 600,
+                lineHeight: 1,
+                textTransform: 'uppercase',
+                marginBottom: '8px',
+              }}>
+                <span style={{ color: 'rgba(248,244,236,0.7)' }}>I,</span>
+                <span style={{ color: '#B5673D' }}>Testifi</span>
+                <span style={{ color: 'rgba(248,244,236,0.7)' }}>That Jesus Saved Me From</span>
+              </div>
+
+              {/* Hero word */}
+              <h2 style={{
+                fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
+                fontSize: fontSize,
+                fontWeight: 700,
+                lineHeight: 1.0,
+                letterSpacing: '-0.025em',
+                color: '#B5673D',
+                margin: 0,
+              }}>
+                {word}
+              </h2>
+            </>
+          )}
         </div>
 
         {/* Bottom bar  "He still saves." + URL */}

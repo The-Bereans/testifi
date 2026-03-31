@@ -134,44 +134,82 @@ function TestimonyCard({ testimony }: { testimony: DbTestimony }) {
 
   return (
     <>
-      <article
-        style={{
-          background: 'var(--brand-ivory-dark)',
-          border: '1px solid var(--brand-ivory-deeper)',
-          borderRadius: 'var(--radius-lg)',
-          padding: 'clamp(1.1rem, 3vw, 1.5rem)',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '0.75rem',
-        }}
-      >
-        <p
+      <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
+        {/* Card */}
+        <article
           style={{
-            fontFamily: 'var(--font-body)',
-            color: 'var(--brand-near-black-soft)',
-            fontSize: 'clamp(0.875rem, 2vw, 0.975rem)',
-            lineHeight: 1.72,
-            letterSpacing: '0.01em',
-            margin: 0,
+            flex: 1,
+            minWidth: 0,
+            background: 'var(--brand-ivory-dark)',
+            border: '1px solid var(--brand-ivory-deeper)',
+            borderRadius: 'var(--radius-lg)',
+            padding: 'clamp(1.1rem, 3vw, 1.5rem)',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '0.75rem',
           }}
         >
-          {displayText}
-        </p>
-
-        <div style={{ paddingTop: '0.25rem', borderTop: '1px solid var(--brand-ivory-deeper)' }}>
-          <span
+          <p
             style={{
               fontFamily: 'var(--font-body)',
-              color: 'var(--brand-near-black-muted)',
-              fontSize: '0.75rem',
-              letterSpacing: '0.03em',
+              color: 'var(--brand-near-black-soft)',
+              fontSize: 'clamp(0.875rem, 2vw, 0.975rem)',
+              lineHeight: 1.72,
+              letterSpacing: '0.01em',
+              margin: 0,
             }}
           >
-            Anonymous · {relativeTime(testimony.created_at)}
-          </span>
-        </div>
+            {displayText}
+          </p>
 
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '0.75rem' }}>
+          <div style={{ paddingTop: '0.25rem', borderTop: '1px solid var(--brand-ivory-deeper)' }}>
+            <span
+              style={{
+                fontFamily: 'var(--font-body)',
+                color: 'var(--brand-near-black-muted)',
+                fontSize: '0.75rem',
+                letterSpacing: '0.03em',
+              }}
+            >
+              Anonymous · {relativeTime(testimony.created_at)}
+            </span>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+            <span
+              style={{
+                background: colors.bg,
+                color: colors.text,
+                border: `1px solid ${colors.border}`,
+                borderRadius: 'var(--radius-full)',
+                padding: '0.2rem 0.75rem',
+                fontSize: '0.75rem',
+                fontWeight: 700,
+                letterSpacing: '0.04em',
+                textTransform: 'uppercase',
+                fontFamily: 'var(--font-body)',
+              }}
+            >
+              {testimony.word}
+            </span>
+            {testimony.category && (
+              <span
+                style={{
+                  color: 'var(--brand-near-black-muted)',
+                  fontSize: '0.7rem',
+                  letterSpacing: '0.06em',
+                  textTransform: 'uppercase',
+                  fontFamily: 'var(--font-body)',
+                }}
+              >
+                {CATEGORY_LABEL[testimony.category as Category] ?? testimony.category}
+              </span>
+            )}
+          </div>
+        </article>
+
+        {/* Share buttons column */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', flexShrink: 0, paddingTop: '0.25rem' }}>
           <button
             className="share-btn"
             onClick={handleDownloadPNG}
@@ -206,39 +244,7 @@ function TestimonyCard({ testimony }: { testimony: DbTestimony }) {
             <InstagramIcon size={18} />
           </button>
         </div>
-
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
-          <span
-            style={{
-              background: colors.bg,
-              color: colors.text,
-              border: `1px solid ${colors.border}`,
-              borderRadius: 'var(--radius-full)',
-              padding: '0.2rem 0.75rem',
-              fontSize: '0.75rem',
-              fontWeight: 700,
-              letterSpacing: '0.04em',
-              textTransform: 'uppercase',
-              fontFamily: 'var(--font-body)',
-            }}
-          >
-            {testimony.word}
-          </span>
-          {testimony.category && (
-            <span
-              style={{
-                color: 'var(--brand-near-black-muted)',
-                fontSize: '0.7rem',
-                letterSpacing: '0.06em',
-                textTransform: 'uppercase',
-                fontFamily: 'var(--font-body)',
-              }}
-            >
-              {CATEGORY_LABEL[testimony.category as Category] ?? testimony.category}
-            </span>
-          )}
-        </div>
-      </article>
+      </div>
 
       <CommunityShareCard
         ref={cardRef}
@@ -523,123 +529,115 @@ export default function FeaturedFeed() {
 
       {/* ── Slideshow ── */}
       {!loading && !error && total > 0 && (
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1.25rem' }}>
-
-          {/* Prev */}
-          {total > 1 && (
-            <button
-              onClick={() => handleNav(-1)}
-              aria-label="Previous testimony"
-              style={{ ...arrowBtnStyle, flexShrink: 0 }}
-              onMouseEnter={e => {
-                e.currentTarget.style.borderColor = 'var(--brand-sienna-pale)';
-                e.currentTarget.style.color = 'var(--brand-near-black-soft)';
-              }}
-              onMouseLeave={e => {
-                e.currentTarget.style.borderColor = 'var(--brand-ivory-deeper)';
-                e.currentTarget.style.color = 'var(--brand-near-black-muted)';
-              }}
-            >
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                <path d="M10 3L5 8L10 13" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
-          )}
-
-          {/* Center: card + progress bar + dots */}
-          <div style={{ flex: '0 1 640px', minWidth: 0 }}>
-            {/* Card viewport */}
-            <div style={{ overflow: 'hidden', position: 'relative', minHeight: 'clamp(240px, 35vh, 380px)' }}>
-              <AnimatePresence initial={false} custom={direction} mode="wait">
-                <motion.div
-                  key={currentIndex}
-                  custom={direction}
-                  variants={slideVariants}
-                  initial="enter"
-                  animate="center"
-                  exit="exit"
-                  transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-                >
-                  <TestimonyCard testimony={testimonies[currentIndex]} />
-                </motion.div>
-              </AnimatePresence>
-            </div>
-
-            {/* Progress bar */}
-            <div style={{
-              height: '2px',
-              background: 'var(--brand-ivory-deeper)',
-              borderRadius: '999px',
-              marginTop: '1.25rem',
-              overflow: 'hidden',
-            }}>
-              {!isPaused && total > 1 && (
-                <div
-                  key={currentIndex}
-                  style={{
-                    height: '100%',
-                    background: 'var(--brand-sienna-light)',
-                    borderRadius: '999px',
-                    animation: `slideshow-progress ${SLIDE_DURATION_MS}ms linear forwards`,
-                  }}
-                />
-              )}
-            </div>
-
-            {/* Dots + counter */}
-            {total > 1 && (
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', marginTop: '1rem' }}>
-                <div style={{ display: 'flex', gap: '0.375rem', alignItems: 'center' }}>
-                  {Array.from({ length: dotCount }, (_, i) => {
-                    const isActive = i === activeDot;
-                    return (
-                      <div
-                        key={i}
-                        style={{
-                          width: isActive ? '1.25rem' : '0.4rem',
-                          height: '0.4rem',
-                          borderRadius: '999px',
-                          background: isActive ? 'var(--brand-sienna-light)' : 'var(--brand-ivory-deeper)',
-                          transition: 'width 0.25s ease, background 0.25s ease',
-                          flexShrink: 0,
-                        }}
-                      />
-                    );
-                  })}
-                </div>
-                <span style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '0.7rem',
-                  color: 'var(--brand-near-black-muted)',
-                  letterSpacing: '0.04em',
-                }}>
-                  {currentIndex + 1} / {total}
-                </span>
-              </div>
-            )}
+        <div>
+          {/* Card viewport */}
+          <div style={{ overflow: 'hidden', position: 'relative', minHeight: 'clamp(240px, 35vh, 380px)' }}>
+            <AnimatePresence initial={false} custom={direction} mode="wait">
+              <motion.div
+                key={currentIndex}
+                custom={direction}
+                variants={slideVariants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+              >
+                <TestimonyCard testimony={testimonies[currentIndex]} />
+              </motion.div>
+            </AnimatePresence>
           </div>
 
-          {/* Next */}
-          {total > 1 && (
-            <button
-              onClick={() => handleNav(1)}
-              aria-label="Next testimony"
-              style={{ ...arrowBtnStyle, flexShrink: 0 }}
-              onMouseEnter={e => {
-                e.currentTarget.style.borderColor = 'var(--brand-sienna-pale)';
-                e.currentTarget.style.color = 'var(--brand-near-black-soft)';
-              }}
-              onMouseLeave={e => {
-                e.currentTarget.style.borderColor = 'var(--brand-ivory-deeper)';
-                e.currentTarget.style.color = 'var(--brand-near-black-muted)';
-              }}
-            >
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                <path d="M6 3L11 8L6 13" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
+          {/* Progress bar + arrows on same line */}
+          {total > 1 ? (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginTop: '1.25rem' }}>
+              {/* Prev */}
+              <button
+                onClick={() => handleNav(-1)}
+                aria-label="Previous testimony"
+                style={arrowBtnStyle}
+                onMouseEnter={e => {
+                  e.currentTarget.style.borderColor = 'var(--brand-sienna-pale)';
+                  e.currentTarget.style.color = 'var(--brand-near-black-soft)';
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.borderColor = 'var(--brand-ivory-deeper)';
+                  e.currentTarget.style.color = 'var(--brand-near-black-muted)';
+                }}
+              >
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <path d="M10 3L5 8L10 13" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </button>
+
+              {/* Progress bar */}
+              <div style={{ flex: 1, height: '2px', background: 'var(--brand-ivory-deeper)', borderRadius: '999px', overflow: 'hidden' }}>
+                {!isPaused && (
+                  <div
+                    key={currentIndex}
+                    style={{
+                      height: '100%',
+                      background: 'var(--brand-sienna-light)',
+                      borderRadius: '999px',
+                      animation: `slideshow-progress ${SLIDE_DURATION_MS}ms linear forwards`,
+                    }}
+                  />
+                )}
+              </div>
+
+              {/* Next */}
+              <button
+                onClick={() => handleNav(1)}
+                aria-label="Next testimony"
+                style={arrowBtnStyle}
+                onMouseEnter={e => {
+                  e.currentTarget.style.borderColor = 'var(--brand-sienna-pale)';
+                  e.currentTarget.style.color = 'var(--brand-near-black-soft)';
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.borderColor = 'var(--brand-ivory-deeper)';
+                  e.currentTarget.style.color = 'var(--brand-near-black-muted)';
+                }}
+              >
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <path d="M6 3L11 8L6 13" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </button>
+            </div>
+          ) : (
+            <div style={{ height: '2px', background: 'var(--brand-ivory-deeper)', borderRadius: '999px', marginTop: '1.25rem' }} />
           )}
 
+          {/* Dots + counter */}
+          {total > 1 && (
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', marginTop: '1rem' }}>
+              <div style={{ display: 'flex', gap: '0.375rem', alignItems: 'center' }}>
+                {Array.from({ length: dotCount }, (_, i) => {
+                  const isActive = i === activeDot;
+                  return (
+                    <div
+                      key={i}
+                      style={{
+                        width: isActive ? '1.25rem' : '0.4rem',
+                        height: '0.4rem',
+                        borderRadius: '999px',
+                        background: isActive ? 'var(--brand-sienna-light)' : 'var(--brand-ivory-deeper)',
+                        transition: 'width 0.25s ease, background 0.25s ease',
+                        flexShrink: 0,
+                      }}
+                    />
+                  );
+                })}
+              </div>
+              <span style={{
+                fontFamily: 'var(--font-body)',
+                fontSize: '0.7rem',
+                color: 'var(--brand-near-black-muted)',
+                letterSpacing: '0.04em',
+              }}>
+                {currentIndex + 1} / {total}
+              </span>
+            </div>
+          )}
         </div>
       )}
     </motion.section>

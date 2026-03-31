@@ -104,11 +104,31 @@ function TestimonyCard({ testimony }: { testimony: DbTestimony }) {
     window.open(`https://twitter.com/intent/tweet?text=${text}`, '_blank');
   }
 
-  function handleWhatsAppShare() {
-    const text = encodeURIComponent(
-      `Jesus saved me from ${testimony.word}.\n\n"${displayText.slice(0, 160)}"\n\ntestifi.vercel.app`
-    );
-    window.open(`https://wa.me/?text=${text}`, '_blank');
+  async function handleWhatsAppShare() {
+    const shareText = `Jesus saved me from ${testimony.word}.\n\n"${displayText.slice(0, 160)}"\n\ntestifi.vercel.app`;
+
+    // Try native share with image (works on mobile)
+    if (navigator.canShare && cardRef.current) {
+      try {
+        const { default: html2canvas } = await import('html2canvas');
+        const canvas = await html2canvas(cardRef.current, {
+          scale: 1, useCORS: true, logging: false, backgroundColor: '#1C1611',
+        });
+        const blob = await new Promise<Blob | null>(resolve => canvas.toBlob(resolve, 'image/png'));
+        if (blob) {
+          const file = new File([blob], `testimony-${testimony.word}.png`, { type: 'image/png' });
+          if (navigator.canShare({ files: [file] })) {
+            await navigator.share({ files: [file], text: shareText });
+            return;
+          }
+        }
+      } catch {
+        // Fall through to text-only fallback
+      }
+    }
+
+    // Fallback: text-only wa.me link (desktop / unsupported browsers)
+    window.open(`https://wa.me/?text=${encodeURIComponent(shareText)}`, '_blank');
   }
 
   async function handleInstagramShare() {
@@ -546,6 +566,20 @@ export default function FeaturedFeed() {
               </motion.div>
             </AnimatePresence>
           </div>
+
+          {/* Editorial nudge */}
+          <p style={{
+            fontFamily: 'var(--font-body)',
+            color: 'var(--brand-near-black-muted)',
+            fontSize: '0.8rem',
+            lineHeight: 1.6,
+            textAlign: 'center',
+            marginTop: '1rem',
+            marginBottom: 0,
+            letterSpacing: '0.01em',
+          }}>
+            Someone you know might need to read this.
+          </p>
 
           {/* Progress bar + arrows on same line */}
           {total > 1 ? (

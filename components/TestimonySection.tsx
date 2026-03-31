@@ -602,6 +602,26 @@ export default function TestimonySection() {
               </motion.div>
             )}
 
+            {/* Share nudge */}
+            {newWord && (
+              <motion.p
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1], delay: 0.15 }}
+                style={{
+                  fontFamily: 'var(--font-body)',
+                  color: 'var(--color-muted)',
+                  fontSize: '0.875rem',
+                  lineHeight: 1.65,
+                  textAlign: 'center',
+                  maxWidth: 320,
+                  marginBottom: '1rem',
+                }}
+              >
+                Someone in your circle needs to be set free. Share it.
+              </motion.p>
+            )}
+
             {/* Share buttons  4 circular icons under the card */}
             {newWord && (
               <motion.div

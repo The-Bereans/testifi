@@ -11,15 +11,12 @@ export default function CommunityReveal() {
   const feedRef     = useRef<HTMLDivElement>(null);
   const [feedVisible, setFeedVisible] = useState(false);
 
-  // Sentinel sits at the top of this section.
-  // When it scrolls into the viewport the user has cleared TestimonySection.
   const pastSection = useInView(sentinelRef, { once: false, margin: '0px 0px -40px 0px' });
 
   const showButton = pastSection && !feedVisible;
 
   function handleReveal() {
     setFeedVisible(true);
-    // Give React one frame to mount FeaturedFeed, then scroll to it.
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
         feedRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -29,56 +26,141 @@ export default function CommunityReveal() {
 
   return (
     <>
-      {/* Sentinel  sits between TestimonySection and FeaturedFeed */}
+      {/* Sentinel sits between TestimonySection and FeaturedFeed */}
       <div ref={sentinelRef} aria-hidden="true" />
 
-      {/* Sticky reveal button */}
+      {/* Stage 1 + 2 — Inline section anchor CTA */}
       <AnimatePresence>
         {showButton && (
           <motion.div
-            key="reveal-btn"
-            initial={{ opacity: 0, y: 16 }}
+            key="reveal-cta"
+            initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 16 }}
-            transition={{ duration: 0.35, ease: EASE_OUT }}
+            exit={{ opacity: 0, y: 8 }}
+            transition={{ duration: 0.4, ease: EASE_OUT }}
             style={{
-              position:       'fixed',
-              bottom:         '2rem',
-              left:           '50%',
-              transform:      'translateX(-50%)',
-              zIndex:         50,
-              pointerEvents:  'auto',
+              width:      '100%',
+              padding:    '3rem 1.5rem',
+              display:    'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap:        '1.5rem',
             }}
           >
-            <button
-              onClick={handleReveal}
-              style={{
-                display:         'flex',
-                alignItems:      'center',
-                gap:             '0.5rem',
-                padding:         '0.75rem 1.5rem',
-                borderRadius:    '9999px',
-                background:      'rgba(28, 22, 17, 0.92)',
-                backdropFilter:  'blur(12px)',
-                WebkitBackdropFilter: 'blur(12px)',
-                border:          '1px solid rgba(181, 103, 61, 0.45)',
-                color:           '#F5ECD7',
-                fontSize:        '0.9375rem',
-                fontWeight:      500,
-                letterSpacing:   '0.01em',
-                cursor:          'pointer',
-                boxShadow:       '0 4px 24px rgba(0,0,0,0.45), 0 0 0 1px rgba(181,103,61,0.15)',
-                whiteSpace:      'nowrap',
-              }}
-            >
-              Read others&#39; testimonies
-              <span style={{ fontSize: '1.05em', opacity: 0.8 }}>→</span>
-            </button>
+            {/* Top divider */}
+            <div style={{
+              width:           '100%',
+              maxWidth:        '480px',
+              height:          '1px',
+              background:      'linear-gradient(to right, transparent, rgba(181,103,61,0.35), transparent)',
+            }} />
+
+            {/* Copy + button */}
+            <div style={{
+              display:        'flex',
+              flexDirection:  'column',
+              alignItems:     'center',
+              gap:            '0.6rem',
+              textAlign:      'center',
+            }}>
+              <p style={{
+                color:          '#C9A87C',
+                fontSize:       '0.8125rem',
+                letterSpacing:  '0.12em',
+                textTransform:  'uppercase',
+                fontWeight:     500,
+                opacity:        0.7,
+                margin:         0,
+              }}>
+                You are not alone
+              </p>
+
+              <button
+                onClick={handleReveal}
+                style={{
+                  display:        'flex',
+                  alignItems:     'center',
+                  gap:            '0.75rem',
+                  background:     'none',
+                  border:         'none',
+                  cursor:         'pointer',
+                  padding:        '0.25rem 0',
+                  color:          '#F5ECD7',
+                  fontSize:       '1.25rem',
+                  fontWeight:     600,
+                  letterSpacing:  '-0.01em',
+                  lineHeight:     1.25,
+                }}
+              >
+                Others have been set free too. Read their stories.
+                <span style={{
+                  display:        'inline-flex',
+                  alignItems:     'center',
+                  justifyContent: 'center',
+                  width:          '2rem',
+                  height:         '2rem',
+                  borderRadius:   '9999px',
+                  border:         '1px solid rgba(181,103,61,0.5)',
+                  color:          '#C9A87C',
+                  fontSize:       '1rem',
+                  flexShrink:     0,
+                  transition:     'background 0.2s',
+                }}>
+                  ↓
+                </span>
+              </button>
+            </div>
+
+            {/* Bottom divider */}
+            <div style={{
+              width:      '100%',
+              maxWidth:   '480px',
+              height:     '1px',
+              background: 'linear-gradient(to right, transparent, rgba(181,103,61,0.35), transparent)',
+            }} />
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* FeaturedFeed  hidden until revealed */}
+      {/* Stage 3 — Persistent in-page marker after reveal */}
+      <AnimatePresence>
+        {feedVisible && (
+          <motion.div
+            key="feed-marker"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, ease: EASE_OUT }}
+            style={{
+              width:          '100%',
+              padding:        '2rem 1.5rem 0.75rem',
+              display:        'flex',
+              flexDirection:  'column',
+              alignItems:     'center',
+              gap:            '0.75rem',
+            }}
+          >
+            <div style={{
+              width:      '100%',
+              maxWidth:   '480px',
+              height:     '1px',
+              background: 'linear-gradient(to right, transparent, rgba(181,103,61,0.3), transparent)',
+            }} />
+            <p style={{
+              color:          '#C9A87C',
+              fontSize:       '0.75rem',
+              letterSpacing:  '0.12em',
+              textTransform:  'uppercase',
+              fontWeight:     500,
+              opacity:        0.5,
+              margin:         0,
+            }}>
+              Community feed
+            </p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* FeaturedFeed hidden until revealed */}
       <AnimatePresence>
         {feedVisible && (
           <motion.div

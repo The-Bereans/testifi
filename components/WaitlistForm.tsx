@@ -61,15 +61,30 @@ export default function WaitlistForm() {
         <h2
           style={{
             fontFamily: 'var(--font-body)',
-            fontSize: 'clamp(1.35rem, 3.5vw, 2rem)',
+            fontSize: 'clamp(1.5rem, 4vw, 2.25rem)',
             fontWeight: 700,
             color: 'var(--brand-near-black)',
-            lineHeight: 1.25,
+            lineHeight: 1.2,
+            marginBottom: '0.75rem',
+          }}
+        >
+          Be the first to know when we launch
+        </h2>
+
+        {/* Overline */}
+        <p
+          style={{
+            fontFamily: 'var(--font-body)',
+            fontSize: '0.72rem',
+            letterSpacing: '0.18em',
+            textTransform: 'uppercase',
+            fontWeight: 600,
+            color: 'var(--brand-sienna-light)',
             marginBottom: '2rem',
           }}
         >
           The Jesus App is bringing Kingdom online
-        </h2>
+        </p>
 
         {/* Form / success swap */}
         <AnimatePresence mode="wait">
@@ -178,7 +193,7 @@ export default function WaitlistForm() {
                   }}
                   onMouseEnter={(e) => {
                     if (state !== 'submitting')
-                      e.currentTarget.style.background = 'var(--brand-sienna-dark)';
+                      e.currentTarget.style.background = 'var(--brand-sienna-pale)';
                   }}
                   onMouseLeave={(e) => {
                     if (state !== 'submitting')

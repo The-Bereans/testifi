@@ -379,14 +379,32 @@ export default function TestimonySection() {
               }} />
             </div>
 
-            {/* Scattered Easter icons — left side */}
-            {(isMobile
-              ? [
-                  { top: '3%', left: '4%', delay: 0.15, icon: LEFT_ICONS[0].icon },
-                  { top: '9%', left: '4%', delay: 0.25, icon: LEFT_ICONS[1].icon },
-                ]
-              : LEFT_ICONS
-            ).map((item, i) => (
+            {/* Mobile: all icons fall like snow across the top backdrop */}
+            {isMobile && [
+              { top: '3%',  left: '6%',  delay: 0.10, icon: 'cross' },
+              { top: '9%',  left: '18%', delay: 0.20, icon: 'dove' },
+              { top: '4%',  left: '34%', delay: 0.15, icon: 'palmleaf' },
+              { top: '11%', left: '50%', delay: 0.28, icon: 'anchor' },
+              { top: '3%',  left: '66%', delay: 0.12, icon: 'flame' },
+              { top: '9%',  left: '78%', delay: 0.22, icon: 'heart' },
+              { top: '4%',  left: '88%', delay: 0.18, icon: 'nail' },
+              { top: '14%', left: '8%',  delay: 0.35, icon: 'chalice' },
+              { top: '14%', left: '44%', delay: 0.32, icon: 'crownofthorns' },
+              { top: '14%', left: '82%', delay: 0.38, icon: 'fish' },
+            ].map((item, i) => (
+              <motion.div
+                key={`snow-${i}`}
+                initial={{ opacity: 0, y: -32 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: item.delay, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+                style={{ position: 'absolute', top: item.top, left: item.left, pointerEvents: 'none', zIndex: 0 }}
+              >
+                <IconSVG name={item.icon} />
+              </motion.div>
+            ))}
+
+            {/* Desktop: left column icons */}
+            {!isMobile && LEFT_ICONS.map((item, i) => (
               <motion.div
                 key={`left-${i}`}
                 initial={{ opacity: 0, x: -24 }}
@@ -398,14 +416,8 @@ export default function TestimonySection() {
               </motion.div>
             ))}
 
-            {/* Scattered Easter icons — right side */}
-            {(isMobile
-              ? [
-                  { top: '3%', right: '4%', delay: 0.18, icon: RIGHT_ICONS[0].icon },
-                  { top: '9%', right: '4%', delay: 0.3,  icon: RIGHT_ICONS[1].icon },
-                ]
-              : RIGHT_ICONS
-            ).map((item, i) => (
+            {/* Desktop: right column icons */}
+            {!isMobile && RIGHT_ICONS.map((item, i) => (
               <motion.div
                 key={`right-${i}`}
                 initial={{ opacity: 0, x: 24 }}

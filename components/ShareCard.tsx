@@ -88,7 +88,9 @@ function sentenceFontSize(word: string): string {
 const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(
   ({ word, cloudWords = [], preview = false }, ref) => {
     const maxCount = cloudWords.reduce((m, w) => Math.max(m, w.count), 0);
-    const isSentence = word.trim().split(/\s+/).length > 4;
+    // Hero layout for: single word, two words, or any hyphenated compound (e.g. "self-hatred")
+    // Quote layout for: three or more non-hyphenated words (a full sentence/story)
+    const isSentence = word.trim().split(/\s+/).length > 2 && !word.includes('-');
     const fontSize = isSentence ? sentenceFontSize(word) : heroFontSize(word);
 
     return (

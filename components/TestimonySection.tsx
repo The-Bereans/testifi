@@ -2,6 +2,53 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+
+// ── Easter / salvation icons ──────────────────────────────────────────────────
+const ICON_STYLE = { width: 26, height: 26, color: 'rgba(139,74,42,0.22)', display: 'block' } as const;
+
+function IconSVG({ name }: { name: string }) {
+  switch (name) {
+    case 'cross':
+      return <svg viewBox="0 0 24 24" fill="none" style={ICON_STYLE}><path d="M5.25 8.625H18.75M12 21V3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>;
+    case 'crownofthorns':
+      return <svg viewBox="0 0 24 24" fill="none" style={ICON_STYLE}><path d="M19.2724 12C19.2724 16.0164 16.0164 19.2724 12 19.2724M19.2724 12C19.2724 7.98357 16.0164 4.7276 12 4.7276M19.2724 12L21.3502 12M12 19.2724C7.98357 19.2724 4.7276 16.0164 4.7276 12M12 19.2724L12 21.3503M4.7276 12C4.7276 7.98357 7.98357 4.7276 12 4.7276M4.7276 12L2.64978 12M12 4.7276L12 2.64978M15.1168 8.93216L19.3213 4.72761M4.7276 19.3213L8.93214 15.1168M8.93216 8.93216L4.72761 4.72761M19.3213 19.3213L15.1167 15.1168" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>;
+    case 'heart':
+      return <svg viewBox="0 0 24 24" fill="none" style={ICON_STYLE}><path d="M16.0906 3.81891C19.3323 3.81891 21.2038 6.3755 21.2038 9.70931C21.2038 15.4668 12.1636 20.1811 12 20.1811C11.8364 20.1811 2.79626 15.4668 2.79626 9.70931C2.79626 6.3755 4.66769 3.81891 7.90946 3.81891C9.77066 3.81891 11.2944 5.55739 12 6.3755C12.7056 5.55739 14.2294 3.81891 16.0906 3.81891Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>;
+    case 'chalice':
+      return <svg viewBox="0 0 24 24" fill="none" style={ICON_STYLE}><path d="M5 5H19M6 5C4 10 5 14 9 15M18 5C20 10 19 14 15 15M9 15C10 17 14 17 15 15M12 17V20M7 20H17" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>;
+    case 'dove':
+      return <svg viewBox="0 0 24 24" fill="none" style={ICON_STYLE}><path d="M4 10L7 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/><path d="M7 11C6 9 8 7 11 8C16 9 20 11 19 15C18 19 13 18 10 17C7 16 6 14 7 11Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/><path d="M10 10C10 5 18 4 18 9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/><path d="M19 14L22 12M19 15L22 17" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>;
+    case 'flame':
+      return <svg viewBox="0 0 24 24" fill="none" style={ICON_STYLE}><path d="M12 2C8 5 6 10 7 14C8 18 10 21 12 21C14 21 16 18 17 14C18 10 16 5 12 2Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>;
+    case 'anchor':
+      return <svg viewBox="0 0 24 24" fill="none" style={ICON_STYLE}><path d="M10 4C10 2 14 2 14 4C14 6 10 6 10 4Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/><path d="M12 6V20" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/><path d="M6 9H18" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/><path d="M12 20C8 20 5 18 5 15M12 20C16 20 19 18 19 15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>;
+    case 'fish':
+      return <svg viewBox="0 0 24 24" fill="none" style={ICON_STYLE}><path d="M6 12C6 8 10 7 15 12C10 17 6 16 6 12Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/><path d="M15 12L19 9M15 12L19 15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>;
+    case 'nail':
+      return <svg viewBox="0 0 24 24" fill="none" style={ICON_STYLE}><path d="M9 3H15V7L13 7L12 21L11 7H9Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>;
+    case 'palmleaf':
+      return <svg viewBox="0 0 24 24" fill="none" style={ICON_STYLE}><path d="M4 20C8 15 14 9 20 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/><path d="M7 17C5 15 4 13 6 11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/><path d="M11 14C13 12 15 13 14 16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/><path d="M14 10C12 8 12 6 14 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/><path d="M17 7C19 5 20 7 18 10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>;
+    case 'risingsun':
+      return <svg viewBox="0 0 24 24" fill="none" style={ICON_STYLE}><path d="M2 16H22" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/><path d="M5 16A7 7 0 0 1 19 16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/><path d="M12 9V4M8 10L6 6M6 13L3 11M16 10L18 6M18 13L21 11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>;
+    default: return null;
+  }
+}
+
+const LEFT_ICONS  = [
+  { top: '8%',  left: '4%',  delay: 0.15, icon: 'cross' },
+  { top: '28%', left: '7%',  delay: 0.3,  icon: 'palmleaf' },
+  { top: '52%', left: '3%',  delay: 0.45, icon: 'dove' },
+  { top: '72%', left: '6%',  delay: 0.25, icon: 'anchor' },
+  { top: '88%', left: '4%',  delay: 0.4,  icon: 'nail' },
+];
+const RIGHT_ICONS = [
+  { top: '11%', right: '5%', delay: 0.2,  icon: 'crownofthorns' },
+  { top: '30%', right: '3%', delay: 0.38, icon: 'chalice' },
+  { top: '54%', right: '6%', delay: 0.5,  icon: 'flame' },
+  { top: '73%', right: '4%', delay: 0.28, icon: 'heart' },
+  { top: '87%', right: '5%', delay: 0.44, icon: 'fish' },
+];
+// ─────────────────────────────────────────────────────────────────────────────
 import { normalize } from '@/lib/normalizer';
 import { CATEGORIES, CATEGORY_LABELS, type Category } from '@/lib/sanitize';
 import { useWordCloud } from '@/lib/hooks/useWordCloud';
@@ -365,6 +412,32 @@ export default function TestimonySection() {
                 )`,
               }} />
             </div>
+
+            {/* Scattered Easter icons — left side */}
+            {LEFT_ICONS.map((item, i) => (
+              <motion.div
+                key={`left-${i}`}
+                initial={{ opacity: 0, x: -24 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: item.delay, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                style={{ position: 'absolute', top: item.top, left: item.left, pointerEvents: 'none', zIndex: 0 }}
+              >
+                <IconSVG name={item.icon} />
+              </motion.div>
+            ))}
+
+            {/* Scattered Easter icons — right side */}
+            {RIGHT_ICONS.map((item, i) => (
+              <motion.div
+                key={`right-${i}`}
+                initial={{ opacity: 0, x: 24 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: item.delay, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                style={{ position: 'absolute', top: item.top, right: item.right, pointerEvents: 'none', zIndex: 0 }}
+              >
+                <IconSVG name={item.icon} />
+              </motion.div>
+            ))}
 
             {/* Content wrapper */}
             <div style={{ position: 'relative', zIndex: 1, width: '100%', maxWidth: '54rem', padding: '0 1.5rem', textAlign: 'center' }}>

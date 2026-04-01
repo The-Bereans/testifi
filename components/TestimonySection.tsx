@@ -429,24 +429,34 @@ export default function TestimonySection() {
               }} />
             </div>
 
-            {/* Mobile: continuous snowfall particles */}
-            {isMobile && SNOW_PARTICLES.map((item, i) => (
-              <motion.div
-                key={`snow-${i}`}
-                initial={{ y: -40, opacity: 0 }}
-                animate={{ y: '58vh', opacity: [0, 1, 1, 0] }}
-                transition={{
-                  delay: item.delay,
-                  duration: item.duration,
-                  repeat: Infinity,
-                  ease: 'linear',
-                  opacity: { times: [0, 0.08, 0.85, 1], ease: 'linear' },
-                }}
-                style={{ position: 'absolute', top: 0, left: item.left, pointerEvents: 'none', zIndex: 0 }}
-              >
-                <IconSVG name={item.icon} />
-              </motion.div>
-            ))}
+            {/* Mobile: continuous snowfall particles — CSS keyframes, negative delays = immediate mid-fall */}
+            {isMobile && (
+              <>
+                <style>{`
+                  @keyframes snowfall {
+                    0%   { transform: translateY(-50px); opacity: 0; }
+                    8%   { opacity: 0.7; }
+                    85%  { opacity: 0.7; }
+                    100% { transform: translateY(62vh);  opacity: 0; }
+                  }
+                `}</style>
+                {SNOW_PARTICLES.map((item, i) => (
+                  <div
+                    key={`snow-${i}`}
+                    style={{
+                      position: 'absolute',
+                      top: 0,
+                      left: item.left,
+                      pointerEvents: 'none',
+                      zIndex: 2,
+                      animation: `snowfall ${item.duration}s linear -${item.delay}s infinite`,
+                    }}
+                  >
+                    <IconSVG name={item.icon} />
+                  </div>
+                ))}
+              </>
+            )}
 
             {/* Desktop: left column icons */}
             {!isMobile && LEFT_ICONS.map((item, i) => (

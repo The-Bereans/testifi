@@ -48,6 +48,56 @@ const RIGHT_ICONS = [
   { top: '64%', right: '5%', delay: 0.22, icon: 'heart' },
   { top: '80%', right: '5%', delay: 0.48, icon: 'fish' },
 ];
+
+// Mobile snowfall: pre-generated particles (no Math.random — fixed for SSR safety)
+const ICON_NAMES = ['cross','palmleaf','crownofthorns','dove','anchor','nail','chalice','flame','heart','fish'];
+const SNOW_PARTICLES = [
+  { left:  '4%', delay: 0.0,  duration: 5.2, icon: ICON_NAMES[0] },
+  { left: '11%', delay: 0.8,  duration: 6.1, icon: ICON_NAMES[1] },
+  { left: '18%', delay: 1.9,  duration: 4.8, icon: ICON_NAMES[2] },
+  { left: '25%', delay: 0.4,  duration: 5.7, icon: ICON_NAMES[3] },
+  { left: '32%', delay: 2.3,  duration: 6.4, icon: ICON_NAMES[4] },
+  { left: '39%', delay: 1.1,  duration: 5.0, icon: ICON_NAMES[5] },
+  { left: '46%', delay: 3.0,  duration: 4.6, icon: ICON_NAMES[6] },
+  { left: '53%', delay: 0.6,  duration: 6.8, icon: ICON_NAMES[7] },
+  { left: '60%', delay: 2.7,  duration: 5.3, icon: ICON_NAMES[8] },
+  { left: '67%', delay: 1.4,  duration: 4.9, icon: ICON_NAMES[9] },
+  { left: '74%', delay: 3.5,  duration: 6.2, icon: ICON_NAMES[0] },
+  { left: '81%', delay: 0.2,  duration: 5.8, icon: ICON_NAMES[1] },
+  { left: '88%', delay: 2.1,  duration: 4.7, icon: ICON_NAMES[2] },
+  { left: '94%', delay: 1.6,  duration: 6.5, icon: ICON_NAMES[3] },
+  { left:  '7%', delay: 4.0,  duration: 5.1, icon: ICON_NAMES[4] },
+  { left: '15%', delay: 3.2,  duration: 6.0, icon: ICON_NAMES[5] },
+  { left: '22%', delay: 0.9,  duration: 4.5, icon: ICON_NAMES[6] },
+  { left: '29%', delay: 4.4,  duration: 5.6, icon: ICON_NAMES[7] },
+  { left: '36%', delay: 1.7,  duration: 6.3, icon: ICON_NAMES[8] },
+  { left: '43%', delay: 3.8,  duration: 4.4, icon: ICON_NAMES[9] },
+  { left: '50%', delay: 0.3,  duration: 5.9, icon: ICON_NAMES[0] },
+  { left: '57%', delay: 2.6,  duration: 4.3, icon: ICON_NAMES[1] },
+  { left: '64%', delay: 4.2,  duration: 6.6, icon: ICON_NAMES[2] },
+  { left: '71%', delay: 1.0,  duration: 5.4, icon: ICON_NAMES[3] },
+  { left: '78%', delay: 3.6,  duration: 4.1, icon: ICON_NAMES[4] },
+  { left: '85%', delay: 0.7,  duration: 6.9, icon: ICON_NAMES[5] },
+  { left: '92%', delay: 2.9,  duration: 5.5, icon: ICON_NAMES[6] },
+  { left:  '2%', delay: 4.8,  duration: 4.2, icon: ICON_NAMES[7] },
+  { left: '13%', delay: 1.3,  duration: 6.7, icon: ICON_NAMES[8] },
+  { left: '20%', delay: 3.1,  duration: 5.0, icon: ICON_NAMES[9] },
+  { left: '27%', delay: 0.5,  duration: 4.8, icon: ICON_NAMES[0] },
+  { left: '34%', delay: 4.6,  duration: 6.1, icon: ICON_NAMES[1] },
+  { left: '41%', delay: 2.2,  duration: 5.2, icon: ICON_NAMES[2] },
+  { left: '48%', delay: 3.9,  duration: 4.6, icon: ICON_NAMES[3] },
+  { left: '55%', delay: 1.5,  duration: 6.4, icon: ICON_NAMES[4] },
+  { left: '62%', delay: 4.3,  duration: 5.7, icon: ICON_NAMES[5] },
+  { left: '69%', delay: 0.1,  duration: 4.0, icon: ICON_NAMES[6] },
+  { left: '76%', delay: 2.4,  duration: 6.2, icon: ICON_NAMES[7] },
+  { left: '83%', delay: 3.7,  duration: 5.3, icon: ICON_NAMES[8] },
+  { left: '90%', delay: 1.8,  duration: 4.9, icon: ICON_NAMES[9] },
+  { left:  '9%', delay: 4.5,  duration: 6.8, icon: ICON_NAMES[0] },
+  { left: '16%', delay: 2.8,  duration: 5.1, icon: ICON_NAMES[1] },
+  { left: '23%', delay: 0.0,  duration: 6.3, icon: ICON_NAMES[2] },
+  { left: '30%', delay: 4.1,  duration: 4.7, icon: ICON_NAMES[3] },
+  { left: '37%', delay: 1.2,  duration: 5.8, icon: ICON_NAMES[4] },
+];
 // ─────────────────────────────────────────────────────────────────────────────
 import { normalize } from '@/lib/normalizer';
 import { CATEGORIES, CATEGORY_LABELS, type Category } from '@/lib/sanitize';
@@ -379,25 +429,20 @@ export default function TestimonySection() {
               }} />
             </div>
 
-            {/* Mobile: all icons fall like snow across the top backdrop */}
-            {isMobile && [
-              { top: '3%',  left: '6%',  delay: 0.10, icon: 'cross' },
-              { top: '9%',  left: '18%', delay: 0.20, icon: 'dove' },
-              { top: '4%',  left: '34%', delay: 0.15, icon: 'palmleaf' },
-              { top: '11%', left: '50%', delay: 0.28, icon: 'anchor' },
-              { top: '3%',  left: '66%', delay: 0.12, icon: 'flame' },
-              { top: '9%',  left: '78%', delay: 0.22, icon: 'heart' },
-              { top: '4%',  left: '88%', delay: 0.18, icon: 'nail' },
-              { top: '14%', left: '8%',  delay: 0.35, icon: 'chalice' },
-              { top: '14%', left: '44%', delay: 0.32, icon: 'crownofthorns' },
-              { top: '14%', left: '82%', delay: 0.38, icon: 'fish' },
-            ].map((item, i) => (
+            {/* Mobile: continuous snowfall particles */}
+            {isMobile && SNOW_PARTICLES.map((item, i) => (
               <motion.div
                 key={`snow-${i}`}
-                initial={{ opacity: 0, y: -32 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: item.delay, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-                style={{ position: 'absolute', top: item.top, left: item.left, pointerEvents: 'none', zIndex: 0 }}
+                initial={{ y: -40, opacity: 0 }}
+                animate={{ y: '58vh', opacity: [0, 0.22, 0.22, 0] }}
+                transition={{
+                  delay: item.delay,
+                  duration: item.duration,
+                  repeat: Infinity,
+                  ease: 'linear',
+                  opacity: { times: [0, 0.08, 0.85, 1] },
+                }}
+                style={{ position: 'absolute', top: 0, left: item.left, pointerEvents: 'none', zIndex: 0 }}
               >
                 <IconSVG name={item.icon} />
               </motion.div>

@@ -35,18 +35,18 @@ function IconSVG({ name }: { name: string }) {
 }
 
 const LEFT_ICONS  = [
-  { top: '8%',  left: '4%',  delay: 0.15, icon: 'cross' },
-  { top: '28%', left: '7%',  delay: 0.3,  icon: 'palmleaf' },
-  { top: '52%', left: '3%',  delay: 0.45, icon: 'dove' },
-  { top: '72%', left: '6%',  delay: 0.25, icon: 'anchor' },
-  { top: '88%', left: '4%',  delay: 0.4,  icon: 'nail' },
+  { top: '5%',  left: '4%',  delay: 0.15, icon: 'cross' },
+  { top: '16%', left: '8%',  delay: 0.25, icon: 'palmleaf' },
+  { top: '28%', left: '3%',  delay: 0.38, icon: 'crownofthorns' },
+  { top: '40%', left: '7%',  delay: 0.2,  icon: 'dove' },
+  { top: '70%', left: '5%',  delay: 0.45, icon: 'anchor' },
 ];
 const RIGHT_ICONS = [
-  { top: '11%', right: '5%', delay: 0.2,  icon: 'crownofthorns' },
-  { top: '30%', right: '3%', delay: 0.38, icon: 'chalice' },
-  { top: '54%', right: '6%', delay: 0.5,  icon: 'flame' },
-  { top: '73%', right: '4%', delay: 0.28, icon: 'heart' },
-  { top: '87%', right: '5%', delay: 0.44, icon: 'fish' },
+  { top: '6%',  right: '5%', delay: 0.18, icon: 'nail' },
+  { top: '18%', right: '3%', delay: 0.3,  icon: 'chalice' },
+  { top: '30%', right: '7%', delay: 0.42, icon: 'flame' },
+  { top: '42%', right: '4%', delay: 0.22, icon: 'heart' },
+  { top: '72%', right: '5%', delay: 0.48, icon: 'fish' },
 ];
 // ─────────────────────────────────────────────────────────────────────────────
 import { normalize } from '@/lib/normalizer';
@@ -399,17 +399,6 @@ export default function TestimonySection() {
                 height: '700px',
                 background: 'radial-gradient(ellipse at 50% 0%, rgba(181,103,61,0.10) 0%, rgba(248,244,236,0) 65%)',
                 filter: 'blur(30px)',
-              }} />
-              {/* Faint horizontal grain lines for parchment feel */}
-              <div style={{
-                position: 'absolute',
-                inset: 0,
-                backgroundImage: `repeating-linear-gradient(
-                  0deg,
-                  transparent,
-                  transparent 47px,
-                  rgba(181,103,61,0.035) 48px
-                )`,
               }} />
             </div>
 

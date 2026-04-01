@@ -380,7 +380,13 @@ export default function TestimonySection() {
             </div>
 
             {/* Scattered Easter icons — left side */}
-            {LEFT_ICONS.map((item, i) => (
+            {(isMobile
+              ? [
+                  { top: '3%', left: '4%', delay: 0.15, icon: LEFT_ICONS[0].icon },
+                  { top: '9%', left: '4%', delay: 0.25, icon: LEFT_ICONS[1].icon },
+                ]
+              : LEFT_ICONS
+            ).map((item, i) => (
               <motion.div
                 key={`left-${i}`}
                 initial={{ opacity: 0, x: -24 }}
@@ -393,7 +399,13 @@ export default function TestimonySection() {
             ))}
 
             {/* Scattered Easter icons — right side */}
-            {RIGHT_ICONS.map((item, i) => (
+            {(isMobile
+              ? [
+                  { top: '3%', right: '4%', delay: 0.18, icon: RIGHT_ICONS[0].icon },
+                  { top: '9%', right: '4%', delay: 0.3,  icon: RIGHT_ICONS[1].icon },
+                ]
+              : RIGHT_ICONS
+            ).map((item, i) => (
               <motion.div
                 key={`right-${i}`}
                 initial={{ opacity: 0, x: 24 }}
@@ -797,7 +809,7 @@ export default function TestimonySection() {
             <WordCloud words={words} newWord={newWord} />
 
             {/* Stage B: depth nudge / story form */}
-            <div style={{ maxWidth: '28rem', margin: '0 auto', width: '100%' }}>
+            <div style={{ maxWidth: '28rem', margin: '0 auto', width: '100%', paddingLeft: 'clamp(1rem, 5vw, 1.5rem)', paddingRight: 'clamp(1rem, 5vw, 1.5rem)' }}>
               <div style={{ marginTop: '2.5rem' }}>
                 <p
                   style={{

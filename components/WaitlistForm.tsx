@@ -57,46 +57,19 @@ export default function WaitlistForm() {
       />
 
       <div style={{ maxWidth: '28rem', margin: '0 auto', textAlign: 'center' }}>
-        {/* Overline */}
-        <p
-          style={{
-            fontFamily: 'var(--font-body)',
-            fontSize: '0.72rem',
-            letterSpacing: '0.18em',
-            textTransform: 'uppercase',
-            fontWeight: 600,
-            color: 'var(--brand-sienna-light)',
-            marginBottom: '0.75rem',
-          }}
-        >
-          There's more
-        </p>
-
         {/* Heading */}
         <h2
           style={{
             fontFamily: 'var(--font-body)',
-            fontSize: 'clamp(1.5rem, 4vw, 2.25rem)',
+            fontSize: 'clamp(1.35rem, 3.5vw, 2rem)',
             fontWeight: 700,
             color: 'var(--brand-near-black)',
-            lineHeight: 1.2,
-            marginBottom: '0.75rem',
-          }}
-        >
-          The JESUS App
-        </h2>
-
-        <p
-          style={{
-            fontFamily: 'var(--font-body)',
-            fontSize: '0.95rem',
-            color: 'var(--brand-near-black-muted)',
-            lineHeight: 1.65,
+            lineHeight: 1.25,
             marginBottom: '2rem',
           }}
         >
-          We are bringing 'Kingdom' online, and this is step one.
-        </p>
+          The Jesus App is bringing Kingdom online
+        </h2>
 
         {/* Form / success swap */}
         <AnimatePresence mode="wait">
@@ -162,7 +135,7 @@ export default function WaitlistForm() {
                     if (errMsg) setErrMsg('');
                     if (state === 'error') setState('idle');
                   }}
-                  placeholder="your@email.com"
+                  placeholder="Enter your email"
                   autoComplete="email"
                   required
                   style={{
@@ -212,7 +185,7 @@ export default function WaitlistForm() {
                       e.currentTarget.style.background = 'var(--brand-sienna-light)';
                   }}
                 >
-                  {state === 'submitting' ? 'Joining…' : 'Join Waitlist'}
+                  {state === 'submitting' ? 'Joining…' : 'Join'}
                 </button>
               </div>
 
@@ -250,7 +223,7 @@ export default function WaitlistForm() {
                   letterSpacing: '0.02em',
                 }}
               >
-                Be the first to jump on.
+                Be the first to know when we launch.
               </p>
             </motion.form>
           )}

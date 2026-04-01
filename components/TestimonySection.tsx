@@ -35,18 +35,18 @@ function IconSVG({ name }: { name: string }) {
 }
 
 const LEFT_ICONS  = [
-  { top: '5%',  left: '4%',  delay: 0.15, icon: 'cross' },
-  { top: '16%', left: '8%',  delay: 0.25, icon: 'palmleaf' },
-  { top: '28%', left: '3%',  delay: 0.38, icon: 'crownofthorns' },
-  { top: '40%', left: '7%',  delay: 0.2,  icon: 'dove' },
-  { top: '70%', left: '5%',  delay: 0.45, icon: 'anchor' },
+  { top: '10%', left: '5%', delay: 0.15, icon: 'cross' },
+  { top: '28%', left: '5%', delay: 0.25, icon: 'palmleaf' },
+  { top: '46%', left: '5%', delay: 0.38, icon: 'crownofthorns' },
+  { top: '64%', left: '5%', delay: 0.2,  icon: 'dove' },
+  { top: '80%', left: '5%', delay: 0.45, icon: 'anchor' },
 ];
 const RIGHT_ICONS = [
-  { top: '6%',  right: '5%', delay: 0.18, icon: 'nail' },
-  { top: '18%', right: '3%', delay: 0.3,  icon: 'chalice' },
-  { top: '30%', right: '7%', delay: 0.42, icon: 'flame' },
-  { top: '42%', right: '4%', delay: 0.22, icon: 'heart' },
-  { top: '72%', right: '5%', delay: 0.48, icon: 'fish' },
+  { top: '10%', right: '5%', delay: 0.18, icon: 'nail' },
+  { top: '28%', right: '5%', delay: 0.3,  icon: 'chalice' },
+  { top: '46%', right: '5%', delay: 0.42, icon: 'flame' },
+  { top: '64%', right: '5%', delay: 0.22, icon: 'heart' },
+  { top: '80%', right: '5%', delay: 0.48, icon: 'fish' },
 ];
 // ─────────────────────────────────────────────────────────────────────────────
 import { normalize } from '@/lib/normalizer';
@@ -366,29 +366,6 @@ export default function TestimonySection() {
                 overflow: 'hidden',
               }}
             >
-              {/* Conic gradient sunburst  very subtle, emanates from top-center */}
-              <div style={{
-                position: 'absolute',
-                top: '-30%',
-                left: '50%',
-                transform: 'translateX(-50%)',
-                width: '160vw',
-                height: '160vw',
-                background: `conic-gradient(
-                  from 260deg at 50% 0%,
-                  rgba(181,103,61,0.0) 0deg,
-                  rgba(181,103,61,0.045) 8deg,
-                  rgba(181,103,61,0.0) 16deg,
-                  rgba(139,74,42,0.03) 28deg,
-                  rgba(181,103,61,0.0) 36deg,
-                  rgba(181,103,61,0.05) 44deg,
-                  rgba(181,103,61,0.0) 52deg,
-                  rgba(181,103,61,0.035) 64deg,
-                  rgba(181,103,61,0.0) 72deg,
-                  rgba(139,74,42,0.025) 84deg,
-                  rgba(181,103,61,0.0) 100deg
-                )`,
-              }} />
               {/* Central radial warmth */}
               <div style={{
                 position: 'absolute',

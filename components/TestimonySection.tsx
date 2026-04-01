@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 // ── Easter / salvation icons ──────────────────────────────────────────────────
-const ICON_STYLE = { width: 26, height: 26, color: 'rgba(139,74,42,0.22)', display: 'block' } as const;
+const ICON_STYLE = { width: 26, height: 26, color: 'rgba(139,74,42,0.55)', display: 'block' } as const;
 
 function IconSVG({ name }: { name: string }) {
   switch (name) {
@@ -434,13 +434,13 @@ export default function TestimonySection() {
               <motion.div
                 key={`snow-${i}`}
                 initial={{ y: -40, opacity: 0 }}
-                animate={{ y: '58vh', opacity: [0, 0.22, 0.22, 0] }}
+                animate={{ y: '58vh', opacity: [0, 1, 1, 0] }}
                 transition={{
                   delay: item.delay,
                   duration: item.duration,
                   repeat: Infinity,
                   ease: 'linear',
-                  opacity: { times: [0, 0.08, 0.85, 1] },
+                  opacity: { times: [0, 0.08, 0.85, 1], ease: 'linear' },
                 }}
                 style={{ position: 'absolute', top: 0, left: item.left, pointerEvents: 'none', zIndex: 0 }}
               >

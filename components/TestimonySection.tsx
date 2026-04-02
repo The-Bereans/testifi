@@ -320,8 +320,8 @@ export default function TestimonySection() {
   }
 
   async function handleWhatsAppShare() {
-    const shareText = `Jesus saved me from ${newWord}. He still saves.\n\nhttps://testifi.vercel.app`;
-
+    const shareText = `Heyyy, I want you to know something very important. Jesus saved me. \n Yessss, He can also save you. \n\n https://testifi.vercel.app`;
+    //const shareText = `Hey, I want you to know something very important. Jesus saved me. This is is my testimony. ${newWord}. \n He still saves.\n\nhttps://testifi.vercel.app`;
     // Try native share with image (works on mobile)
     if (navigator.canShare && shareCardRef.current) {
       try {

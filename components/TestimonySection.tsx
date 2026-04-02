@@ -545,7 +545,7 @@ export default function TestimonySection() {
                 >
                   <AnimatePresence mode="wait">
                     <motion.textarea
-                      key={placeholderIdx}
+                      key="testimony-input"
                       ref={inputRef}
                       value={input}
                       onChange={(e) => {

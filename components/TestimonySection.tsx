@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 // ── Easter / salvation icons ──────────────────────────────────────────────────
-const ICON_STYLE = { width: 26, height: 26, color: 'rgba(139,74,42,0.55)', display: 'block' } as const;
+const ICON_STYLE = { width: 26, height: 26, color: 'rgba(139,74,42,0.28)', display: 'block' } as const;
 
 function IconSVG({ name }: { name: string }) {
   switch (name) {
@@ -435,8 +435,8 @@ export default function TestimonySection() {
                 <style>{`
                   @keyframes snowfall {
                     0%   { transform: translateY(-50px); opacity: 0; }
-                    8%   { opacity: 0.7; }
-                    85%  { opacity: 0.7; }
+                    8%   { opacity: 0.45; }
+                    85%  { opacity: 0.45; }
                     100% { transform: translateY(62vh);  opacity: 0; }
                   }
                 `}</style>
@@ -448,7 +448,7 @@ export default function TestimonySection() {
                       top: 0,
                       left: item.left,
                       pointerEvents: 'none',
-                      zIndex: 2,
+                      zIndex: 0,
                       animation: `snowfall ${item.duration}s linear -${item.delay}s infinite`,
                     }}
                   >

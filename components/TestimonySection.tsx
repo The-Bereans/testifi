@@ -101,7 +101,7 @@ const SNOW_PARTICLES = [
 // ─────────────────────────────────────────────────────────────────────────────
 import { normalize } from '@/lib/normalizer';
 import { CATEGORIES, CATEGORY_LABELS, type Category } from '@/lib/sanitize';
-import { TESTIMONY_TYPES, TESTIMONY_TYPE_LABELS, type TestimonyType } from '@/lib/testimonyTypes';
+import { TESTIMONY_TYPES, TESTIMONY_TYPE_LABELS, TESTIMONY_TYPE_CONFIG, type TestimonyType } from '@/lib/testimonyTypes';
 import { useWordCloud } from '@/lib/hooks/useWordCloud';
 import WordCloud from '@/components/WordCloud';
 import ShareCard from '@/components/ShareCard';
@@ -324,8 +324,11 @@ export default function TestimonySection() {
   }
 
   async function handleWhatsAppShare() {
-    const shareText = `Heyyy, I want you to know something very important. Jesus saved me. \n Yessss, He can also save you. \n\n https://testifi.vercel.app`;
-    //const shareText = `Hey, I want you to know something very important. Jesus saved me. This is is my testimony. ${newWord}. \n He still saves.\n\nhttps://testifi.vercel.app`;
+    const shareText = TESTIMONY_TYPE_CONFIG[testimonyType].buildWhatsAppMessage(
+      newWord ?? '',
+      testimonyText.trim() || null,
+      'https://testifi.vercel.app'
+    );
     // Try native share with image (works on mobile)
     if (navigator.canShare && shareCardRef.current) {
       try {
@@ -739,6 +742,7 @@ export default function TestimonySection() {
                     word={newWord}
                     cloudWords={cloudWords}
                     preview
+                    testimonyType={testimonyType}
                   />
                 </div>
               </motion.div>
@@ -1052,6 +1056,7 @@ export default function TestimonySection() {
           ref={shareCardRef}
           word={newWord}
           cloudWords={cloudWords}
+          testimonyType={testimonyType}
         />
       )}
     </div>

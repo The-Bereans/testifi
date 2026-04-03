@@ -1,6 +1,8 @@
 'use client';
 
 import { forwardRef } from 'react';
+import { TESTIMONY_TYPE_CONFIG, type TestimonyType } from '@/lib/testimonyTypes';
+import { abbreviate } from '@/lib/abbreviate';
 
 export interface CloudWord { text: string; count: number; }
 
@@ -8,6 +10,7 @@ interface ShareCardProps {
   word: string;
   cloudWords?: CloudWord[];
   preview?: boolean;
+  testimonyType?: TestimonyType;
 }
 
 // ─── Cross geometry constants ───────────────────────────────────────────────
@@ -86,7 +89,8 @@ function sentenceFontSize(word: string): string {
  * Uses only inline styles / system fonts  no CSS vars  html2canvas-safe.
  */
 const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(
-  ({ word, cloudWords = [], preview = false }, ref) => {
+  ({ word, cloudWords = [], preview = false, testimonyType = 'salvation' }, ref) => {
+    const config = TESTIMONY_TYPE_CONFIG[testimonyType];
     const maxCount = cloudWords.reduce((m, w) => Math.max(m, w.count), 0);
     // Hero layout for: single word, two words, or any hyphenated compound (e.g. "self-hatred")
     // Quote layout for: three or more non-hyphenated words (a full sentence/story)
@@ -200,7 +204,7 @@ const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(
                 margin: '0 0 20px 0',
                 overflowWrap: 'break-word',
               }}>
-                {word}
+                {abbreviate(word, 220)}
               </h2>
 
               {/* Closing attribution */}
@@ -213,13 +217,13 @@ const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(
                 margin: 0,
                 opacity: 0.9,
               }}>
-                Jesus saved me, and He can save you too.
+                {config.suffix}.
               </p>
             </>
           ) : (
             /* ── Short concept layout ──────────────────────────────────────── */
             <>
-              {/* "I, Testifi That Jesus Saved Me From"  label */}
+              {/* "I, Testifi That [label]"  label */}
               <div style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -233,7 +237,7 @@ const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(
               }}>
                 <span style={{ color: 'rgba(248,244,236,0.7)' }}>I,</span>
                 <span style={{ color: '#B5673D' }}>Testifi</span>
-                <span style={{ color: 'rgba(248,244,236,0.7)' }}>That Jesus Saved Me From</span>
+                <span style={{ color: 'rgba(248,244,236,0.7)' }}>That {config.label}</span>
               </div>
 
               {/* Hero word */}
@@ -275,7 +279,7 @@ const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(
               lineHeight: 1,
             }}
           >
-            Jesus can save you too
+            {config.suffix}
           </p>
           <p
             style={{

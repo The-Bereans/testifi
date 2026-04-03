@@ -1,11 +1,14 @@
 'use client';
 
 import { forwardRef } from 'react';
+import { TESTIMONY_TYPE_CONFIG, type TestimonyType } from '@/lib/testimonyTypes';
+import { abbreviate } from '@/lib/abbreviate';
 
 interface CommunityShareCardProps {
   word: string;
   excerpt: string | null;
   category: string;
+  testimonyType?: TestimonyType;
 }
 
 /**
@@ -14,12 +17,13 @@ interface CommunityShareCardProps {
  * All colors are hardcoded hex (no CSS vars) for html2canvas stability.
  */
 const CommunityShareCard = forwardRef<HTMLDivElement, CommunityShareCardProps>(
-  ({ word, excerpt, category }, ref) => {
+  ({ word, excerpt, category, testimonyType = 'salvation' }, ref) => {
+    const config = TESTIMONY_TYPE_CONFIG[testimonyType];
     const wordFontSize =
       word.length > 18 ? '58px' : word.length > 12 ? '76px' : '96px';
 
-    const text = excerpt ?? `Jesus saved me from ${word}`;
-    const truncated = text.length > 200 ? text.slice(0, 197) + '…' : text;
+    const text = excerpt ?? `${config.label} ${word}`;
+    const truncated = abbreviate(text, 200);
 
     return (
       <div
@@ -114,7 +118,7 @@ const CommunityShareCard = forwardRef<HTMLDivElement, CommunityShareCardProps>(
               lineHeight: 1,
             }}
           >
-            Jesus saved me from:
+            {config.label}:
           </p>
 
           <h2
@@ -171,7 +175,7 @@ const CommunityShareCard = forwardRef<HTMLDivElement, CommunityShareCardProps>(
               lineHeight: 1,
             }}
           >
-            He still saves.
+            {config.suffix}.
           </p>
           <p
             style={{

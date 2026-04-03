@@ -5,6 +5,7 @@ import { motion, AnimatePresence, useInView } from 'framer-motion';
 import { CATEGORIES, type Category } from '@/lib/sanitize';
 import CommunityShareCard from '@/components/CommunityShareCard';
 import { relativeTime } from '@/lib/relativeTime';
+import { TESTIMONY_TYPE_CONFIG, type TestimonyType } from '@/lib/testimonyTypes';
 
 interface DbTestimony {
   id: string;
@@ -12,6 +13,7 @@ interface DbTestimony {
   body: string | null;
   category: string | null;
   excerpt: string | null;
+  testimony_type: string | null;
   created_at: string;
 }
 
@@ -105,7 +107,12 @@ function TestimonyCard({ testimony }: { testimony: DbTestimony }) {
   }
 
   async function handleWhatsAppShare() {
-    const shareText = `Jesus saved me from ${testimony.word}.\n\n"${displayText.slice(0, 160)}"\n\nhttps://testifi.vercel.app`;
+    const type = (testimony.testimony_type ?? 'salvation') as TestimonyType;
+    const shareText = TESTIMONY_TYPE_CONFIG[type].buildWhatsAppMessage(
+      testimony.word,
+      displayText,
+      'https://testifi.vercel.app'
+    );
 
     // Try native share with image (works on mobile)
     if (navigator.canShare && cardRef.current) {
@@ -252,6 +259,7 @@ function TestimonyCard({ testimony }: { testimony: DbTestimony }) {
         word={testimony.word}
         excerpt={displayText}
         category={(CATEGORY_LABEL[testimony.category as Category] ?? testimony.category ?? '') as never}
+        testimonyType={(testimony.testimony_type ?? 'salvation') as TestimonyType}
       />
     </>
   );

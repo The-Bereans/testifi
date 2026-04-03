@@ -78,7 +78,7 @@ export default function CommunityReveal() {
                 marginBottom: '0.5rem',
               }}
             >
-              Where are the Testifi-ers?
+              Are there other Testifi-ers?
             </motion.p>
 
               <button
@@ -94,12 +94,10 @@ export default function CommunityReveal() {
                   fontFamily: 'var(--font-body)',
                   color: 'var(--brand-near-black-muted)',
                   fontSize: 'clamp(0.875rem, 2vw, 1rem)',
-                  lineHeight: 1.65,
-                  fontWeight:     600,
-                  letterSpacing:  '-0.01em'
+                  lineHeight: 1.65
                 }}
               >
-                Right here, if you click, and they have powerful experiences to share!
+                Click me to find out!
                 {/* <span style={{
                   display:        'inline-flex',
                   alignItems:     'center',

@@ -397,7 +397,7 @@ export default function FeaturedFeed() {
           lineHeight: 1.2,
           marginBottom: '0.6rem',
         }}>
-          Dozens of people have engaged
+          Dozens of people have been engaging
         </h2>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem' }}>
           <p style={{
@@ -408,7 +408,7 @@ export default function FeaturedFeed() {
             maxWidth: '38ch',
             margin: 0,
           }}>
-            Sharing the evidences of God in their lives.
+            See the evidences of God in their lives.
           </p>
         </div>
       </div>

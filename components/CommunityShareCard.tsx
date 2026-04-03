@@ -153,7 +153,7 @@ const CommunityShareCard = forwardRef<HTMLDivElement, CommunityShareCardProps>(
               maxWidth: '740px',
             }}
           >
-            <p
+            {/* <p
               style={{
                 color: 'rgba(248,244,236,0.82)',
                 fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
@@ -164,7 +164,7 @@ const CommunityShareCard = forwardRef<HTMLDivElement, CommunityShareCardProps>(
               }}
             >
               &ldquo;{truncated}&rdquo;
-            </p>
+            </p> */}
           </div>}
         </div>
 

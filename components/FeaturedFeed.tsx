@@ -466,7 +466,7 @@ export default function FeaturedFeed() {
       {/* ── Loading skeleton ── */}
       {loading && (
         <div style={{
-          // minHeight: 'clamp(240px, 35vh, 380px)',
+          minHeight: 'clamp(240px, 35vh, 380px)',
           borderRadius: 'var(--radius-lg)',
           background: 'var(--brand-ivory-dark)',
           border: '1px solid var(--brand-ivory-deeper)',
@@ -509,7 +509,12 @@ export default function FeaturedFeed() {
       {!loading && !error && total > 0 && (
         <div>
           {/* Card viewport */}
-          <div style={{ overflow: 'hidden', position: 'relative', minHeight: 'clamp(240px, 35vh, 380px)' }}>
+          <div style={{ 
+              overflow: 'hidden', 
+              position: 'relative', 
+              // minHeight: 'clamp(240px, 35vh, 380px)' 
+            
+            }}>
             <AnimatePresence initial={false} custom={direction} mode="wait">
               <motion.div
                 key={currentIndex}

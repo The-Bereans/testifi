@@ -444,7 +444,7 @@ export default function FeaturedFeed() {
         </div>
       </div>
 
-      {/* ── Category filter tabs ── */}
+      {/* ── Category filter tabs ── 
       <AnimatePresence>
         {showFilters && (
           <motion.div
@@ -492,7 +492,7 @@ export default function FeaturedFeed() {
             </div>
           </motion.div>
         )}
-      </AnimatePresence>
+      </AnimatePresence> */}
 
       {/* ── Loading skeleton ── */}
       {loading && (

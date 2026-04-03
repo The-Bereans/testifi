@@ -397,7 +397,7 @@ export default function FeaturedFeed() {
           lineHeight: 1.2,
           marginBottom: '0.6rem',
         }}>
-          Dozens of people have been engaging
+          Dozens of people have been sharing
         </h2>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem' }}>
           <p style={{

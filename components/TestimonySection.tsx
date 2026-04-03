@@ -307,7 +307,7 @@ export default function TestimonySection() {
   }
 
   function handleTwitterShare() {
-    const text = `Jesus saved me from ${newWord}. He still saves. #Testifi`;
+    const text = ` ${newWord}. He still saves. #Testifi`;
     const url  = window.location.href;
     window.open(
       `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`,
@@ -321,7 +321,7 @@ export default function TestimonySection() {
     try {
       await navigator.share({
         title: 'Jesus saved me',
-        text: `Jesus saved me from ${newWord}. He still saves.`,
+        text: ` ${newWord}. He still saves.`,
         url: window.location.href,
       });
     } catch {

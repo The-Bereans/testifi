@@ -119,7 +119,7 @@ const CommunityShareCard = forwardRef<HTMLDivElement, CommunityShareCardProps>(
             paddingTop: '16px',
           }}
         >
-          <p
+          {/* <p
             style={{
               color: 'rgba(248,244,236,0.5)',
               fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
@@ -130,7 +130,7 @@ const CommunityShareCard = forwardRef<HTMLDivElement, CommunityShareCardProps>(
             }}
           >
             {config.label}:
-          </p>
+          </p> */}
 
           <h2
             style={{

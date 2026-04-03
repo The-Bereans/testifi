@@ -14,10 +14,10 @@ export const metadata: Metadata = {
     default: "Testifi",
     template: "%s · Testifi",
   },
-  description: "Share what Jesus has saved you from  and inspire someone else to believe.",
+  description: "Share what the Lord has done for and impact the next life.",
   openGraph: {
     title: "Testifi",
-    description: "Share what Jesus has saved you from  and inspire someone else to believe.",
+    description: "Share what the Lord has done for and impact the next life.",
     type: "website",
   },
 };

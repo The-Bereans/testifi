@@ -397,7 +397,7 @@ export default function FeaturedFeed() {
           lineHeight: 1.2,
           marginBottom: '0.6rem',
         }}>
-          Others have used Testifi.
+          Dozens have used Testifi
         </h2>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem' }}>
           <p style={{
@@ -408,39 +408,8 @@ export default function FeaturedFeed() {
             maxWidth: '38ch',
             margin: 0,
           }}>
-            Anonymously, people have shared the evidences of God in their lives.
+            Sharing the evidences of God in their lives.
           </p>
-          <button
-            onClick={() => setShowFilters(v => !v)}
-            style={{
-              flexShrink: 0,
-              background: 'none',
-              border: '1px solid var(--brand-ivory-deeper)',
-              borderRadius: 'var(--radius-full)',
-              padding: '0.35rem 0.85rem',
-              cursor: 'pointer',
-              fontFamily: 'var(--font-body)',
-              fontSize: '0.75rem',
-              fontWeight: 600,
-              letterSpacing: '0.04em',
-              color: 'var(--brand-near-black-muted)',
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.35rem',
-              transition: 'border-color 0.15s, color 0.15s',
-            }}
-            onMouseEnter={e => {
-              e.currentTarget.style.borderColor = 'var(--brand-sienna-pale)';
-              e.currentTarget.style.color = 'var(--brand-near-black-soft)';
-            }}
-            onMouseLeave={e => {
-              e.currentTarget.style.borderColor = 'var(--brand-ivory-deeper)';
-              e.currentTarget.style.color = 'var(--brand-near-black-muted)';
-            }}
-          >
-            <span style={{ fontSize: '0.65rem' }}>{showFilters ? '▲' : '▼'}</span>
-            Filter by topic
-          </button>
         </div>
       </div>
 

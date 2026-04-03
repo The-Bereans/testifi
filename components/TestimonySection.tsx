@@ -117,11 +117,18 @@ const sectionVariants = {
 };
 
 const PLACEHOLDERS = [
+  'i once saw my mum in a sexual manner. it was crazy man',
+  "He came through financially multiple times in the past year. I'm so gratefulll",
+  'Hmm. I just realised that actuallY God saved me from a serious pain on the left side of my waist.',
   'my pornography addiction was eating me up, but I attended a particular service, and encountered God',
+  'jesus has saved me from worldly music right now i find no delight in listening to worldly musicians but i now enjoy listening gospel musicians',
+  'I used to feel spiritual emptiness and hopelessness',
+  'God saved me from being hit by a car on the highway',
   'a chronic football addiction that could not let me get along at work.',
   'Hatred for my uncles. It was hard, but I forgave them eventually',
   'Omo, I used to love betting so much. I once staked my school fees, and even after my dad beat me blue black. I did not learn',
   'CoDeine and alcohol',
+  'a bad porn addiction,but god saved me from a path that would have led to destruction',
   'anger. I almost destroyed my marriage',
   'FinAncial shame was one thing my family was known for. I"m grateful that things have changed"',
   'I was in a bad relationship, and we were doing some bad things. I left, but felt loneliness so much I wanted to go back. God found me, and made me whole',

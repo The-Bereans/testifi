@@ -70,14 +70,15 @@ export default function CommunityReveal() {
               transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1], delay: 0.3 }}
               style={{
                 fontFamily: 'var(--font-body)',
-                fontSize: '0.85rem',
-                color: 'var(--brand-near-black-muted)',
-                textAlign: 'center',
-                marginTop: '0.5rem',
-                letterSpacing: '0.01em',
+                color: 'var(--brand-sienna-light)',
+                fontSize: '0.72rem',
+                letterSpacing: '0.18em',
+                textTransform: 'uppercase',
+                fontWeight: 600,
+                marginBottom: '0.5rem',
               }}
             >
-              Read very powerful testimonies.
+              Where are the Testifi-ers?
             </motion.p>
 
               <button
@@ -90,15 +91,16 @@ export default function CommunityReveal() {
                   border:         'none',
                   cursor:         'pointer',
                   padding:        '0.25rem 0',
-                  color:          '#F5ECD7',
-                  fontSize:       '1.25rem',
+                  fontFamily: 'var(--font-body)',
+                  color: 'var(--brand-near-black-muted)',
+                  fontSize: 'clamp(0.875rem, 2vw, 1rem)',
+                  lineHeight: 1.65,
                   fontWeight:     600,
-                  letterSpacing:  '-0.01em',
-                  lineHeight:     1.25,
+                  letterSpacing:  '-0.01em'
                 }}
               >
-                Others have been set free too. Read their stories.
-                <span style={{
+                Right here, if you click, and they have powerful experiences to share!
+                {/* <span style={{
                   display:        'inline-flex',
                   alignItems:     'center',
                   justifyContent: 'center',
@@ -112,17 +114,17 @@ export default function CommunityReveal() {
                   transition:     'background 0.2s',
                 }}>
                   ↓
-                </span>
+                </span> */}
               </button>
             </div>
 
             {/* Bottom divider */}
-            <div style={{
+            {/* <div style={{
               width:      '100%',
               maxWidth:   '480px',
               height:     '1px',
               background: 'linear-gradient(to right, transparent, rgba(181,103,61,0.35), transparent)',
-            }} />
+            }} /> */}
           </motion.div>
         )}
       </AnimatePresence>

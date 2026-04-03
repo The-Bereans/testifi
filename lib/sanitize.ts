@@ -40,9 +40,11 @@ export const submissionSchema = z.object({
     .trim()
     .min(1, 'Word is required.')
     .max(2000, 'Testimony must be 2000 characters or fewer.')
-    .refine((v) => !/<|>|&lt;|&gt;|javascript:/i.test(v), {
-      message: 'Invalid characters in word.',
-    }),
+    .refine(
+      (v) =>
+        !/<|>|&lt;|&gt;|javascript:|data:|vbscript:|on\w+\s*=|<script|<svg|<img|<iframe|<object|<embed/i.test(v),
+      { message: 'Invalid characters in word.' }
+    ),
 
   /** User explicitly consented to share their story publicly */
   consented: z.boolean().optional().default(false),

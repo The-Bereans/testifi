@@ -24,6 +24,7 @@ const CommunityShareCard = forwardRef<HTMLDivElement, CommunityShareCardProps>(
 
     const text = excerpt ?? `${config.label} ${word}`;
     const truncated = abbreviate(text, 200);
+    const showBlockquote = excerpt !== null && excerpt !== word;
 
     return (
       /* Zero-size clipping shell — prevents the 1200×630 card from bleeding
@@ -145,7 +146,7 @@ const CommunityShareCard = forwardRef<HTMLDivElement, CommunityShareCardProps>(
             {word}
           </h2>
 
-          <div
+          {showBlockquote && <div
             style={{
               borderLeft: '3px solid #B5673D',
               paddingLeft: '24px',
@@ -164,7 +165,7 @@ const CommunityShareCard = forwardRef<HTMLDivElement, CommunityShareCardProps>(
             >
               &ldquo;{truncated}&rdquo;
             </p>
-          </div>
+          </div>}
         </div>
 
         {/* Bottom bar */}

@@ -68,7 +68,7 @@ export default function WaitlistForm() {
             marginBottom: '0.75rem',
           }}
         >
-          Be the first to know when we launch
+          Join the movement.
         </h2>
 
         {/* Overline */}
@@ -83,7 +83,7 @@ export default function WaitlistForm() {
             marginBottom: '2rem',
           }}
         >
-          The Jesus App is bringing Kingdom online
+          Yes, The Jesus App is bringing Kingdom online.
         </p>
 
         {/* Form / success swap */}

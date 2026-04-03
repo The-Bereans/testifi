@@ -408,7 +408,7 @@ export default function FeaturedFeed() {
             maxWidth: '38ch',
             margin: 0,
           }}>
-            Real people. Real struggles. Shared with consent, anonymously.
+            Anonymously, people have shared the evidences of God in their lives.
           </p>
           <button
             onClick={() => setShowFilters(v => !v)}

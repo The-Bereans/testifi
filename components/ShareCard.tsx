@@ -102,9 +102,9 @@ const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(
         ref={ref}
         aria-hidden="true"
         style={{
-          position: preview ? 'relative' : 'fixed',
-          left: preview ? 0 : '-9999px',
+          position: preview ? 'relative' : 'absolute',
           top: 0,
+          left: 0,
           width: '1200px',
           height: '900px',
           background: '#1C1611',
@@ -112,7 +112,6 @@ const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(
           boxSizing: 'border-box',
           pointerEvents: 'none',
           userSelect: 'none',
-          zIndex: preview ? 0 : -1,
         }}
       >
 

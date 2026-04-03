@@ -740,7 +740,7 @@ export default function TestimonySection() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                  style={{ position: 'absolute', inset: 0 }}
+                  style={{ position: 'absolute', inset: 0, overflow: 'hidden' }}
                 >
                   <div
                     style={{
@@ -1066,14 +1066,16 @@ export default function TestimonySection() {
 
       </AnimatePresence>
 
-      {/* Off-screen share card for html2canvas capture */}
+      {/* Off-screen share card for html2canvas capture — zero-size shell prevents overflow */}
       {step === 'cloud' && newWord && (
-        <ShareCard
-          ref={shareCardRef}
-          word={cardText ?? newWord}
-          cloudWords={cloudWords}
-          testimonyType={testimonyType}
-        />
+        <div style={{ position: 'absolute', width: 0, height: 0, overflow: 'hidden', pointerEvents: 'none' }}>
+          <ShareCard
+            ref={shareCardRef}
+            word={cardText ?? newWord}
+            cloudWords={cloudWords}
+            testimonyType={testimonyType}
+          />
+        </div>
       )}
     </div>
   );

@@ -625,14 +625,14 @@ export default function FeaturedFeed() {
                   );
                 })}
               </div>
-              <span style={{
+              {/* <span style={{
                 fontFamily: 'var(--font-body)',
                 fontSize: '0.7rem',
                 color: 'var(--brand-near-black-muted)',
                 letterSpacing: '0.04em',
               }}>
                 {currentIndex + 1} / {total}
-              </span>
+              </span> */}
             </div>
           )}
         </div>

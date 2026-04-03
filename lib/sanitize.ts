@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { TESTIMONY_TYPES } from '@/lib/testimonyTypes';
 
 // ─── Categories ───────────────────────────────────────────────────────────────
 
@@ -55,6 +56,9 @@ export const submissionSchema = z.object({
 
   /** Optional category tag for what the user was saved from */
   category: z.enum(CATEGORIES).optional(),
+
+  /** Type of testimony — drives card label, suffix, and share text */
+  testimonyType: z.enum(TESTIMONY_TYPES).optional().default('salvation'),
 });
 
 export type SubmissionInput = z.infer<typeof submissionSchema>;
@@ -79,6 +83,7 @@ export const TestimonySchema = z.object({
   body: z.string().nullable(),
   category: z.string().nullable(),
   excerpt: z.string().nullable(),
+  testimony_type: z.string().default('salvation'),
   created_at: z.string(),
 });
 

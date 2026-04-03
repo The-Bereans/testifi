@@ -101,6 +101,7 @@ const SNOW_PARTICLES = [
 // ─────────────────────────────────────────────────────────────────────────────
 import { normalize } from '@/lib/normalizer';
 import { CATEGORIES, CATEGORY_LABELS, type Category } from '@/lib/sanitize';
+import { TESTIMONY_TYPES, TESTIMONY_TYPE_LABELS, type TestimonyType } from '@/lib/testimonyTypes';
 import { useWordCloud } from '@/lib/hooks/useWordCloud';
 import WordCloud from '@/components/WordCloud';
 import ShareCard from '@/components/ShareCard';
@@ -179,6 +180,7 @@ export default function TestimonySection() {
   const [consentChecked, setConsentChecked] = useState(false);
   const [depthSubmitted, setDepthSubmitted] = useState(false);
   const [category, setCategory]             = useState<Category | ''>('');
+  const [testimonyType, setTestimonyType]   = useState<TestimonyType>('salvation');
   const [showThankYou, setShowThankYou]     = useState(false);
   const [isCapturing, setIsCapturing]       = useState(false);
   const [canNativeShare, setCanNativeShare] = useState(false);
@@ -250,6 +252,7 @@ export default function TestimonySection() {
     setDepthSubmitted(false);
     setShowThankYou(false);
     setCategory('');
+    setTestimonyType('salvation');
     setStep('input');
   }
 
@@ -268,6 +271,7 @@ export default function TestimonySection() {
           word: newWord,
           body: testimonyText,
           consented: consentChecked,
+          testimonyType,
           ...(category ? { category } : {}),
         }),
       });
@@ -926,6 +930,44 @@ export default function TestimonySection() {
                 >
                   {testimonyText.length}/1000
                 </p>
+
+                {/* Testimony type selector — always visible, defaults to salvation */}
+                <div style={{ marginBottom: '1rem' }}>
+                  <p style={{
+                    fontFamily: 'var(--font-body)',
+                    fontSize: '0.8rem',
+                    color: 'var(--brand-near-black-muted)',
+                    marginBottom: '0.5rem',
+                  }}>
+                    Type of testimony
+                  </p>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
+                    {TESTIMONY_TYPES.map((type) => {
+                      const active = testimonyType === type;
+                      return (
+                        <button
+                          key={type}
+                          type="button"
+                          onClick={() => setTestimonyType(type)}
+                          style={{
+                            padding: '0.3rem 0.75rem',
+                            borderRadius: '999px',
+                            border: `1.5px solid ${active ? 'var(--brand-sienna)' : 'var(--brand-ivory-deeper)'}`,
+                            background: active ? 'var(--brand-sienna)' : 'transparent',
+                            color: active ? '#fff' : 'var(--brand-near-black)',
+                            fontFamily: 'var(--font-body)',
+                            fontSize: '0.78rem',
+                            fontWeight: active ? 600 : 400,
+                            cursor: 'pointer',
+                            transition: 'background 0.15s, border-color 0.15s, color 0.15s',
+                          }}
+                        >
+                          {TESTIMONY_TYPE_LABELS[type]}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
 
                 {/* Category picker  optional, shown once typing starts */}
                 <AnimatePresence>

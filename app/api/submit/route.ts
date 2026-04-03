@@ -41,7 +41,7 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const { word, body: testimonyBody, consented, category } = parsed.data;
+  const { word, body: testimonyBody, consented, category, testimonyType } = parsed.data;
 
   // ── Persist ───────────────────────────────────────────────────────────────
   try {
@@ -53,6 +53,7 @@ export async function POST(req: NextRequest) {
       body: testimonyBody ?? null,
       consented: consented ?? false,
       ip_hash: ipHash,
+      testimony_type: testimonyType ?? 'salvation',
       ...(category ? { category } : {}),
     });
     if (testimonyErr) throw testimonyErr;

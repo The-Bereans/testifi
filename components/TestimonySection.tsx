@@ -175,11 +175,7 @@ export default function TestimonySection() {
   const previewWrapRef                      = useRef<HTMLDivElement>(null);
   const CARD_W = 1200;
   const CARD_H = 900;
-  const [previewScale, setPreviewScale]     = useState(() => {
-    if (typeof window === 'undefined') return 500 / CARD_W;
-    // px-6 = 24px each side → 48px total horizontal padding; cap at maxWidth 500
-    return Math.min(window.innerWidth - 48, 500) / CARD_W;
-  });
+  const [previewScale, setPreviewScale]     = useState(500 / CARD_W);
   const [testimonyText, setTestimonyText]   = useState('');
   const [consentChecked, setConsentChecked] = useState(false);
   const [depthSubmitted, setDepthSubmitted] = useState(false);
@@ -263,17 +259,16 @@ export default function TestimonySection() {
   }
 
   async function handleDepthSubmit() {
-    const body = testimonyText.trim();
+    const storyText = testimonyText.trim();
     setDepthSubmitted(true);
     setStep('loading');
 
-    // Persist testimony with optional category (fire-and-forget)
+    // Persist testimony — story text goes into word; falls back to keyword if empty
     fetch('/api/submit', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        word: newWord,
-        body,
+        word: storyText || newWord,
         consented: consentChecked,
         testimonyType,
         ...(category ? { category } : {}),
@@ -282,7 +277,7 @@ export default function TestimonySection() {
 
     // After the same loading beat, surface the full testimony as the card, then reset the form
     setTimeout(() => {
-      setCardText(body);
+      setCardText(storyText || newWord);
       setStep('cloud');
       setTestimonyText('');
       setConsentChecked(false);
@@ -732,9 +727,6 @@ export default function TestimonySection() {
                   borderRadius: '0.75rem',
                   position: 'relative',
                   transform: 'translateZ(0)',
-                  /* clipPath is more reliable than overflow:hidden on mobile Safari
-                     when clipping GPU-composited (transformed) children */
-                  clipPath: 'inset(0 round 0.75rem)',
                   boxShadow: '0 8px 32px rgba(0,0,0,0.12)',
                   marginBottom: '1rem',
                   flexShrink: 0,
@@ -751,11 +743,11 @@ export default function TestimonySection() {
                     style={{
                       position: 'absolute',
                       top: 0,
-                      left: 0,
+                      left: '50%',
                       width: CARD_W,
                       height: CARD_H,
-                      transform: `scale(${previewScale})`,
-                      transformOrigin: 'top left',
+                      transform: `translateX(-50%) scale(${previewScale})`,
+                      transformOrigin: 'top center',
                     }}
                   >
                     <ShareCard
@@ -923,7 +915,7 @@ export default function TestimonySection() {
                   value={testimonyText}
                   onChange={(e) => setTestimonyText(e.target.value)}
                   placeholder="Tell your story in your own words..."
-                  maxLength={1000}
+                  maxLength={2000}
                   rows={5}
                   style={{
                     width: '100%',
@@ -953,7 +945,7 @@ export default function TestimonySection() {
                     marginBottom: '0.75rem',
                   }}
                 >
-                  {testimonyText.length}/1000
+                  {testimonyText.length}/2000
                 </p>
 
                 {/* Testimony type selector — always visible, defaults to salvation */}

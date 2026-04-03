@@ -13,23 +13,23 @@ export async function GET() {
   try {
     const db = createServiceClient();
 
-    // Single query: word for explicit counts, body for NLP extraction.
+    // Single query: word contains the full testimony content (keyword or story).
     const { data: rows, error } = await db
       .from('testimonies')
-      .select('word, body')
+      .select('word')
       .limit(5000);
 
     if (error) throw error;
 
-    // Count explicit submissions per word (replaces word_counts).
+    // Count explicit submissions per word value.
     const wordCountMap: Record<string, number> = {};
-    const bodies: string[] = [];
     for (const row of rows ?? []) {
       wordCountMap[row.word] = (wordCountMap[row.word] ?? 0) + 1;
-      if (row.body) bodies.push(row.body);
     }
 
-    const nlpFreq = extractWordFrequencies(bodies);
+    // NLP extraction runs on all word values — picks meaningful nouns out of
+    // longer story submissions that won't repeat as exact strings.
+    const nlpFreq = extractWordFrequencies((rows ?? []).map(r => r.word));
 
     const merged: Record<string, number> = { ...nlpFreq };
     for (const [word, count] of Object.entries(wordCountMap)) {

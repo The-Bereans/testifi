@@ -7,9 +7,9 @@ export interface Database {
   public: {
     Tables: {
       testimonies: {
-        Row:    { id: string; word: string; body: string | null; category: string | null; excerpt: string | null; consented: boolean; created_at: string; ip_hash: string | null; testimony_type: string };
-        Insert: { id?: string; word: string; body?: string | null; category?: string | null; consented?: boolean; created_at?: string; ip_hash?: string | null; testimony_type?: string };
-        Update: { id?: string; word?: string; body?: string | null; category?: string | null; consented?: boolean; ip_hash?: string | null; testimony_type?: string };
+        Row:    { id: string; word: string; category: string | null; excerpt: string | null; consented: boolean; created_at: string; ip_hash: string | null; testimony_type: string };
+        Insert: { id?: string; word: string; category?: string | null; consented?: boolean; created_at?: string; ip_hash?: string | null; testimony_type?: string };
+        Update: { id?: string; word?: string; category?: string | null; consented?: boolean; ip_hash?: string | null; testimony_type?: string };
         Relationships: [];
       };
       waitlist: {

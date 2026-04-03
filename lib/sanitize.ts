@@ -34,22 +34,15 @@ export const CATEGORY_LABELS: Record<Category, string> = {
 // ─── Submission (word + optional testimony) ───────────────────────────────────
 
 export const submissionSchema = z.object({
-  /** The canonical word from the normalizer (1–80 chars, no HTML) */
+  /** Testimony content — a keyword or a full story (1–2000 chars, no HTML) */
   word: z
     .string()
     .trim()
     .min(1, 'Word is required.')
-    .max(80, 'Word is too long.')
+    .max(2000, 'Testimony must be 2000 characters or fewer.')
     .refine((v) => !/<|>|&lt;|&gt;|javascript:/i.test(v), {
       message: 'Invalid characters in word.',
     }),
-
-  /** Optional full testimony text */
-  body: z
-    .string()
-    .trim()
-    .max(1000, 'Story must be 1000 characters or fewer.')
-    .optional(),
 
   /** User explicitly consented to share their story publicly */
   consented: z.boolean().optional().default(false),
@@ -80,7 +73,7 @@ export type WaitlistInput = z.infer<typeof waitlistSchema>;
 export const TestimonySchema = z.object({
   id: z.string().uuid(),
   word: z.string(),
-  body: z.string().nullable(),
+
   category: z.string().nullable(),
   excerpt: z.string().nullable(),
   testimony_type: z.string().default('salvation'),

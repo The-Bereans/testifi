@@ -10,7 +10,6 @@ import { TESTIMONY_TYPE_CONFIG, type TestimonyType } from '@/lib/testimonyTypes'
 interface DbTestimony {
   id: string;
   word: string;
-  body: string | null;
   category: string | null;
   excerpt: string | null;
   testimony_type: string | null;
@@ -82,7 +81,7 @@ function TestimonyCard({ testimony }: { testimony: DbTestimony }) {
   const colors  = CATEGORY_COLORS[testimony.category ?? ''] ?? DEFAULT_COLORS;
   const type    = (testimony.testimony_type ?? 'salvation') as TestimonyType;
   const config  = TESTIMONY_TYPE_CONFIG[type];
-  const displayText = testimony.excerpt ?? testimony.body ?? `${config.label} ${testimony.word}`;
+  const displayText = testimony.excerpt ?? testimony.word;
 
   async function handleDownloadPNG() {
     if (!cardRef.current || isCapturing) return;

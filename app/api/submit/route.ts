@@ -41,16 +41,14 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const { word, body: testimonyBody, consented, category, testimonyType } = parsed.data;
+  const { word, consented, category, testimonyType } = parsed.data;
 
   // ── Persist ───────────────────────────────────────────────────────────────
   try {
     const db = createServiceClient();
 
-    // All submissions land in testimonies; body is NULL for word-only rows.
     const { error: testimonyErr } = await db.from('testimonies').insert({
       word,
-      body: testimonyBody ?? null,
       consented: consented ?? false,
       ip_hash: ipHash,
       testimony_type: testimonyType ?? 'salvation',

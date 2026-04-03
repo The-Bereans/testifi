@@ -27,7 +27,7 @@ const CommunityShareCard = forwardRef<HTMLDivElement, CommunityShareCardProps>(
     const showBlockquote = excerpt !== null && excerpt !== word;
 
     return (
-      /* Zero-size clipping shell — prevents the 1200×630 card from bleeding
+      /* Zero-size clipping shell prevents the 1200×630 card from bleeding
          out of any overflow:hidden parent even when inside a CSS transform. */
       <div
         aria-hidden="true"

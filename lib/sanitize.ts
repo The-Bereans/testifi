@@ -34,7 +34,7 @@ export const CATEGORY_LABELS: Record<Category, string> = {
 // ─── Submission (word + optional testimony) ───────────────────────────────────
 
 export const submissionSchema = z.object({
-  /** Testimony content — a keyword or a full story (1–2000 chars, no HTML) */
+  /** Testimony content a keyword or a full story (1–2000 chars, no HTML) */
   word: z
     .string()
     .trim()
@@ -52,7 +52,7 @@ export const submissionSchema = z.object({
   /** Optional category tag for what the user was saved from */
   category: z.enum(CATEGORIES).optional(),
 
-  /** Type of testimony — drives card label, suffix, and share text */
+  /** Type of testimony drives card label, suffix, and share text */
   testimonyType: z.enum(TESTIMONY_TYPES).optional().default('salvation'),
 });
 

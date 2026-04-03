@@ -190,7 +190,7 @@ function TestimonyCard({ testimony }: { testimony: DbTestimony }) {
             {displayText}
           </p>
 
-          {/* Stage 2: Footer — no border, single muted line */}
+          {/* Stage 2: Footer no border, single muted line */}
           <span
             style={{
               fontFamily: 'var(--font-body)',
@@ -203,7 +203,7 @@ function TestimonyCard({ testimony }: { testimony: DbTestimony }) {
           </span>
         </article>
 
-        {/* Stage 3: Share buttons column — smaller circles + "Share" label */}
+        {/* Stage 3: Share buttons column smaller circles + "Share" label */}
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.4rem', flexShrink: 0, paddingTop: '0.25rem' }}>
           <span
             style={{
@@ -387,7 +387,7 @@ export default function FeaturedFeed() {
           fontWeight: 600,
           marginBottom: '0.5rem',
         }}>
-          Community
+          Testifi-ers
         </p>
         <h2 style={{
           fontFamily: 'var(--font-body)',
@@ -397,7 +397,7 @@ export default function FeaturedFeed() {
           lineHeight: 1.2,
           marginBottom: '0.6rem',
         }}>
-          Others who were set free.
+          Others have used Testifi.
         </h2>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem' }}>
           <p style={{

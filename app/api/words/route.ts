@@ -27,7 +27,7 @@ export async function GET() {
       wordCountMap[row.word] = (wordCountMap[row.word] ?? 0) + 1;
     }
 
-    // NLP extraction runs on all word values — picks meaningful nouns out of
+    // NLP extraction runs on all word values picks meaningful nouns out of
     // longer story submissions that won't repeat as exact strings.
     const nlpFreq = extractWordFrequencies((rows ?? []).map(r => r.word));
 

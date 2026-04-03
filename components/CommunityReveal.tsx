@@ -29,7 +29,7 @@ export default function CommunityReveal() {
       {/* Sentinel sits between TestimonySection and FeaturedFeed */}
       <div ref={sentinelRef} aria-hidden="true" />
 
-      {/* Stage 1 + 2 — Inline section anchor CTA */}
+      {/* Stage 1 + 2 Inline section anchor CTA */}
       <AnimatePresence>
         {showButton && (
           <motion.div
@@ -63,17 +63,22 @@ export default function CommunityReveal() {
               gap:            '0.6rem',
               textAlign:      'center',
             }}>
-              <p style={{
-                color:          '#C9A87C',
-                fontSize:       '0.8125rem',
-                letterSpacing:  '0.12em',
-                textTransform:  'uppercase',
-                fontWeight:     500,
-                opacity:        0.7,
-                margin:         0,
-              }}>
-                You are not alone
-              </p>
+              {/* Stage A: community subtitle */}
+            <motion.p
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1], delay: 0.3 }}
+              style={{
+                fontFamily: 'var(--font-body)',
+                fontSize: '0.85rem',
+                color: 'var(--brand-near-black-muted)',
+                textAlign: 'center',
+                marginTop: '0.5rem',
+                letterSpacing: '0.01em',
+              }}
+            >
+              Read very powerful testimonies.
+            </motion.p>
 
               <button
                 onClick={handleReveal}

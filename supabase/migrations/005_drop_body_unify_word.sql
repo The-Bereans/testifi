@@ -1,5 +1,5 @@
 -- ============================================================
--- Testify  Migration 005 — Drop body, unify testimony content into word
+-- Testify  Migration 005 Drop body, unify testimony content into word
 --
 -- body was a separate optional extended-story column. It is redundant:
 -- the testimony IS the word, whether a single keyword or a full sentence.

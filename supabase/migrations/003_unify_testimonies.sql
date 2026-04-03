@@ -1,5 +1,5 @@
 -- ============================================================
--- Testify  Phase 3 — Database Unification
+-- Testify  Phase 3 Database Unification
 -- Makes testimonies the single source of truth for all submissions.
 --
 -- Stage 1  Relax the body constraint (allow NULL for word-only rows)
@@ -45,7 +45,7 @@ GRANT SELECT (excerpt) ON public.testimonies TO anon;
 -- ─── Stage 3: Migrate orphan word_counts rows & retire the table ─────────────
 -- Any word that reached word_counts but never produced a testimony row gets
 -- a stub row: body NULL, consented false.  Words that already have at least
--- one testimony row are intentionally skipped — the testimony IS the record.
+-- one testimony row are intentionally skipped the testimony IS the record.
 
 INSERT INTO public.testimonies (word, body, consented)
 SELECT wc.word, NULL, false

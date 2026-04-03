@@ -49,7 +49,7 @@ const RIGHT_ICONS = [
   { top: '80%', right: '5%', delay: 0.48, icon: 'fish' },
 ];
 
-// Mobile snowfall: pre-generated particles (no Math.random — fixed for SSR safety)
+// Mobile snowfall: pre-generated particles (no Math.random fixed for SSR safety)
 const ICON_NAMES = ['cross','palmleaf','crownofthorns','dove','anchor','nail','chalice','flame','heart','fish'];
 const SNOW_PARTICLES = [
   { left:  '4%', delay: 0.0,  duration: 5.2, icon: ICON_NAMES[0] },
@@ -262,7 +262,7 @@ export default function TestimonySection() {
     setDepthSubmitted(true);
     setStep('loading');
 
-    // Persist testimony — story text goes into word; falls back to keyword if empty
+    // Persist testimony story text goes into word; falls back to keyword if empty
     fetch('/api/submit', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -442,8 +442,8 @@ export default function TestimonySection() {
               }} />
             </div>
 
-            {/* Mobile: continuous snowfall particles — CSS keyframes, negative delays = immediate mid-fall */}
-            {/* COMMENTED OUT: falling icons on mobile (distracting) — lines 445–472 */}
+            {/* Mobile: continuous snowfall particles CSS keyframes, negative delays = immediate mid-fall */}
+            {/* COMMENTED OUT: falling icons on mobile (distracting) lines 445–472 */}
             {/* {isMobile && (
               <>
                 <style>{`
@@ -732,7 +732,7 @@ export default function TestimonySection() {
                   flexShrink: 0,
                 }}
               >
-                {/* Animation wrapper — separate from the clip so transform doesn't break overflow */}
+                {/* Animation wrapper separate from the clip so transform doesn't break overflow */}
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -878,7 +878,7 @@ export default function TestimonySection() {
               </motion.div>
             )}
 
-            {/* Stage A: community subtitle */}
+            {/* Stage A: community subtitle
             <motion.p
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -893,13 +893,13 @@ export default function TestimonySection() {
               }}
             >
               Thousands set free  tap any word to explore
-            </motion.p>
+            </motion.p> */}
 
-            {/* Compact interactive cloud in a modal-launching row 
+            {/* This is where the word cloud actually resides. Compact interactive cloud in a modal-launching row 
             <WordCloud words={words} newWord={newWord} />
             */}
 
-            {/* Stage B: depth nudge / story form — always visible, resets after each submission */}
+            {/* Depth nudge / story form always visible, resets after each submission */}
             <div style={{ maxWidth: '28rem', margin: '0 auto', width: '100%', paddingLeft: 'clamp(1rem, 5vw, 1.5rem)', paddingRight: 'clamp(1rem, 5vw, 1.5rem)' }}>
               <div style={{ marginTop: '2.5rem' }}>
                 <p
@@ -951,7 +951,7 @@ export default function TestimonySection() {
                   {testimonyText.length}/2000
                 </p>
 
-                {/* Testimony type selector — always visible, defaults to salvation */}
+                {/* Testimony type selector always visible, defaults to salvation */}
                 <div style={{ marginBottom: '1rem' }}>
                   <p style={{
                     fontFamily: 'var(--font-body)',
@@ -1066,7 +1066,7 @@ export default function TestimonySection() {
 
       </AnimatePresence>
 
-      {/* Off-screen share card for html2canvas capture — zero-size shell prevents overflow */}
+      {/* Off-screen share card for html2canvas capture zero-size shell prevents overflow */}
       {step === 'cloud' && newWord && (
         <div style={{ position: 'absolute', width: 0, height: 0, overflow: 'hidden', pointerEvents: 'none' }}>
           <ShareCard

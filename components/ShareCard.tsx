@@ -70,7 +70,7 @@ function heroFontSize(word: string): string {
   return '32px';
 }
 
-// For full sentences — scales down so it always fits in the card
+// For full sentences scales down so it always fits in the card
 function sentenceFontSize(word: string): string {
   const len = word.length;
   if (len <= 60)  return '48px';
@@ -99,7 +99,7 @@ const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(
     const isSentence = word.trim().split(/\s+/).length > 2 && !word.includes('-');
     const fontSize = isSentence ? sentenceFontSize(word) : heroFontSize(word);
 
-    // Derived layout values — adapt to card orientation
+    // Derived layout values adapt to card orientation
     const crossAnchorX = cardW - CROSS.RIGHT_OFFSET - CROSS.SVG_W + CROSS.BEAM_X + CROSS.BEAM_W / 2;
     const crossAnchorY = cardH / 2 + CROSS.SVG_H / 2; // base of vertical beam
     const contentTop   = Math.round(cardH * 0.38);

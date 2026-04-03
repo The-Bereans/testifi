@@ -1,4 +1,4 @@
--- Stage 1.2 — Add testimony_type column
+-- Stage 1.2 Add testimony_type column
 -- Safe to run on an existing database; existing rows default to 'salvation'.
 
 -- Add testimony_type column, defaulting existing rows to 'salvation'

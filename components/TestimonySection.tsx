@@ -276,10 +276,15 @@ export default function TestimonySection() {
       }),
     }).catch(() => {});
 
-    // After the same loading beat, surface the full testimony as the card
+    // After the same loading beat, surface the full testimony as the card, then reset the form
     setTimeout(() => {
       setCardText(body);
       setStep('cloud');
+      setTestimonyText('');
+      setConsentChecked(false);
+      setTestimonyType('salvation');
+      setCategory('');
+      setDepthSubmitted(false);
     }, 1400);
   }
 
@@ -713,7 +718,8 @@ export default function TestimonySection() {
           >
             {/* Share card preview */}
             {newWord && (
-              /* Clip container — static (no animation) so overflow:hidden is reliable */
+              /* Clip container — transform:translateZ(0) forces a composited layer so
+                 overflow:hidden correctly clips the GPU-composited animated child */
               <div
                 ref={previewWrapRef}
                 style={{
@@ -723,6 +729,7 @@ export default function TestimonySection() {
                   overflow: 'hidden',
                   borderRadius: '0.75rem',
                   position: 'relative',
+                  transform: 'translateZ(0)',
                   boxShadow: '0 8px 32px rgba(0,0,0,0.12)',
                   marginBottom: '1rem',
                   flexShrink: 0,
@@ -737,6 +744,9 @@ export default function TestimonySection() {
                 >
                   <div
                     style={{
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
                       width: CARD_W,
                       height: CARD_H,
                       transform: `scale(${previewScale})`,
@@ -889,8 +899,8 @@ export default function TestimonySection() {
             {/* Compact interactive cloud in a modal-launching row */}
             <WordCloud words={words} newWord={newWord} />
 
-            {/* Stage B: depth nudge / story form — hidden once full testimony is on the card */}
-            <div style={{ maxWidth: '28rem', margin: '0 auto', width: '100%', paddingLeft: 'clamp(1rem, 5vw, 1.5rem)', paddingRight: 'clamp(1rem, 5vw, 1.5rem)', display: cardText ? 'none' : undefined }}>
+            {/* Stage B: depth nudge / story form — always visible, resets after each submission */}
+            <div style={{ maxWidth: '28rem', margin: '0 auto', width: '100%', paddingLeft: 'clamp(1rem, 5vw, 1.5rem)', paddingRight: 'clamp(1rem, 5vw, 1.5rem)' }}>
               <div style={{ marginTop: '2.5rem' }}>
                 <p
                   style={{

@@ -26,13 +26,24 @@ const CommunityShareCard = forwardRef<HTMLDivElement, CommunityShareCardProps>(
     const truncated = abbreviate(text, 200);
 
     return (
+      /* Zero-size clipping shell — prevents the 1200×630 card from bleeding
+         out of any overflow:hidden parent even when inside a CSS transform. */
       <div
-        ref={ref}
         aria-hidden="true"
         style={{
-          position: 'fixed',
-          left: '-9999px',
+          position: 'absolute',
+          width: 0,
+          height: 0,
+          overflow: 'hidden',
+          pointerEvents: 'none',
+        }}
+      >
+      <div
+        ref={ref}
+        style={{
+          position: 'absolute',
           top: 0,
+          left: 0,
           width: '1200px',
           height: '630px',
           background: '#1C1611',
@@ -44,7 +55,6 @@ const CommunityShareCard = forwardRef<HTMLDivElement, CommunityShareCardProps>(
           boxSizing: 'border-box',
           pointerEvents: 'none',
           userSelect: 'none',
-          zIndex: -1,
         }}
       >
         {/* Watermark cross */}
@@ -189,6 +199,7 @@ const CommunityShareCard = forwardRef<HTMLDivElement, CommunityShareCardProps>(
             https://testifi.vercel.app
           </p>
         </div>
+      </div>
       </div>
     );
   }

@@ -175,7 +175,11 @@ export default function TestimonySection() {
   const previewWrapRef                      = useRef<HTMLDivElement>(null);
   const CARD_W = 1200;
   const CARD_H = 900;
-  const [previewScale, setPreviewScale]     = useState(500 / CARD_W);
+  const [previewScale, setPreviewScale]     = useState(() => {
+    if (typeof window === 'undefined') return 500 / CARD_W;
+    // px-6 = 24px each side → 48px total horizontal padding; cap at maxWidth 500
+    return Math.min(window.innerWidth - 48, 500) / CARD_W;
+  });
   const [testimonyText, setTestimonyText]   = useState('');
   const [consentChecked, setConsentChecked] = useState(false);
   const [depthSubmitted, setDepthSubmitted] = useState(false);
@@ -718,8 +722,6 @@ export default function TestimonySection() {
           >
             {/* Share card preview */}
             {newWord && (
-              /* Clip container — transform:translateZ(0) forces a composited layer so
-                 overflow:hidden correctly clips the GPU-composited animated child */
               <div
                 ref={previewWrapRef}
                 style={{
@@ -730,6 +732,9 @@ export default function TestimonySection() {
                   borderRadius: '0.75rem',
                   position: 'relative',
                   transform: 'translateZ(0)',
+                  /* clipPath is more reliable than overflow:hidden on mobile Safari
+                     when clipping GPU-composited (transformed) children */
+                  clipPath: 'inset(0 round 0.75rem)',
                   boxShadow: '0 8px 32px rgba(0,0,0,0.12)',
                   marginBottom: '1rem',
                   flexShrink: 0,

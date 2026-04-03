@@ -80,7 +80,9 @@ function TestimonyCard({ testimony }: { testimony: DbTestimony }) {
   const [isCapturing, setIsCapturing] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
   const colors  = CATEGORY_COLORS[testimony.category ?? ''] ?? DEFAULT_COLORS;
-  const displayText = testimony.excerpt ?? testimony.body ?? `Jesus saved me from ${testimony.word}`;
+  const type    = (testimony.testimony_type ?? 'salvation') as TestimonyType;
+  const config  = TESTIMONY_TYPE_CONFIG[type];
+  const displayText = testimony.excerpt ?? testimony.body ?? `${config.label} ${testimony.word}`;
 
   async function handleDownloadPNG() {
     if (!cardRef.current || isCapturing) return;
@@ -101,14 +103,13 @@ function TestimonyCard({ testimony }: { testimony: DbTestimony }) {
 
   function handleXShare() {
     const text = encodeURIComponent(
-      `Jesus saved me from ${testimony.word}. "${displayText.slice(0, 120)}"  https://testifi.vercel.app`
+      `${config.label} ${testimony.word}. "${displayText.slice(0, 120)}"  https://testifi.vercel.app`
     );
     window.open(`https://twitter.com/intent/tweet?text=${text}`, '_blank');
   }
 
   async function handleWhatsAppShare() {
-    const type = (testimony.testimony_type ?? 'salvation') as TestimonyType;
-    const shareText = TESTIMONY_TYPE_CONFIG[type].buildWhatsAppMessage(
+    const shareText = config.buildWhatsAppMessage(
       testimony.word,
       displayText,
       'https://testifi.vercel.app'

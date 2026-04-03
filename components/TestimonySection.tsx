@@ -182,6 +182,7 @@ export default function TestimonySection() {
   const [category, setCategory]             = useState<Category | ''>('');
   const [testimonyType, setTestimonyType]   = useState<TestimonyType>('salvation');
   const [showThankYou, setShowThankYou]     = useState(false);
+  const [cardText, setCardText]             = useState<string | null>(null);
   const [isCapturing, setIsCapturing]       = useState(false);
   const [canNativeShare, setCanNativeShare] = useState(false);
 
@@ -251,33 +252,35 @@ export default function TestimonySection() {
     setConsentChecked(false);
     setDepthSubmitted(false);
     setShowThankYou(false);
+    setCardText(null);
     setCategory('');
     setTestimonyType('salvation');
     setStep('input');
   }
 
   async function handleDepthSubmit() {
+    const body = testimonyText.trim();
     setDepthSubmitted(true);
-    setShowThankYou(true);
-    setTimeout(() => setShowThankYou(false), 1500);
-    setTestimonyText('');
+    setStep('loading');
 
     // Persist testimony with optional category (fire-and-forget)
-    try {
-      await fetch('/api/submit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          word: newWord,
-          body: testimonyText,
-          consented: consentChecked,
-          testimonyType,
-          ...(category ? { category } : {}),
-        }),
-      });
-    } catch {
-      // Network error  thank-you already shown; no UX disruption
-    }
+    fetch('/api/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        word: newWord,
+        body,
+        consented: consentChecked,
+        testimonyType,
+        ...(category ? { category } : {}),
+      }),
+    }).catch(() => {});
+
+    // After the same loading beat, surface the full testimony as the card
+    setTimeout(() => {
+      setCardText(body);
+      setStep('cloud');
+    }, 1400);
   }
 
   async function handleDownloadPNG() {
@@ -710,11 +713,9 @@ export default function TestimonySection() {
           >
             {/* Share card preview */}
             {newWord && (
-              <motion.div
+              /* Clip container — static (no animation) so overflow:hidden is reliable */
+              <div
                 ref={previewWrapRef}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
                 style={{
                   width: '100%',
                   maxWidth: 500,
@@ -727,25 +728,30 @@ export default function TestimonySection() {
                   flexShrink: 0,
                 }}
               >
-                <div
-                  style={{
-                    width: CARD_W,
-                    height: CARD_H,
-                    transform: `scale(${previewScale})`,
-                    transformOrigin: 'top left',
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                  }}
+                {/* Animation wrapper — separate from the clip so transform doesn't break overflow */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                  style={{ position: 'absolute', inset: 0 }}
                 >
-                  <ShareCard
-                    word={newWord}
-                    cloudWords={cloudWords}
-                    preview
-                    testimonyType={testimonyType}
-                  />
-                </div>
-              </motion.div>
+                  <div
+                    style={{
+                      width: CARD_W,
+                      height: CARD_H,
+                      transform: `scale(${previewScale})`,
+                      transformOrigin: 'top left',
+                    }}
+                  >
+                    <ShareCard
+                      word={cardText ?? newWord}
+                      cloudWords={cloudWords}
+                      preview
+                      testimonyType={testimonyType}
+                    />
+                  </div>
+                </motion.div>
+              </div>
             )}
 
             {/* Share nudge */}
@@ -883,8 +889,8 @@ export default function TestimonySection() {
             {/* Compact interactive cloud in a modal-launching row */}
             <WordCloud words={words} newWord={newWord} />
 
-            {/* Stage B: depth nudge / story form */}
-            <div style={{ maxWidth: '28rem', margin: '0 auto', width: '100%', paddingLeft: 'clamp(1rem, 5vw, 1.5rem)', paddingRight: 'clamp(1rem, 5vw, 1.5rem)' }}>
+            {/* Stage B: depth nudge / story form — hidden once full testimony is on the card */}
+            <div style={{ maxWidth: '28rem', margin: '0 auto', width: '100%', paddingLeft: 'clamp(1rem, 5vw, 1.5rem)', paddingRight: 'clamp(1rem, 5vw, 1.5rem)', display: cardText ? 'none' : undefined }}>
               <div style={{ marginTop: '2.5rem' }}>
                 <p
                   style={{
@@ -895,7 +901,7 @@ export default function TestimonySection() {
                     marginBottom: '1.25rem',
                   }}
                 >
-                  Your testimony in details would shift someone's life
+                  Share more testimonies. Tell of God&rsquo;s goodness.
                 </p>
 
                 <textarea
@@ -1054,7 +1060,7 @@ export default function TestimonySection() {
       {step === 'cloud' && newWord && (
         <ShareCard
           ref={shareCardRef}
-          word={newWord}
+          word={cardText ?? newWord}
           cloudWords={cloudWords}
           testimonyType={testimonyType}
         />

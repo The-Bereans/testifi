@@ -895,8 +895,9 @@ export default function TestimonySection() {
               Thousands set free  tap any word to explore
             </motion.p>
 
-            {/* Compact interactive cloud in a modal-launching row */}
+            {/* Compact interactive cloud in a modal-launching row 
             <WordCloud words={words} newWord={newWord} />
+            */}
 
             {/* Stage B: depth nudge / story form — always visible, resets after each submission */}
             <div style={{ maxWidth: '28rem', margin: '0 auto', width: '100%', paddingLeft: 'clamp(1rem, 5vw, 1.5rem)', paddingRight: 'clamp(1rem, 5vw, 1.5rem)' }}>

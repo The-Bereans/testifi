@@ -709,7 +709,7 @@ export default function TestimonySection() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
                 style={{
-                  width: isMobile ? 'calc(100% - 24px)' : '100%',
+                  width: '100%',
                   maxWidth: 500,
                   height: Math.round(CARD_H * previewScale),
                   overflow: 'hidden',

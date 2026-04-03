@@ -117,16 +117,15 @@ const sectionVariants = {
 };
 
 const PLACEHOLDERS = [
-  'pornography',
-  'betting. I once bet my school fees',
-  'a chronic football addiction',
-  'homosexuality',
-  'alcohol',
+  'my pornography addiction was eating me up, but I attended a particular service, and encountered God',
+  'a chronic football addiction that could not let me get along at work.',
+  'Hatred for my uncles. It was hard, but I forgave them eventually',
+  'Omo, I used to love betting so much. I once staked my school fees, and even after my dad beat me blue black. I did not learn',
+  'CoDeine and alcohol',
   'anger. I almost destroyed my marriage',
-  'drugs',
-  'shame',
-  'loneliness',
-  'suicidal thoughts',
+  'FinAncial shame was one thing my family was known for. I"m grateful that things have changed"',
+  'I was in a bad relationship, and we were doing some bad things. I left, but felt loneliness so much I wanted to go back. God found me, and made me whole',
+  'After I failed my 100 level, I had suIcidal thoughts. God sent someone into that room and saved me last minute',
 ];
 
 // Best-effort mapping from canonical word → category

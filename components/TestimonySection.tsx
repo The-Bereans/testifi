@@ -576,7 +576,7 @@ export default function TestimonySection() {
                         }
                       }}
                       placeholder={PLACEHOLDERS[placeholderIdx]}
-                      maxLength={400}
+                      maxLength={2000}
                       autoComplete="off"
                       spellCheck={false}
                       aria-label="Share your testimony"

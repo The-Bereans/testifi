@@ -173,9 +173,10 @@ export default function TestimonySection() {
 
   const shareCardRef                        = useRef<HTMLDivElement>(null);
   const previewWrapRef                      = useRef<HTMLDivElement>(null);
-  const CARD_W = 1200;
-  const CARD_H = 900;
-  const [previewScale, setPreviewScale]     = useState(500 / CARD_W);
+  const [isMobile, setIsMobile]             = useState(false);
+  const CARD_W = isMobile ? 900  : 1200;
+  const CARD_H = isMobile ? 1200 : 900;
+  const [previewScale, setPreviewScale]     = useState(500 / 1200);
   const [testimonyText, setTestimonyText]   = useState('');
   const [consentChecked, setConsentChecked] = useState(false);
   const [depthSubmitted, setDepthSubmitted] = useState(false);
@@ -194,7 +195,6 @@ export default function TestimonySection() {
     .sort(([, a], [, b]) => b - a)
     .slice(0, 25)
     .map(([text, count]) => ({ text, count }));
-  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     const mq = window.matchMedia('(max-width: 640px)');
@@ -226,7 +226,7 @@ export default function TestimonySection() {
     update();
     window.addEventListener('resize', update);
     return () => window.removeEventListener('resize', update);
-  }, [step]);
+  }, [step, CARD_W]);
 
   async function handleSubmit() {
     const result = normalize(input);
@@ -755,6 +755,8 @@ export default function TestimonySection() {
                       cloudWords={cloudWords}
                       preview
                       testimonyType={testimonyType}
+                      cardW={CARD_W}
+                      cardH={CARD_H}
                     />
                   </div>
                 </motion.div>
@@ -1071,6 +1073,8 @@ export default function TestimonySection() {
             word={cardText ?? newWord}
             cloudWords={cloudWords}
             testimonyType={testimonyType}
+            cardW={CARD_W}
+            cardH={CARD_H}
           />
         </div>
       )}

@@ -11,6 +11,8 @@ interface ShareCardProps {
   cloudWords?: CloudWord[];
   preview?: boolean;
   testimonyType?: TestimonyType;
+  cardW?: number;
+  cardH?: number;
 }
 
 // ─── Cross geometry constants ───────────────────────────────────────────────
@@ -20,9 +22,6 @@ const CROSS = {
   SVG_W: 480, SVG_H: 600,
   BEAM_X: 196, BEAM_W: 88,      // vertical beam rect
 } as const;
-// Derived card-pixel coords
-const CROSS_ANCHOR_X = 1200 - CROSS.RIGHT_OFFSET - CROSS.SVG_W + CROSS.BEAM_X + CROSS.BEAM_W / 2; // 900
-const CROSS_ANCHOR_Y = 450 - CROSS.SVG_H / 2 + CROSS.SVG_H;  // 750  base of vertical beam
 
 // ─── Deterministic golden-angle spiral positions ────────────────────────────
 // No Math.random, no Date, no state  same output every render (html2canvas-safe).
@@ -39,12 +38,15 @@ interface WordPosition {
   opacity: number;
 }
 
-function getClusterPosition(index: number, count: number, maxCount: number): WordPosition {
+function getClusterPosition(
+  index: number, count: number, maxCount: number,
+  anchorX: number, anchorY: number, boundX: number, boundY: number,
+): WordPosition {
   const angle = index * GOLDEN_ANGLE;
   const r = Math.min(55 * Math.sqrt(index + 0.5), MAX_R); // capped  D.2
 
-  const x = Math.min(900 + r * Math.cos(angle), 1150);
-  const y = Math.min(750 + r * Math.sin(angle), 870);
+  const x = Math.min(anchorX + r * Math.cos(angle), boundX);
+  const y = Math.min(anchorY + r * Math.sin(angle), boundY);
 
   const ratio = maxCount > 1 ? (count - 1) / (maxCount - 1) : 0;
   const size = Math.round(12 + ratio * 16);    // 12 – 28 px
@@ -89,13 +91,19 @@ function sentenceFontSize(word: string): string {
  * Uses only inline styles / system fonts  no CSS vars  html2canvas-safe.
  */
 const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(
-  ({ word, cloudWords = [], preview = false, testimonyType = 'salvation' }, ref) => {
+  ({ word, cloudWords = [], preview = false, testimonyType = 'salvation', cardW = 1200, cardH = 900 }, ref) => {
     const config = TESTIMONY_TYPE_CONFIG[testimonyType];
     const maxCount = cloudWords.reduce((m, w) => Math.max(m, w.count), 0);
     // Hero layout for: single word, two words, or any hyphenated compound (e.g. "self-hatred")
     // Quote layout for: three or more non-hyphenated words (a full sentence/story)
     const isSentence = word.trim().split(/\s+/).length > 2 && !word.includes('-');
     const fontSize = isSentence ? sentenceFontSize(word) : heroFontSize(word);
+
+    // Derived layout values — adapt to card orientation
+    const crossAnchorX = cardW - CROSS.RIGHT_OFFSET - CROSS.SVG_W + CROSS.BEAM_X + CROSS.BEAM_W / 2;
+    const crossAnchorY = cardH / 2 + CROSS.SVG_H / 2; // base of vertical beam
+    const contentTop   = Math.round(cardH * 0.38);
+    const contentWidth = cardW - 192;                  // 96px margin each side
 
     return (
       <div
@@ -105,8 +113,8 @@ const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(
           position: preview ? 'relative' : 'absolute',
           top: 0,
           left: 0,
-          width: '1200px',
-          height: '900px',
+          width: `${cardW}px`,
+          height: `${cardH}px`,
           background: '#1C1611',
           overflow: 'hidden',
           boxSizing: 'border-box',
@@ -117,7 +125,10 @@ const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(
 
         {/* ── Layer 1 · Background word cloud ─────────────────────────────── */}
         {cloudWords.map(({ text, count }, i) => {
-          const { x, y, size, opacity } = getClusterPosition(i, count, maxCount);
+          const { x, y, size, opacity } = getClusterPosition(
+            i, count, maxCount,
+            crossAnchorX, crossAnchorY, cardW - 50, cardH - 30,
+          );
           return (
             <span
               key={text}
@@ -168,13 +179,13 @@ const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(
 
         {/* ── Layer 4 · Foreground content ─────────────────────────────────── */}
 
-        {/* Hero content block  starts at optical center (~38% from top = 342px) */}
+        {/* Hero content block  starts at optical center (~38% from top) */}
         <div
           style={{
             position: 'absolute',
-            top: 342,
+            top: contentTop,
             left: 96,
-            width: 1008,
+            width: contentWidth,
             overflow: 'hidden',
           }}
         >

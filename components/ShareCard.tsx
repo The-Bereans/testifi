@@ -202,6 +202,8 @@ const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(
                 color: '#F8F4EC',
                 margin: '0 0 20px 0',
                 overflowWrap: 'break-word',
+                wordBreak: 'break-word',
+                width: '100%',
               }}>
                 {abbreviate(word, 220)}
               </h2>
@@ -248,6 +250,9 @@ const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(
                 letterSpacing: '-0.025em',
                 color: '#B5673D',
                 margin: 0,
+                overflowWrap: 'break-word',
+                wordBreak: 'break-word',
+                width: '100%',
               }}>
                 {word}
               </h2>

@@ -174,7 +174,8 @@ const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(
             position: 'absolute',
             top: 342,
             left: 96,
-            right: 96,
+            width: 1008,
+            overflow: 'hidden',
           }}
         >
           {isSentence ? (
@@ -228,6 +229,7 @@ const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(
               <div style={{
                 display: 'flex',
                 alignItems: 'center',
+                flexWrap: 'wrap',
                 gap: '8px',
                 fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
                 fontSize: '26px',

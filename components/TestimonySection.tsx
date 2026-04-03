@@ -443,7 +443,8 @@ export default function TestimonySection() {
             </div>
 
             {/* Mobile: continuous snowfall particles — CSS keyframes, negative delays = immediate mid-fall */}
-            {isMobile && (
+            {/* COMMENTED OUT: falling icons on mobile (distracting) — lines 445–472 */}
+            {/* {isMobile && (
               <>
                 <style>{`
                   @keyframes snowfall {
@@ -469,7 +470,7 @@ export default function TestimonySection() {
                   </div>
                 ))}
               </>
-            )}
+            )} */}
 
             {/* Desktop: left column icons */}
             {!isMobile && LEFT_ICONS.map((item, i) => (

@@ -466,7 +466,7 @@ export default function FeaturedFeed() {
       {/* ── Loading skeleton ── */}
       {loading && (
         <div style={{
-          minHeight: 'clamp(240px, 35vh, 380px)',
+          // minHeight: 'clamp(240px, 35vh, 380px)',
           borderRadius: 'var(--radius-lg)',
           background: 'var(--brand-ivory-dark)',
           border: '1px solid var(--brand-ivory-deeper)',
@@ -526,7 +526,7 @@ export default function FeaturedFeed() {
           </div>
 
           {/* Editorial nudge */}
-          <p style={{
+          {/* <p style={{
             fontFamily: 'var(--font-body)',
             color: 'var(--brand-near-black-muted)',
             fontSize: '0.8rem',
@@ -537,7 +537,7 @@ export default function FeaturedFeed() {
             letterSpacing: '0.01em',
           }}>
             Someone you know might need to read this.
-          </p>
+          </p> */}
 
           {/* Progress bar + arrows on same line */}
           {total > 1 ? (

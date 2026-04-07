@@ -21,13 +21,13 @@ export default function Footer() {
       <span>&copy; {year} Testifi</span>
 
       <a
-        href="https://twitter.com/testifi"
+        href="https://instagram.com/we.testifi"
         target="_blank"
         rel="noopener noreferrer"
         style={{ color: 'inherit', textDecoration: 'none' }}
-        aria-label="Testifi on X (Twitter)"
+        aria-label="Testifi on Instagram "
       >
-        @testifi
+        @we.testifi
       </a>
 
       <Link

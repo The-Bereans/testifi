@@ -103,10 +103,10 @@ export default function PrivacyPage() {
         <p>
           You can ask us to view, correct, or delete your data at any time. Just email us at{' '}
           <a
-            href="mailto:hello@testifi.app"
+            href="mailto:thebereanjesusapp@gmail.com"
             style={{ color: 'inherit', textDecoration: 'underline' }}
           >
-            hello@testifi.app
+            via mail
           </a>{' '}
           and we will respond within 7 days. If you are in the EU or UK, you also have the right to
           lodge a complaint with your local data-protection authority.
@@ -131,8 +131,8 @@ export default function PrivacyPage() {
         }}
       >
         Questions? Reach us at{' '}
-        <a href="mailto:hello@testifi.app" style={{ color: 'inherit', textDecoration: 'underline' }}>
-          hello@testifi.app
+        <a href="mailto:thebereanjesusapp@gmail.com" style={{ color: 'inherit', textDecoration: 'underline' }}>
+          via mail
         </a>
       </p>
     </main>

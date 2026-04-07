@@ -101,7 +101,7 @@ export default function PrivacyPage() {
 
       <Section title="5. Your rights">
         <p>
-          You can ask us to view, correct, or delete your data at any time. Just email us at{' '}
+          You can ask us to view, correct, or delete your data at any time. Just reach out{' '}
           <a
             href="mailto:thebereanjesusapp@gmail.com"
             style={{ color: 'inherit', textDecoration: 'underline' }}

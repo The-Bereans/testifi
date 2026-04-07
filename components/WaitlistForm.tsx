@@ -83,7 +83,7 @@ export default function WaitlistForm() {
             marginBottom: '2rem',
           }}
         >
-          Yes, The Jesus App is bringing Kingdom online.
+          Testifi. Real stories, real triumphs in Christ.
         </p>
 
         {/* Form / success swap */}
@@ -238,7 +238,11 @@ export default function WaitlistForm() {
                   letterSpacing: '0.02em',
                 }}
               >
-                Be the first to know when we launch.
+                Be the first to know when we launch —{' '}
+                <a href="/privacy" style={{ color: 'inherit', textDecoration: 'underline', textUnderlineOffset: '2px' }}>
+                  your email stays private
+                </a>{' '}
+                and is never shared.
               </p>
             </motion.form>
           )}

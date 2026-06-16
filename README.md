@@ -4,7 +4,7 @@
 
 The platform is designed around a simple belief:
 
-> Some stories change lives, but many people never share them because identity, judgment, and social consequences get in the way.
+> Some testimonies change lives, but many people never share them because identity, judgment, and social consequences get in the way.
 
 Testifi provides a secure environment where users can submit testimonies without revealing personal information, discover experiences from others, and engage with authentic human stories that might otherwise remain unheard.
 

@@ -1,91 +1,69 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { submissionSchema } from '@/lib/sanitize';
-import { checkRateLimit, hashIp } from '@/lib/rateLimit';
-import { createServiceClient } from '@/lib/supabase';
+import crypto from "node:crypto";
+import { NextRequest, NextResponse } from "next/server";
 
-// Minimum seconds a user must wait between submissions
-const SUBMISSION_COOLDOWN_S = 30;
-// How far back to check for duplicate content from the same IP
-const DUPLICATE_WINDOW_MS = 24 * 60 * 60 * 1000; // 24 hours
+import { prisma } from "@/lib/prisma";
+import { checkRateLimitWithDb, hashIp } from "@/lib/rateLimit";
+import { submissionSchema } from "@/lib/sanitize";
+
+const RATE_LIMIT = {
+  limit: 5,
+  windowMs: 60 * 60 * 1000,
+};
 
 export async function POST(req: NextRequest) {
-  // ── Rate limit ────────────────────────────────────────────────────────────
   const rawIp =
-    req.headers.get('x-forwarded-for')?.split(',')[0].trim() ??
-    req.headers.get('x-real-ip') ??
-    'unknown';
-  const ipHash = await hashIp(rawIp);
+    req.headers.get("x-forwarded-for")?.split(",")[0].trim() ??
+    req.headers.get("x-real-ip") ??
+    "unknown";
 
-  // Fast in-memory burst guard (same instance, back-to-back hits)
-  const rl = checkRateLimit(`submit:${ipHash}`, { limit: 1, windowMs: SUBMISSION_COOLDOWN_S * 1000 });
+  const ipHash = hashIp(rawIp);
+
+  const rl = await checkRateLimitWithDb(`submit:${ipHash}`, RATE_LIMIT);
+
   if (!rl.allowed) {
     return NextResponse.json(
-      { error: `Please wait ${SUBMISSION_COOLDOWN_S} seconds before submitting again.` },
-      {
-        status: 429,
-        headers: { 'Retry-After': String(Math.ceil((rl.resetAt - Date.now()) / 1000)) },
-      }
+      { error: "Too many requests. Try again later." },
+      { status: 429, headers: { "Retry-After": String(Math.ceil((rl.resetAt - Date.now()) / 1000)) } }
     );
   }
 
-  // ── Parse & validate ──────────────────────────────────────────────────────
-  let body: unknown;
   try {
-    body = await req.json();
-  } catch {
-    return NextResponse.json({ error: 'Invalid JSON.' }, { status: 400 });
-  }
+    const body = await req.json();
 
-  const parsed = submissionSchema.safeParse(body);
-  if (!parsed.success) {
-    return NextResponse.json(
-      { error: parsed.error.issues[0]?.message ?? 'Invalid input.' },
-      { status: 422 }
-    );
-  }
+    const parsed = submissionSchema.safeParse(body);
 
-  const { word, consented, category, testimonyType } = parsed.data;
-
-  // ── Duplicate content check ───────────────────────────────────────────────
-  try {
-    const db = createServiceClient();
-    const since = new Date(Date.now() - DUPLICATE_WINDOW_MS).toISOString();
-    const { count, error: dupErr } = await db
-      .from('testimonies')
-      .select('id', { count: 'exact', head: true })
-      .eq('ip_hash', ipHash)
-      .eq('word', word)
-      .gte('created_at', since);
-
-    if (dupErr) throw dupErr;
-
-    if ((count ?? 0) > 0) {
+    if (!parsed.success) {
       return NextResponse.json(
-        { error: 'You already submitted this testimony recently.' },
-        { status: 409 }
+        { error: parsed.error.issues[0]?.message ?? "Invalid submission." },
+        { status: 422 }
       );
     }
-  } catch (err) {
-    console.error('[/api/submit] duplicate check failed', err);
-    // fail open — don't block legitimate users if the check errors
-  }
 
-  // ── Persist ───────────────────────────────────────────────────────────────
-  try {
-    const db = createServiceClient();
+    const { title, body: testimonyBody, categoryId, consented, isIdentityHidden } = parsed.data;
 
-    const { error: testimonyErr } = await db.from('testimonies').insert({
-      word,
-      consented: consented ?? false,
-      ip_hash: ipHash,
-      testimony_type: testimonyType ?? 'salvation',
-      ...(category ? { category } : {}),
+    const testimony = await prisma.testimonies.create({
+      data: {
+        id: crypto.randomUUID(),
+        title,
+        body: testimonyBody,
+        consented,
+        is_identity_hidden: isIdentityHidden,
+        status: "published",
+        category_id: categoryId ?? null,
+        excerpt:
+          testimonyBody.length > 240
+            ? `${testimonyBody.slice(0, 240)}...`
+            : testimonyBody,
+      },
+      include: { categories: true },
     });
-    if (testimonyErr) throw testimonyErr;
 
-    return NextResponse.json({ ok: true }, { status: 201 });
+    return NextResponse.json(testimony, { status: 201, headers: { "Cache-Control": "no-store" } });
   } catch (err) {
-    console.error('[/api/submit]', err);
-    return NextResponse.json({ error: 'Failed to save. Please try again.' }, { status: 500 });
+    console.error("[/api/submit]", err);
+    return NextResponse.json(
+      { error: "Something went wrong while submitting your testimony." },
+      { status: 500, headers: { "Cache-Control": "no-store" } }
+    );
   }
 }

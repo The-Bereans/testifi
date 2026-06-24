@@ -1,63 +1,15 @@
 'use client';
 
 import { forwardRef } from 'react';
-import { TESTIMONY_TYPE_CONFIG, type TestimonyType } from '@/lib/testimonyTypes';
 import { abbreviate } from '@/lib/abbreviate';
-
-export interface CloudWord { text: string; count: number; }
 
 interface ShareCardProps {
   word: string;
-  cloudWords?: CloudWord[];
   preview?: boolean;
-  testimonyType?: TestimonyType;
   cardW?: number;
   cardH?: number;
 }
 
-// ─── Cross geometry constants ───────────────────────────────────────────────
-
-const CROSS = {
-  RIGHT_OFFSET: 60,
-  SVG_W: 480, SVG_H: 600,
-  BEAM_X: 196, BEAM_W: 88,      // vertical beam rect
-} as const;
-
-// ─── Deterministic golden-angle spiral positions ────────────────────────────
-// No Math.random, no Date, no state  same output every render (html2canvas-safe).
-// Caller must pass cloudWords sorted descending by count so index 0 (innermost
-// spiral position) is the highest-frequency word  closest to the cross anchor.
-
-const GOLDEN_ANGLE = 2.39996322972865332; // radians
-const MAX_R = 220; // px  caps outer spiral ring so words past index ~15 don't drift
-
-interface WordPosition {
-  x: number;
-  y: number;
-  size: number;
-  opacity: number;
-}
-
-function getClusterPosition(
-  index: number, count: number, maxCount: number,
-  anchorX: number, anchorY: number, boundX: number, boundY: number,
-): WordPosition {
-  const angle = index * GOLDEN_ANGLE;
-  const r = Math.min(55 * Math.sqrt(index + 0.5), MAX_R); // capped  D.2
-
-  const x = Math.min(anchorX + r * Math.cos(angle), boundX);
-  const y = Math.min(anchorY + r * Math.sin(angle), boundY);
-
-  const ratio = maxCount > 1 ? (count - 1) / (maxCount - 1) : 0;
-  const size = Math.round(12 + ratio * 16);    // 12 – 28 px
-  const opacity = 0.08 + ratio * 0.10;          // 0.08 – 0.18 (C.2)
-
-  return { x, y, size, opacity };
-}
-
-// ─── Hero word font size (responsive tiers) ──────────────────────────────────
-
-// For short concepts (single word / short phrase)
 function heroFontSize(word: string): string {
   const len = word.length;
   if (len <= 6)  return '140px';
@@ -70,7 +22,6 @@ function heroFontSize(word: string): string {
   return '32px';
 }
 
-// For full sentences scales down so it always fits in the card
 function sentenceFontSize(word: string): string {
   const len = word.length;
   if (len <= 60)  return '48px';
@@ -80,30 +31,12 @@ function sentenceFontSize(word: string): string {
   return '22px';
 }
 
-// ─── ShareCard ──────────────────────────────────────────────────────────────
-/**
- * Full-bleed layered poster share card  1200×900 px.
- * Layer 1: background word-cloud scatter (golden-angle spiral, deterministic)
- * Layer 2: radial vignette (spotlight on content area)
- * Layer 3: watermark cross (centered-right, opacity 0.05)
- * Layer 4: foreground content (left-aligned, optically centered)
- *
- * Uses only inline styles / system fonts  no CSS vars  html2canvas-safe.
- */
 const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(
-  ({ word, cloudWords = [], preview = false, testimonyType = 'salvation', cardW = 1200, cardH = 900 }, ref) => {
-    const config = TESTIMONY_TYPE_CONFIG[testimonyType];
-    const maxCount = cloudWords.reduce((m, w) => Math.max(m, w.count), 0);
-    // Hero layout for: single word, two words, or any hyphenated compound (e.g. "self-hatred")
-    // Quote layout for: three or more non-hyphenated words (a full sentence/story)
+  ({ word, preview = false, cardW = 1200, cardH = 900 }, ref) => {
     const isSentence = word.trim().split(/\s+/).length > 2 && !word.includes('-');
     const fontSize = isSentence ? sentenceFontSize(word) : heroFontSize(word);
-
-    // Derived layout values adapt to card orientation
-    const crossAnchorX = cardW - CROSS.RIGHT_OFFSET - CROSS.SVG_W + CROSS.BEAM_X + CROSS.BEAM_W / 2;
-    const crossAnchorY = cardH / 2 + CROSS.SVG_H / 2; // base of vertical beam
     const contentTop   = Math.round(cardH * 0.38);
-    const contentWidth = cardW - 192;                  // 96px margin each side
+    const contentWidth = cardW - 192;
 
     return (
       <div
@@ -115,53 +48,22 @@ const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(
           left: 0,
           width: `${cardW}px`,
           height: `${cardH}px`,
-          background: '#1C1611',
+          background: '#2E2418',
           overflow: 'hidden',
           boxSizing: 'border-box',
           pointerEvents: 'none',
           userSelect: 'none',
         }}
       >
-
-        {/* ── Layer 1 · Background word cloud ─────────────────────────────── */}
-        {cloudWords.map(({ text, count }, i) => {
-          const { x, y, size, opacity } = getClusterPosition(
-            i, count, maxCount,
-            crossAnchorX, crossAnchorY, cardW - 50, cardH - 30,
-          );
-          return (
-            <span
-              key={text}
-              style={{
-                position: 'absolute',
-                left: x,
-                top: y,
-                fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
-                fontSize: `${size}px`,
-                color: '#F8F4EC',
-                opacity,
-                fontWeight: count === maxCount ? 700 : 400,
-                letterSpacing: '0.01em',
-                whiteSpace: 'nowrap',
-                lineHeight: 1,
-              }}
-            >
-              {text}
-            </span>
-          );
-        })}
-
-        {/* ── Layer 2 · Radial vignette ────────────────────────────────────── */}
         <div
           style={{
             position: 'absolute',
             inset: 0,
             background:
-              'radial-gradient(ellipse 52% 72% at 32% 50%, rgba(28,22,17,0) 0%, rgba(28,22,17,0.55) 60%, rgba(28,22,17,0.80) 100%)',
+              'radial-gradient(ellipse 52% 72% at 32% 50%, rgba(46,36,24,0) 0%, rgba(46,36,24,0.55) 60%, rgba(46,36,24,0.80) 100%)',
           }}
         />
 
-        {/* ── Layer 3 · Watermark cross (centered-right) ───────────────────── */}
         <div
           style={{
             position: 'absolute',
@@ -177,9 +79,6 @@ const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(
           </svg>
         </div>
 
-        {/* ── Layer 4 · Foreground content ─────────────────────────────────── */}
-
-        {/* Hero content block  starts at optical center (~38% from top) */}
         <div
           style={{
             position: 'absolute',
@@ -190,9 +89,7 @@ const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(
           }}
         >
           {isSentence ? (
-            /* ── Sentence layout: quoted testimony ─────────────────────────── */
             <>
-              {/* Opening quote */}
               <div style={{
                 fontFamily: 'Georgia, serif',
                 fontSize: '96px',
@@ -204,7 +101,6 @@ const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(
                 &ldquo;
               </div>
 
-              {/* The testimony sentence */}
               <h2 style={{
                 fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
                 fontSize: fontSize,
@@ -220,7 +116,6 @@ const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(
                 {abbreviate(word, 220)}
               </h2>
 
-              {/* Closing attribution */}
               <p style={{
                 fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
                 fontSize: '28px',
@@ -230,13 +125,11 @@ const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(
                 margin: 0,
                 opacity: 0.9,
               }}>
-                {config.suffix}.
+                My testimony.
               </p>
             </>
           ) : (
-            /* ── Short concept layout ──────────────────────────────────────── */
             <>
-              {/* "I, Testifi That [label]"  label */}
               <div style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -251,10 +144,9 @@ const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(
               }}>
                 <span style={{ color: 'rgba(248,244,236,0.7)' }}>I,</span>
                 <span style={{ color: '#B5673D' }}>Testifi</span>
-                <span style={{ color: 'rgba(248,244,236,0.7)' }}>That {config.label}</span>
+                <span style={{ color: 'rgba(248,244,236,0.7)' }}>That</span>
               </div>
 
-              {/* Hero word */}
               <h2 style={{
                 fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
                 fontSize: fontSize,
@@ -273,7 +165,6 @@ const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(
           )}
         </div>
 
-        {/* Bottom bar  "He still saves." + URL */}
         <div
           style={{
             position: 'absolute',
@@ -296,7 +187,7 @@ const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(
               lineHeight: 1,
             }}
           >
-            {config.suffix}
+            My testimony.
           </p>
           <p
             style={{
@@ -311,7 +202,6 @@ const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(
             https://testifi.vercel.app
           </p>
         </div>
-
       </div>
     );
   }

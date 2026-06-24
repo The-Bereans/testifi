@@ -13,13 +13,14 @@ const securityHeaders = [
       "style-src 'self' 'unsafe-inline'",
       "img-src 'self' data: blob:",
       "font-src 'self'",
-      "connect-src 'self' https://*.supabase.co",
+      "connect-src 'self'",
       "frame-ancestors 'none'",
     ].join('; '),
   },
 ];
 
 const nextConfig: NextConfig = {
+  allowedDevOrigins: ['10.239.181.140'],
   async headers() {
     return [{ source: '/(.*)', headers: securityHeaders }];
   },

@@ -1,3 +1,6 @@
+import crypto from 'node:crypto';
+import { prisma } from '@/lib/prisma';
+
 /**
  * In-memory sliding-window rate limiter.
  * Suitable for single-instance deployments (Vercel Serverless, Netlify Functions).
@@ -50,12 +53,65 @@ export function checkRateLimit(key: string, options: RateLimitOptions): RateLimi
 
 /**
  * SHA-256 hash of the raw IP so we never store PII.
- * Uses the Web Crypto API available in Next.js edge + Node runtimes.
+ * Uses Node's built-in crypto module (Node.js runtime compatible).
  */
-export async function hashIp(ip: string): Promise<string> {
-  const encoded = new TextEncoder().encode(ip);
-  const buf = await crypto.subtle.digest('SHA-256', encoded);
-  return Array.from(new Uint8Array(buf))
-    .map((b) => b.toString(16).padStart(2, '0'))
-    .join('');
+export function hashIp(ip: string): string {
+  return crypto.createHash('sha256').update(ip).digest('hex');
+}
+
+/**
+ * DB-backed rate-limit check with in-memory fallback.
+ * Uses the `rate_limits` table so limits survive serverless cold starts.
+ * Falls back to the in-memory store if the DB is unreachable.
+ */
+export async function checkRateLimitWithDb(
+  key: string,
+  options: RateLimitOptions,
+): Promise<RateLimitResult> {
+  const colonIdx = key.indexOf(':');
+  const action = key.slice(0, colonIdx);
+  const ipHash = key.slice(colonIdx + 1);
+
+  try {
+    return await prisma.$transaction(async (tx) => {
+      const now = new Date();
+
+      const record = await tx.rate_limits.findFirst({
+        where: {
+          ip_hash: ipHash,
+          action: action,
+          expires_at: { gt: now },
+        },
+        orderBy: { expires_at: 'desc' },
+      });
+
+      if (!record) {
+        await tx.rate_limits.create({
+          data: {
+            id: crypto.randomUUID(),
+            ip_hash: ipHash,
+            action: action,
+            count: 1,
+            window_start: now,
+            expires_at: new Date(now.getTime() + options.windowMs),
+          },
+        });
+        return { allowed: true, remaining: options.limit - 1, resetAt: Date.now() + options.windowMs };
+      }
+
+      if (record.count >= options.limit) {
+        return { allowed: false, remaining: 0, resetAt: record.expires_at.getTime() };
+      }
+
+      await tx.rate_limits.update({
+        where: { id: record.id },
+        data: { count: { increment: 1 } },
+      });
+
+      return { allowed: true, remaining: options.limit - record.count - 1, resetAt: record.expires_at.getTime() };
+    });
+  } catch (err) {
+    console.warn('[rateLimit] DB unavailable, falling back to in-memory', err);
+    return checkRateLimit(key, options);
+  }
 }

@@ -84,15 +84,14 @@ export default function PrivacyPage() {
       <Section title="3. Who we share it with">
         <p>
           We do not sell, rent, or trade your email address to anyone. We use{' '}
-          <strong>Supabase</strong> to store waitlist data securely. Beyond that, your email is
+          <strong>a secure database</strong> to store waitlist data. Beyond that, your email is
           not shared with any third-party marketing, advertising, or analytics services.
         </p>
       </Section>
 
       <Section title="4. How we store and protect it">
         <p>
-          Your email is stored in a password-protected database hosted on Supabase, which encrypts
-          data at rest and in transit. Access is limited to the Testifi founding team. We retain
+          Your email is stored in a password-protected database that encrypts data at rest and in transit. Access is limited to the Testifi founding team. We retain
           your email only as long as needed to fulfil the purpose above; once Testifi launches and
           onboarding is complete, waitlist-only records will be deleted or migrated to your account
           (with your consent).

@@ -27,6 +27,7 @@ export default function TestimonySection() {
   const [isIdentityHidden, setIsIdentityHidden] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [categories, setCategories] = useState<CategoryData[]>([]);
+  const [showOptions, setShowOptions] = useState(false);
   const [submittedId, setSubmittedId] = useState<string | null>(null);
   const [isMobile, setIsMobile] = useState(false);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -44,7 +45,6 @@ export default function TestimonySection() {
       .then((data) => {
         if (Array.isArray(data)) {
           setCategories(data);
-          if (data.length > 0) setCategoryId(data[0].id);
         }
       })
       .catch(() => {});
@@ -116,9 +116,10 @@ export default function TestimonySection() {
   function handleReset() {
     setTitle('');
     setBody('');
-    setCategoryId(categories[0]?.id ?? '');
+    setCategoryId('');
     setConsented(false);
     setIsIdentityHidden(false);
+    setShowOptions(false);
     setSubmittedId(null);
     setError(null);
     setStep('input');
@@ -272,27 +273,6 @@ export default function TestimonySection() {
                   position: 'relative',
                   textAlign: 'left',
                 }}>
-                  <div style={{ marginBottom: '1rem' }}>
-                    <input
-                      value={title}
-                      onChange={(e) => setTitle(e.target.value)}
-                      placeholder="Title (optional)"
-                      maxLength={120}
-                      style={{
-                        width: '100%',
-                        padding: '0.6rem 0',
-                        background: 'transparent',
-                        border: 'none',
-                        borderBottom: '1.5px solid var(--brand-ivory-deeper)',
-                        outline: 'none',
-                        fontFamily: 'var(--font-body)',
-                        fontSize: 'clamp(0.95rem, 2vw, 1.05rem)',
-                        fontWeight: 600,
-                        color: 'var(--brand-near-black)',
-                      }}
-                    />
-                  </div>
-
                   <textarea
                     ref={inputRef}
                     value={body}
@@ -302,6 +282,7 @@ export default function TestimonySection() {
                       e.target.style.height = 'auto';
                       e.target.style.height = e.target.scrollHeight + 'px';
                     }}
+                    onFocus={() => setShowOptions(true)}
                     placeholder="Share your testimony..."
                     maxLength={10000}
                     rows={5}
@@ -331,69 +312,116 @@ export default function TestimonySection() {
                     {body.length}/10000
                   </p>
 
-                  {categories.length > 0 && (
-                    <div style={{ marginBottom: '1rem' }}>
-                      <label style={{
+                  {body.length > 0 && (
+                    <button
+                      type="button"
+                      onClick={() => setShowOptions((v) => !v)}
+                      style={{
                         fontFamily: 'var(--font-body)',
-                        fontSize: '0.78rem',
-                        color: 'var(--brand-near-black-muted)',
-                        display: 'block',
-                        marginBottom: '0.35rem',
-                      }}>
-                        Category (optional)
-                      </label>
-                      <select
-                        value={categoryId}
-                        onChange={(e) => setCategoryId(e.target.value)}
-                        style={{
-                          width: '100%',
-                          padding: '0.5rem 0.75rem',
-                          background: 'var(--brand-ivory-dark)',
-                          border: '1.5px solid var(--brand-ivory-deeper)',
-                          borderRadius: 'var(--radius-md)',
-                          fontFamily: 'var(--font-body)',
-                          fontSize: '0.85rem',
-                          color: 'var(--brand-near-black)',
-                          outline: 'none',
-                          cursor: 'pointer',
-                        }}
-                      >
-                        <option value="">Select a category</option>
-                        {categories.map((cat) => (
-                          <option key={cat.id} value={cat.id}>{cat.name}</option>
-                        ))}
-                      </select>
-                    </div>
+                        fontSize: '0.75rem',
+                        color: 'var(--brand-sienna-light)',
+                        background: 'none',
+                        border: 'none',
+                        padding: '0.25rem 0',
+                        cursor: 'pointer',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.3rem',
+                        marginBottom: showOptions ? '0.75rem' : '0',
+                      }}
+                    >
+                      {showOptions ? '▾' : '▸'} More options
+                    </button>
                   )}
 
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '1rem' }}>
-                    <label style={{
-                      display: 'flex', alignItems: 'center', gap: '0.5rem',
-                      fontFamily: 'var(--font-body)', fontSize: '0.82rem',
-                      color: 'var(--brand-near-black-muted)', cursor: 'pointer',
-                    }}>
-                      <input
-                        type="checkbox"
-                        checked={consented}
-                        onChange={(e) => setConsented(e.target.checked)}
-                        style={{ accentColor: 'var(--brand-sienna-light)' }}
-                      />
-                      I consent to sharing my testimony
-                    </label>
-                    <label style={{
-                      display: 'flex', alignItems: 'center', gap: '0.5rem',
-                      fontFamily: 'var(--font-body)', fontSize: '0.82rem',
-                      color: 'var(--brand-near-black-muted)', cursor: 'pointer',
-                    }}>
-                      <input
-                        type="checkbox"
-                        checked={isIdentityHidden}
-                        onChange={(e) => setIsIdentityHidden(e.target.checked)}
-                        style={{ accentColor: 'var(--brand-sienna-light)' }}
-                      />
-                      Hide my identity
-                    </label>
-                  </div>
+                  {showOptions && (
+                    <>
+                      <div style={{ marginBottom: '1rem' }}>
+                        <input
+                          value={title}
+                          onChange={(e) => setTitle(e.target.value)}
+                          placeholder="Title (optional)"
+                          maxLength={120}
+                          style={{
+                            width: '100%',
+                            padding: '0.6rem 0',
+                            background: 'transparent',
+                            border: 'none',
+                            borderBottom: '1.5px solid var(--brand-ivory-deeper)',
+                            outline: 'none',
+                            fontFamily: 'var(--font-body)',
+                            fontSize: 'clamp(0.95rem, 2vw, 1.05rem)',
+                            fontWeight: 600,
+                            color: 'var(--brand-near-black)',
+                          }}
+                        />
+                      </div>
+
+                      {categories.length > 0 && (
+                        <div style={{ marginBottom: '1rem' }}>
+                          <label style={{
+                            fontFamily: 'var(--font-body)',
+                            fontSize: '0.78rem',
+                            color: 'var(--brand-near-black-muted)',
+                            display: 'block',
+                            marginBottom: '0.35rem',
+                          }}>
+                            Category (optional)
+                          </label>
+                          <select
+                            value={categoryId}
+                            onChange={(e) => setCategoryId(e.target.value)}
+                            style={{
+                              width: '100%',
+                              padding: '0.5rem 0.75rem',
+                              background: 'var(--brand-ivory-dark)',
+                              border: '1.5px solid var(--brand-ivory-deeper)',
+                              borderRadius: 'var(--radius-md)',
+                              fontFamily: 'var(--font-body)',
+                              fontSize: '0.85rem',
+                              color: 'var(--brand-near-black)',
+                              outline: 'none',
+                              cursor: 'pointer',
+                            }}
+                          >
+                            <option value="">Select a category</option>
+                            {categories.map((cat) => (
+                              <option key={cat.id} value={cat.id}>{cat.name}</option>
+                            ))}
+                          </select>
+                        </div>
+                      )}
+
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '1rem' }}>
+                        <label style={{
+                          display: 'flex', alignItems: 'center', gap: '0.5rem',
+                          fontFamily: 'var(--font-body)', fontSize: '0.82rem',
+                          color: 'var(--brand-near-black-muted)', cursor: 'pointer',
+                        }}>
+                          <input
+                            type="checkbox"
+                            checked={consented}
+                            onChange={(e) => setConsented(e.target.checked)}
+                            style={{ accentColor: 'var(--brand-sienna-light)' }}
+                          />
+                          I consent to sharing my testimony
+                        </label>
+                        <label style={{
+                          display: 'flex', alignItems: 'center', gap: '0.5rem',
+                          fontFamily: 'var(--font-body)', fontSize: '0.82rem',
+                          color: 'var(--brand-near-black-muted)', cursor: 'pointer',
+                        }}>
+                          <input
+                            type="checkbox"
+                            checked={isIdentityHidden}
+                            onChange={(e) => setIsIdentityHidden(e.target.checked)}
+                            style={{ accentColor: 'var(--brand-sienna-light)' }}
+                          />
+                          Hide my identity
+                        </label>
+                      </div>
+                    </>
+                  )}
 
                   <button
                     onClick={handleSubmit}

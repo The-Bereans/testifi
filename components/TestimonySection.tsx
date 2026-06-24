@@ -16,7 +16,7 @@ const sectionVariants = {
   exit:    { opacity: 0, y: -24, transition: { duration: 0.3,  ease: EASE_IN  } },
 };
 
-type Step = 'input' | 'loading' | 'done';
+type Step = 'input' | 'review' | 'loading' | 'done';
 
 export default function TestimonySection() {
   const [step, setStep] = useState<Step>('input');
@@ -27,7 +27,6 @@ export default function TestimonySection() {
   const [isIdentityHidden, setIsIdentityHidden] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [categories, setCategories] = useState<CategoryData[]>([]);
-  const [showOptions, setShowOptions] = useState(false);
   const [submittedId, setSubmittedId] = useState<string | null>(null);
   const [isMobile, setIsMobile] = useState(false);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -75,7 +74,7 @@ export default function TestimonySection() {
     return () => window.removeEventListener('resize', update);
   }, [step, CARD_W]);
 
-  async function handleSubmit() {
+  function handleGoToReview() {
     const trimmed = body.trim();
     if (trimmed.length < 20) {
       setError('Please share at least a few sentences (20 characters).');
@@ -85,13 +84,16 @@ export default function TestimonySection() {
       setError('You appear to be offline. Please check your connection and try again.');
       return;
     }
-
     setError(null);
+    setStep('review');
+  }
+
+  async function handleSubmit() {
     setStep('loading');
 
     const payload = {
       title: title.trim() || undefined,
-      body: trimmed,
+      body: body.trim(),
       consented,
       categoryId: categoryId || undefined,
       isIdentityHidden,
@@ -109,7 +111,7 @@ export default function TestimonySection() {
       setStep('done');
     } catch {
       setError('Something went wrong. Please try again.');
-      setStep('input');
+      setStep('review');
     }
   }
 
@@ -119,7 +121,6 @@ export default function TestimonySection() {
     setCategoryId('');
     setConsented(false);
     setIsIdentityHidden(false);
-    setShowOptions(false);
     setSubmittedId(null);
     setError(null);
     setStep('input');
@@ -193,8 +194,6 @@ export default function TestimonySection() {
     await handleDownloadPNG();
     window.open('https://www.instagram.com', '_blank');
   }
-
-  const selectedCategory = categories.find((c) => c.id === categoryId);
 
   return (
     <div className="relative min-h-screen w-full overflow-hidden flex flex-col">
@@ -282,7 +281,6 @@ export default function TestimonySection() {
                       e.target.style.height = 'auto';
                       e.target.style.height = e.target.scrollHeight + 'px';
                     }}
-                    onFocus={() => setShowOptions(true)}
                     placeholder="Share your testimony..."
                     maxLength={10000}
                     rows={5}
@@ -312,119 +310,8 @@ export default function TestimonySection() {
                     {body.length}/10000
                   </p>
 
-                  {body.length > 0 && (
-                    <button
-                      type="button"
-                      onClick={() => setShowOptions((v) => !v)}
-                      style={{
-                        fontFamily: 'var(--font-body)',
-                        fontSize: '0.75rem',
-                        color: 'var(--brand-sienna-light)',
-                        background: 'none',
-                        border: 'none',
-                        padding: '0.25rem 0',
-                        cursor: 'pointer',
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: '0.3rem',
-                        marginBottom: showOptions ? '0.75rem' : '0',
-                      }}
-                    >
-                      {showOptions ? '▾' : '▸'} More options
-                    </button>
-                  )}
-
-                  {showOptions && (
-                    <>
-                      <div style={{ marginBottom: '1rem' }}>
-                        <input
-                          value={title}
-                          onChange={(e) => setTitle(e.target.value)}
-                          placeholder="Title (optional)"
-                          maxLength={120}
-                          style={{
-                            width: '100%',
-                            padding: '0.6rem 0',
-                            background: 'transparent',
-                            border: 'none',
-                            borderBottom: '1.5px solid var(--brand-ivory-deeper)',
-                            outline: 'none',
-                            fontFamily: 'var(--font-body)',
-                            fontSize: 'clamp(0.95rem, 2vw, 1.05rem)',
-                            fontWeight: 600,
-                            color: 'var(--brand-near-black)',
-                          }}
-                        />
-                      </div>
-
-                      {categories.length > 0 && (
-                        <div style={{ marginBottom: '1rem' }}>
-                          <label style={{
-                            fontFamily: 'var(--font-body)',
-                            fontSize: '0.78rem',
-                            color: 'var(--brand-near-black-muted)',
-                            display: 'block',
-                            marginBottom: '0.35rem',
-                          }}>
-                            Category (optional)
-                          </label>
-                          <select
-                            value={categoryId}
-                            onChange={(e) => setCategoryId(e.target.value)}
-                            style={{
-                              width: '100%',
-                              padding: '0.5rem 0.75rem',
-                              background: 'var(--brand-ivory-dark)',
-                              border: '1.5px solid var(--brand-ivory-deeper)',
-                              borderRadius: 'var(--radius-md)',
-                              fontFamily: 'var(--font-body)',
-                              fontSize: '0.85rem',
-                              color: 'var(--brand-near-black)',
-                              outline: 'none',
-                              cursor: 'pointer',
-                            }}
-                          >
-                            <option value="">Select a category</option>
-                            {categories.map((cat) => (
-                              <option key={cat.id} value={cat.id}>{cat.name}</option>
-                            ))}
-                          </select>
-                        </div>
-                      )}
-
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '1rem' }}>
-                        <label style={{
-                          display: 'flex', alignItems: 'center', gap: '0.5rem',
-                          fontFamily: 'var(--font-body)', fontSize: '0.82rem',
-                          color: 'var(--brand-near-black-muted)', cursor: 'pointer',
-                        }}>
-                          <input
-                            type="checkbox"
-                            checked={consented}
-                            onChange={(e) => setConsented(e.target.checked)}
-                            style={{ accentColor: 'var(--brand-sienna-light)' }}
-                          />
-                          I consent to sharing my testimony
-                        </label>
-                        <label style={{
-                          display: 'flex', alignItems: 'center', gap: '0.5rem',
-                          fontFamily: 'var(--font-body)', fontSize: '0.82rem',
-                          color: 'var(--brand-near-black-muted)', cursor: 'pointer',
-                        }}>
-                          <input
-                            type="checkbox"
-                            checked={isIdentityHidden}
-                            onChange={(e) => setIsIdentityHidden(e.target.checked)}
-                            style={{ accentColor: 'var(--brand-sienna-light)' }}
-                          />
-                          Hide my identity
-                        </label>
-                      </div>
-                    </>
-                  )}
-
                   <button
-                    onClick={handleSubmit}
+                    onClick={handleGoToReview}
                     disabled={body.trim().length < 20}
                     style={{
                       width: '100%',
@@ -468,6 +355,188 @@ export default function TestimonySection() {
                   )}
                 </AnimatePresence>
               </motion.div>
+            </div>
+          </motion.section>
+        )}
+
+        {step === 'review' && (
+          <motion.section
+            key="review"
+            variants={sectionVariants}
+            initial="enter"
+            animate="visible"
+            exit="exit"
+            className="flex flex-col flex-1 items-center justify-center relative overflow-hidden"
+            style={{ paddingTop: 'clamp(3rem, 10vw, 6rem)', paddingBottom: 'clamp(3rem, 10vw, 6rem)' }}
+          >
+            <div style={{ position: 'relative', zIndex: 1, width: '100%', maxWidth: '36rem', padding: '0 1.5rem' }}>
+              <div style={{
+                background: 'rgba(255,252,247,0.85)',
+                borderRadius: '1.25rem',
+                padding: 'clamp(1.25rem, 3.5vw, 1.75rem)',
+                boxShadow: '0 8px 40px rgba(28,22,17,0.10)',
+                border: `1px solid ${error ? '#b94040' : 'var(--brand-ivory-deeper)'}`,
+                transition: 'border-color 0.15s',
+                textAlign: 'left',
+              }}>
+                <p style={{
+                  fontFamily: 'var(--font-body)',
+                  fontSize: 'clamp(0.9rem, 2vw, 1rem)',
+                  color: 'var(--brand-near-black-soft)',
+                  lineHeight: 1.7,
+                  marginBottom: '1.25rem',
+                  paddingBottom: '1rem',
+                  borderBottom: '1px solid var(--brand-ivory-deeper)',
+                  whiteSpace: 'pre-wrap',
+                }}>
+                  {body.trim()}
+                </p>
+
+                <div style={{ marginBottom: '1rem' }}>
+                  <input
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    placeholder="Add a title (optional)"
+                    maxLength={120}
+                    style={{
+                      width: '100%',
+                      padding: '0.6rem 0',
+                      background: 'transparent',
+                      border: 'none',
+                      borderBottom: '1.5px solid var(--brand-ivory-deeper)',
+                      outline: 'none',
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 'clamp(0.95rem, 2vw, 1.05rem)',
+                      fontWeight: 600,
+                      color: 'var(--brand-near-black)',
+                    }}
+                  />
+                </div>
+
+                {categories.length > 0 && (
+                  <div style={{ marginBottom: '1rem' }}>
+                    <label style={{
+                      fontFamily: 'var(--font-body)',
+                      fontSize: '0.78rem',
+                      color: 'var(--brand-near-black-muted)',
+                      display: 'block',
+                      marginBottom: '0.35rem',
+                    }}>
+                      Category (optional)
+                    </label>
+                    <select
+                      value={categoryId}
+                      onChange={(e) => setCategoryId(e.target.value)}
+                      style={{
+                        width: '100%',
+                        padding: '0.5rem 0.75rem',
+                        background: 'var(--brand-ivory-dark)',
+                        border: '1.5px solid var(--brand-ivory-deeper)',
+                        borderRadius: 'var(--radius-md)',
+                        fontFamily: 'var(--font-body)',
+                        fontSize: '0.85rem',
+                        color: 'var(--brand-near-black)',
+                        outline: 'none',
+                        cursor: 'pointer',
+                      }}
+                    >
+                      <option value="">Select a category</option>
+                      {categories.map((cat) => (
+                        <option key={cat.id} value={cat.id}>{cat.name}</option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '1.25rem' }}>
+                  <label style={{
+                    display: 'flex', alignItems: 'center', gap: '0.5rem',
+                    fontFamily: 'var(--font-body)', fontSize: '0.82rem',
+                    color: 'var(--brand-near-black-muted)', cursor: 'pointer',
+                  }}>
+                    <input
+                      type="checkbox"
+                      checked={consented}
+                      onChange={(e) => setConsented(e.target.checked)}
+                      style={{ accentColor: 'var(--brand-sienna-light)' }}
+                    />
+                    I consent to sharing my testimony
+                  </label>
+                  <label style={{
+                    display: 'flex', alignItems: 'center', gap: '0.5rem',
+                    fontFamily: 'var(--font-body)', fontSize: '0.82rem',
+                    color: 'var(--brand-near-black-muted)', cursor: 'pointer',
+                  }}>
+                    <input
+                      type="checkbox"
+                      checked={isIdentityHidden}
+                      onChange={(e) => setIsIdentityHidden(e.target.checked)}
+                      style={{ accentColor: 'var(--brand-sienna-light)' }}
+                    />
+                    Hide my identity
+                  </label>
+                </div>
+
+                <div style={{ display: 'flex', gap: '0.75rem' }}>
+                  <button
+                    onClick={() => setStep('input')}
+                    style={{
+                      flex: 1,
+                      padding: '0.75rem 1rem',
+                      background: 'var(--brand-ivory-dark)',
+                      color: 'var(--brand-near-black-muted)',
+                      fontFamily: 'var(--font-body)',
+                      fontSize: '0.95rem',
+                      fontWeight: 600,
+                      border: '1.5px solid var(--brand-ivory-deeper)',
+                      borderRadius: 'var(--radius-md)',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={handleSubmit}
+                    style={{
+                      flex: 1,
+                      padding: '0.75rem 1rem',
+                      background: 'var(--brand-sienna)',
+                      color: 'var(--brand-ivory)',
+                      fontFamily: 'var(--font-body)',
+                      fontSize: '0.95rem',
+                      fontWeight: 600,
+                      border: 'none',
+                      borderRadius: 'var(--radius-md)',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    Submit
+                  </button>
+                </div>
+              </div>
+
+              <AnimatePresence>
+                {error && (
+                  <motion.p
+                    key="error"
+                    initial={{ opacity: 0, y: -4 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -4 }}
+                    transition={{ duration: 0.2 }}
+                    role="alert"
+                    style={{
+                      fontFamily: 'var(--font-body)',
+                      fontSize: '0.8rem',
+                      color: '#b94040',
+                      marginTop: '0.6rem',
+                      textAlign: 'left',
+                      paddingLeft: '0.25rem',
+                    }}
+                  >
+                    {error}
+                  </motion.p>
+                )}
+              </AnimatePresence>
             </div>
           </motion.section>
         )}
